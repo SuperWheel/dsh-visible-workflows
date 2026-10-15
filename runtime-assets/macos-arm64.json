@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "platform": "macos-arm64",
+  "graphonVersion": "0.7.0",
+  "pythonVersion": "3.12.15",
+  "archive": "graphon-core-0.7.0-macos-arm64.tar.gz",
+  "sha256": "dd7940400a98253be02aec0b26bf75e188dc3f2fe925baf18cce510630aef4f0",
+  "archiveBytes": 31136038,
+  "expandedFileBytes": 86615433,
+  "fileCount": 2626,
+  "pythonExecutable": "python/bin/python3.12",
+  "pythonExecutableSha256": "3274dde21f9767655564d093e63c9a5faacefbf1d41bc1e6bf8b6f6e5a441903",
+  "dependencyManifest": "core-dependencies.json",
+  "dependencyManifestSha256": "27b2eb9bc2a9ed661e48664cf57a51841deb4bc32c0bc25bd1a1c9953391a44f",
+  "tokenizer": {
+    "encoding": "cl100k_base",
+    "path": "tokenizer-cache/9b5ad71b2ce5302211f9c61530b329a4922fc6a4",
+    "sha256": "223921b76ee99bde995b7ff738513eef100fb51d18c93597a113bcffe865b2a7",
+    "estimatedForUnmatchedModels": true
+  },
+  "packages": [
+    {
+      "name": "annotated-types",
+      "version": "0.7.0"
+    },
+    {
+      "name": "anyio",
+      "version": "4.14.2"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.6.17"
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.4.9"
+    },
+    {
+      "name": "graphon",
+      "version": "0.7.0"
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0"
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9"
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1"
+    },
+    {
+      "name": "idna",
+      "version": "3.18"
+    },
+    {
+      "name": "jinja2",
+      "version": "3.1.6"
+    },
+    {
+      "name": "json-repair",
+      "version": "0.61.7"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.26.0"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1"
+    },
+    {
+      "name": "markupsafe",
+      "version": "3.0.3"
+    },
+    {
+      "name": "orjson",
+      "version": "3.11.9"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.4"
+    },
+    {
+      "name": "pydantic-core",
+      "version": "2.46.4"
+    },
+    {
+      "name": "pydantic-extra-types",
+      "version": "2.11.1"
+    },
+    {
+      "name": "pyyaml",
+      "version": "6.0.3"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0"
+    },
+    {
+      "name": "regex",
+      "version": "2026.7.19"
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2"
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.6.3"
+    },
+    {
+      "name": "tiktoken",
+      "version": "0.13.0"
+    },
+    {
+      "name": "typing-extensions",
+      "version": "4.16.0"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.2"
+    },
+    {
+      "name": "urllib3",
+      "version": "2.7.0"
+    }
+  ],
+  "verification": {
+    "mode": "native-offline-import-probe",
+    "executed": true,
+    "result": {
+      "python": "3.12.15",
+      "graphon": "0.7.0",
+      "encoding": "cl100k_base",
+      "offline": true
+    }
+  },
+  "lockSha256": "93fd9f679fe198bdd3e1d8e5a8daf855b62a5c15876de3ebf99603ad5d206e5b",
+  "omittedInterpreterAliases": [
+    "python/bin/2to3",
+    "python/bin/idle3",
+    "python/bin/pydoc3",
+    "python/bin/python",
+    "python/bin/python3",
+    "python/bin/python3-config",
+    "python/lib/pkgconfig/python3-embed.pc",
+    "python/lib/pkgconfig/python3.pc",
+    "python/share/man/man1/python.1",
+    "python/share/man/man1/python3.1"
+  ]
+}

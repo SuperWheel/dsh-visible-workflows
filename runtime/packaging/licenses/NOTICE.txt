@@ -1,0 +1,15 @@
+Graphon 0.7.0 lightweight runtime distribution
+
+Graphon is developed by LangGenius and contributors.
+Source: https://github.com/langgenius/graphon/tree/v0.7.0
+License: Apache License 2.0 (included).
+
+The original Graphon wheel source and metadata are retained. This distribution
+selects a controlled core dependency set: document parsing is delegated to the
+host; models/tools use a DSH bridge; tiktoken is retained without transformers.
+The original wheel metadata still declares optional heavy dependencies, so use
+the included dependency manifest rather than reinstalling the unrestricted wheel.
+
+Python: Astral python-build-standalone CPython 3.12.15 (20261013).
+Python licenses and third-party wheel licenses are retained inside the payload.
+The packaging NOTICE is supplied by this project, not an upstream Graphon NOTICE.
