@@ -1,0 +1,275 @@
+{
+  "passed": true,
+  "failures": [],
+  "scope": "Installed Harness runtime; synthetic single-process policy only; not activated globally",
+  "at": "2026-10-17T04:30:16.771Z",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "mxcSha256": "c54390e48a25187fdae10758c6a286bede49416cb610c88c6705fd8445e97f60",
+  "supervisorSha256": "918fb176b95137e49a4c1ffc96eada579ad4440c8b2d2d2f4737d66340bba062",
+  "reports": [
+    {
+      "mode": "syscalls",
+      "done": {
+        "value": {
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 84345,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 84346,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 84347,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 84348,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":84348,\"ppid\":84347,\"mode\":\"syscalls\",\"token\":\"b4cf763a-38eb-4792-91c5-52350ac946bf\"}\nCHECK:{\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"fork\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nCHECK:{\"name\":\"signal-self\",\"result\":0,\"errno\":0}\nCHECK:{\"name\":\"signal-guardian\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"signal-watchdog\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"signal-runner\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"ptrace-guardian\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"ptrace-watchdog\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"pthread-create\",\"result\":0,\"errno\":0}\nCHECK:{\"name\":\"fork-after-exec\",\"result\":-1,\"errno\":1}\n",
+      "status": "{\"event\":\"started\",\"guardian\":84345,\"watchdog\":84346,\"runner\":84347,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":84345,\"watchdog\":84346,\"runner\":84347,\"code\":0,\"signal\":0}\n",
+      "err": ""
+    },
+    {
+      "mode": "exit",
+      "done": {
+        "value": {
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 84359,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 84360,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 84361,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 84362,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":84362,\"ppid\":84361,\"mode\":\"syscalls\",\"token\":\"636d4219-caa8-4797-886f-b8e6832e3d61\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":84359,\"watchdog\":84360,\"runner\":84361,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":84359,\"watchdog\":84360,\"runner\":84361,\"code\":0,\"signal\":0}\n",
+      "err": ""
+    },
+    {
+      "mode": "cancel",
+      "done": {
+        "value": {
+          "exitCode": 125,
+          "signal": null
+        }
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 84373,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 84374,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 84375,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 84376,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":84376,\"ppid\":84375,\"mode\":\"syscalls\",\"token\":\"97b7f7ce-6ea3-4f5c-b746-f2e73dae13f7\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":84373,\"watchdog\":84374,\"runner\":84375,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":84373,\"watchdog\":84374,\"runner\":84375,\"code\":125,\"signal\":0}\n",
+      "err": ""
+    },
+    {
+      "mode": "lease-close",
+      "done": {
+        "value": {
+          "exitCode": 125,
+          "signal": null
+        }
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 84387,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 84388,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 84389,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 84390,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":84390,\"ppid\":84389,\"mode\":\"syscalls\",\"token\":\"68535f5a-a060-4993-bcac-ce8d6480cb9a\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":84387,\"watchdog\":84388,\"runner\":84389,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":84387,\"watchdog\":84388,\"runner\":84389,\"code\":125,\"signal\":0}\n",
+      "err": ""
+    },
+    {
+      "mode": "guardian-crash",
+      "done": {
+        "value": {
+          "exitCode": null,
+          "signal": "SIGKILL"
+        }
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 84401,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 84402,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 84403,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 84404,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":84404,\"ppid\":84403,\"mode\":\"syscalls\",\"token\":\"1c0eac3e-a5c8-4f63-aaa3-350f2315ede7\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":84401,\"watchdog\":84402,\"runner\":84403,\"code\":0,\"signal\":0}\n",
+      "err": ""
+    },
+    {
+      "mode": "watchdog-crash",
+      "done": {
+        "value": {
+          "exitCode": 125,
+          "signal": null
+        }
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 84415,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 84416,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 84417,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 84418,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":84418,\"ppid\":84417,\"mode\":\"syscalls\",\"token\":\"242a5da6-d374-45a9-9bea-f63cd063c240\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":84415,\"watchdog\":84416,\"runner\":84417,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":84415,\"watchdog\":84416,\"runner\":84417,\"code\":125,\"signal\":0}\n",
+      "err": ""
+    },
+    {
+      "mode": "timeout",
+      "done": {
+        "value": {
+          "exitCode": 124,
+          "signal": null
+        }
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 84429,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 84430,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 84431,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 84432,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":84432,\"ppid\":84431,\"mode\":\"syscalls\",\"token\":\"a1fddeec-ffe0-4f76-9a64-61599b78756c\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":84429,\"watchdog\":84430,\"runner\":84431,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":84429,\"watchdog\":84430,\"runner\":84431,\"code\":124,\"signal\":0}\n",
+      "err": ""
+    },
+    {
+      "mode": "host-crash",
+      "remaining": {
+        "guardian": {
+          "pid": 84444,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 84445,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 84446,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 84447,
+          "alive": false,
+          "state": null
+        }
+      }
+    }
+  ]
+}

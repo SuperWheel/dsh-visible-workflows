@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-17T07:58:46.809Z",
+  "workflowId": "162878e8-e655-4572-a573-5649b6100d15",
+  "userConfirmedDelete": true,
+  "nativeWindowClosed": true,
+  "uiObserved": {
+    "componentReady": true,
+    "missingSecretCount": 1,
+    "nodeWarning": true,
+    "executeButtonEnabled": true,
+    "onClickDialog": "请先处理缺失配置",
+    "noNewRun": true,
+    "canContinueSaving": true
+  },
+  "sourceDefinitionUnchanged": true,
+  "nodeCount": 3,
+  "edgeCount": 2,
+  "noteCount": 1,
+  "annotationCount": 1,
+  "runIds": [
+    "3c4e7a6d-4b1f-468a-b13a-44e126c11f5c"
+  ],
+  "rawValueRead": false,
+  "authorizationModel": "per-use-confirmation",
+  "persistentAuthorizationAcceptance": false
+}

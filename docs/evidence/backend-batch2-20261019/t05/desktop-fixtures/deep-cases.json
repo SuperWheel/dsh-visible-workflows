@@ -1,0 +1,35 @@
+[
+  {
+    "id": "primary",
+    "inputs": {
+      "records": "[3,-2,0,4]",
+      "rounds": "2",
+      "threshold": "2"
+    },
+    "expectedOutputs": {
+      "result": "[6,0,0,8]"
+    }
+  },
+  {
+    "id": "holdout",
+    "inputs": {
+      "records": "[1,5,2]",
+      "rounds": "3",
+      "threshold": "2"
+    },
+    "expectedOutputs": {
+      "result": "[0,15,0]"
+    }
+  },
+  {
+    "id": "invalid",
+    "inputs": {
+      "records": "[1,\"wrong\",3]",
+      "rounds": "2",
+      "threshold": "0"
+    },
+    "expectedStatus": "failed",
+    "expectedErrorIncludes": "finite numbers",
+    "expectedOutputs": {}
+  }
+]

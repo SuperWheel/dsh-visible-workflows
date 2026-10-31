@@ -88,13 +88,14 @@ describe('isolated and bounded execution adapters',()=>{
   await new Promise<void>((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve)})
   try {const port=(server.address() as {port:number}).port;const result=await httpRequest(`http://127.0.0.1:${port}/ok`,'POST',{},'{"ok":true}',new AbortController().signal);expect(result.json).toEqual({method:'POST',path:'/ok'});expect(result.headers).not.toHaveProperty('set-cookie');expect((await httpRequest(`http://127.0.0.1:${port}/redirect`,'GET',{},undefined,new AbortController().signal)).status_code).toBe(302)}finally{server.closeAllConnections();await new Promise<void>(resolve=>server.close(()=>resolve()))}
  })
- it('runs an Agent decision loop only through explicitly selected actual tools',async()=>{
-  const dir=temporary(),catalog=new ToolCatalog({directory:dir,workflows:()=>[],nativeTools:()=>[],executeNative:async()=>{throw new Error('must not call')},runWorkflow:async()=>({}),http:async()=>({})}),adapter=createExecutionAdapters({catalog,workspaceRoot:()=>dir})
-  const req=request('agent',{model:{provider:'p',model:'m'},tools:['builtin:json.parse'],maxSteps:3});let calls=0
-  req.backend.generate=async()=>++calls===1?'{"tool":"builtin:json.parse","arguments":{"text":"{\\"x\\":2}"}}':'{"final":"finished"}'
-  const result=await adapter.execute('agent',req);expect(result.text).toBe('finished');expect(result.tool_results).toHaveLength(1)
-  req.backend.generate=async()=>'{"tool":"native:write_file","arguments":{}}'
-  await expect(adapter.execute('agent',req)).rejects.toThrow('未授权')
+ it('delegates Agent nodes to the native adapter and never silently falls back to a model loop',async()=>{
+  const dir=temporary(),catalog=new ToolCatalog({directory:dir,workflows:()=>[],nativeTools:()=>[],executeNative:async()=>{throw new Error('must not call')},runWorkflow:async()=>({}),http:async()=>({})})
+  const req=request('agent',{model:{provider:'p',model:'m'},tools:['native:read_file'],maxSteps:3})
+  req.backend.generate=async()=>{throw new Error('must not fall back')}
+  await expect(createExecutionAdapters({catalog,workspaceRoot:()=>dir}).execute('agent',req)).rejects.toThrow('原生子 Agent 服务不可用')
+  let nativeRequest:AdapterRequest|undefined
+  const adapter=createExecutionAdapters({catalog,workspaceRoot:()=>dir,nativeAgent:async value=>{nativeRequest=value;return {text:'finished'}}})
+  expect(await adapter.execute('agent',req)).toEqual({text:'finished'});expect(nativeRequest).toBe(req)
   await expect(adapter.execute('code',request('code',{language:'python',code:'def main(inputs):\n return {}'}))).rejects.toThrow('文件沙箱')
  })
 })

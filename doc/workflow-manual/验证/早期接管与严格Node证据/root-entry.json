@@ -1,0 +1,37 @@
+{
+  "scope": "actual-installed-boot-loader-profile-resolution; scratch activation graph; no production profile mutation",
+  "singleRootBeforeConsumerImport": true,
+  "metadataResolutionDidNotImportConsumers": true,
+  "privateNativeProvider": true,
+  "delayedNativeIncludeMounted": true,
+  "preservedConsumerConfiguration": true,
+  "fatalBootstrapFailurePreventedConsumers": true,
+  "rawFailureCanaryExcludedFromBootError": true,
+  "desktopActivated": false,
+  "secretReady": false,
+  "pending": [
+    "live-composition-verification",
+    "preexisting-process-quiescence",
+    "control-fd7",
+    "pty",
+    "confined-mcp-transport",
+    "loader-import-control",
+    "host-ipc-and-ui",
+    "credential-broker-acceptance",
+    "host-crash-tree-supervision",
+    "confined-file-provider"
+  ],
+  "events": [
+    "metadata-resolution-ready",
+    "verify",
+    "compose",
+    "verify",
+    "private-native-ready",
+    "consumer-import:true",
+    "consumer-apply"
+  ],
+  "failureEvents": [
+    "metadata-resolution-ready",
+    "verify"
+  ]
+}

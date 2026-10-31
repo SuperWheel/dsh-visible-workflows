@@ -82,7 +82,7 @@ describe('真实 SDK 系统提示词与工作流模板语法兼容',()=>{
     const {stdout}=await promisify(execFile)(process.execPath,['--import','tsx',new URL('./fixtures/host-cordis-fixture.ts',import.meta.url).pathname,'--prompt-contract'],{timeout:10_000})
     expect(JSON.parse(stdout.trim())).toEqual({ok:true,cases:[
       'native-ordinary-chat-literal-guidance','native-old-config-reproduces-malformed-variable','native-production-tool-braces-preserved',
-      'both-ordinary-chat-literal-guidance','both-old-config-reproduces-malformed-variable','both-production-tool-braces-preserved',
+      'ptc-ordinary-chat-literal-guidance','ptc-old-config-reproduces-malformed-variable','ptc-production-tool-braces-preserved',
     ]})
   })
 })

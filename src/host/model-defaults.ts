@@ -4,6 +4,7 @@ import type { ModelSelection, ModelSelectionProjectionState } from '@deepseek-ai
 import { foldRequestHeader, SessionId, SessionLogOffset, type EpochHeader } from '@deepseek-ai/dsh-session'
 import type { NodeGraph, WorkflowModelDefaults, WorkflowNode } from '../shared/types.ts'
 import { allNodes } from './validation.ts'
+import { sameWorkspacePath } from './agent-workspace.ts'
 
 export const MODEL_NODE_KINDS = new Set(['llm', 'agent', 'classifier', 'extractor'])
 export const isModelNode = (node: WorkflowNode): boolean => MODEL_NODE_KINDS.has(node.kind) || (node.kind === 'document' && node.config.documentMode === 'agent')
@@ -24,18 +25,28 @@ export function sessionModelDefaults(pending: ModelSelection | null | undefined,
   return snapshot({ provider: header.config.provider, model: header.config.model, ...(header.config.reasoningEffort && !header.adapterDefaults?.reasoningEffort ? { reasoningEffort: header.config.reasoningEffort } : {}) }, 'session')
 }
 
+/** Match the Host's live selection; running tools must use their actual request. */
+export function liveSessionModelDefaults(ctx: Context, agent: Agent, currentRequest = false): WorkflowModelDefaults | undefined {
+  const header = agent.session.requestHeader()
+  if (currentRequest) return header ? snapshot(header.config, 'session') : undefined
+  const state = ctx.get('sessionProjections')?.stateOf(agent.session, 'modelSelection')
+  // API Session selectionFor.current and the model picker both use the live
+  // Host default only before this Session has a pending pick or request header.
+  // Agent.options is a construction snapshot and may name a different route.
+  if (state?.pending === null && !header) return snapshot((ctx as ModelContext).get('agentDefaultModel')?.currentSelection(), 'harness')
+  return sessionModelDefaults(state?.pending, header)
+}
+
 /** Cold-safe, read-only resolution. Never creates an Agent or chooses a catalog entry. */
 export async function resolveHarnessModelDefaults(ctx: Context, workspaceId: string, sessionId?: string, agent?: Agent, currentRequest = false): Promise<WorkflowModelDefaults | undefined> {
   const workspace = ctx.workspaceRegistry.list().find(w => w.id === workspaceId)
   const scoped = !!sessionId && !!workspace?.sessionIds.includes(SessionId(sessionId))
   if (scoped && workspace) {
     const projections = ctx.get('sessionProjections')
-    if (agent && agent.id === sessionId && agent.session.header.cwd === workspace.path) {
+    if (agent && agent.id === sessionId && !!agent.session.header.cwd && sameWorkspacePath(agent.session.header.cwd, workspace.path)) {
       // A running Agent tool belongs to its current request, even when the user
       // has already picked a different model for a later conversation turn.
-      const pending = currentRequest ? undefined : projections?.stateOf(agent.session, 'modelSelection')?.pending
-      const header = agent.session.requestHeader()
-      const selected = currentRequest && header ? snapshot(header.config, 'session') : sessionModelDefaults(pending, header)
+      const selected = liveSessionModelDefaults(ctx, agent, currentRequest)
       if (selected) return selected
     } else {
       const controller = ctx.get('sessionController')

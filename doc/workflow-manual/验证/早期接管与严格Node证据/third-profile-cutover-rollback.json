@@ -1,0 +1,89 @@
+{
+  "version": 2,
+  "state": "rolled-back",
+  "at": "2026-10-17T06:23:09.176Z",
+  "profile": "~/.dsh/profiles/desktop",
+  "entryName": "file://~/.dsh/profiles/desktop/protected-desktop-entry.mjs",
+  "baseline": {
+    "packageSha256": "abf8ec7f128cca6146ade95f3b92c07cc84289cac9bb2026a56dc1e74bd849d8",
+    "patchSha256": "9e7669b8dca3a5bf78500b7e9ce309f29a0c2050b2bbf5ea84035b23cf60c752"
+  },
+  "candidate": {
+    "packageSha256": "c4a3b2946764c754ed890e5b92424dde4b5ea256516df79cc666a62a943402ef",
+    "rootPatchSha256": "666b0ad549f926349ad6910a326d206da819cd481e925a7b7636e2cea6b1cf40",
+    "packageBytes": 493,
+    "rootPatchBytes": 166
+  },
+  "backups": {
+    "packagePath": "~/.dsh/profiles/desktop/package.before-isolation-abf8ec7f128cca61.json",
+    "patchPath": "~/.dsh/profiles/desktop/cordis.before-isolation-9e7669b8dca3a5bf.patch.yml"
+  },
+  "emptyRoot": "~/.dsh/protected-workflow-empty",
+  "emptyRootCreated": true,
+  "deployment": [
+    {
+      "target": "~/.dsh/profiles/desktop/protected-isolation-host.mjs",
+      "sha256": "1a14cab763a792d27cacd0ed7c0386bd6b2b9756244ccfdaa19fb39ce6df8460",
+      "size": 183739,
+      "existed": false,
+      "created": true
+    },
+    {
+      "target": "~/.dsh/profiles/desktop/protected-skills.mjs",
+      "sha256": "eda2b8aec3463633f8ef4d2c5655ba9dac29983d8dd33e7a5626332be85c8b6d",
+      "size": 30570,
+      "existed": false,
+      "created": true
+    },
+    {
+      "target": "~/.dsh/profiles/desktop/protected-references.mjs",
+      "sha256": "22c3f9bf0153d821632128d403f54978fc2a9fd907b2f7530a0e91929f2e6224",
+      "size": 16721,
+      "existed": false,
+      "created": true
+    },
+    {
+      "target": "~/.dsh/profiles/desktop/protected-http-policy.mjs",
+      "sha256": "0b52d9704c6ec0d7a9245240c09d278903ef994c52f49511b43abefda80233d9",
+      "size": 14982,
+      "existed": false,
+      "created": true
+    },
+    {
+      "target": "~/.dsh/profiles/desktop/protected-settings.mjs",
+      "sha256": "ccf754d4500f16391ddad96046133332c0f973468637cdc849e0832871c3df93",
+      "size": 8816,
+      "existed": false,
+      "created": true
+    },
+    {
+      "target": "~/.dsh/profiles/desktop/protected-runtime-integrity.mjs",
+      "sha256": "7dd6cc70af35211d04c855df93cb77e6e69277ab71b127a7cae4085cf2b1b65f",
+      "size": 3191,
+      "existed": false,
+      "created": true
+    },
+    {
+      "target": "~/.dsh/profiles/desktop/protected-desktop-composition.mjs",
+      "sha256": "bf41003b892dff3a00dd011927879c7fc93c1a8654679729bb7bc3220fd020b2",
+      "size": 2910303,
+      "existed": false,
+      "created": true
+    },
+    {
+      "target": "~/.dsh/profiles/desktop/protected-desktop-entry.mjs",
+      "sha256": "1e6057c137d6d162b6523c0f70b9d7bc286f00f5d1cee5128f14ba2af1af3503",
+      "size": 47612,
+      "existed": false,
+      "created": true
+    }
+  ],
+  "metadataHashes": {
+    "profile-preflight.json": "320428122b4abbb39f35d6f9706d64f0ecfab6d6a740c249242496e2261ea7d7",
+    "cutover-review.json": "19dd2ab75d62c250c5a405ccf6fcb4e379039bfcd3bf6922d12404fe8e5efadc",
+    "runtime-manifest.json": "42820d9258eafd4a6248a41009a0972a9250f507790411c26982b32cadae3a88",
+    "root-patch.candidate.json": "666b0ad549f926349ad6910a326d206da819cd481e925a7b7636e2cea6b1cf40"
+  },
+  "installedAt": "2026-10-17T06:23:10.865Z",
+  "rolledBackAt": "2026-10-17T06:27:43.368Z"
+}

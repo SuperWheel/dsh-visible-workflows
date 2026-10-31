@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "at": "2026-10-17T06:33:43.231280+00:00",
+  "kind": "coordinating-agent-ui-observation-summary",
+  "source": "Coordinating agent reports actual CUA/native Desktop observations in this shared task; no screenshot files are embedded or fabricated.",
+  "thirdProtectedAttempt": {
+    "rendererOpened": true,
+    "existingWorkflowId": "d509d971-a850-4a8c-895b-c01069b87094",
+    "nodesVisible": 3,
+    "viewportScale": 0.75,
+    "originalNotesAndAnnotationsVisible": true,
+    "environmentAndSystemIconButtonsVisible": true,
+    "rightReadinessListVisible": true,
+    "runButtonClickable": true,
+    "runClickShowsMissingConfigurationDialog": true,
+    "runStarted": false,
+    "nativeSavePanelExport": "desktop-protected-export.workflow.json",
+    "newSessionCreation": "failed",
+    "newSessionError": "agent-preset/invalid",
+    "overallAccepted": false
+  },
+  "afterThirdRollback": {
+    "normalDesktopRestarted": true,
+    "newSessionCreation": "passed",
+    "standardPresetVisible": true,
+    "selectedModelLabel": "GLM 5.3 Flash",
+    "cliWorkerEntryRestored": true,
+    "modelRequestExecuted": false
+  },
+  "secretReady": false,
+  "credentialLifecycleAccepted": false
+}

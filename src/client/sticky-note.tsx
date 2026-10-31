@@ -1,3 +1,4 @@
+import { displayNodeNumber } from './annotation-nodes.ts'
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode } from 'react'
 import { Button, Menu } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { CanvasNote, WorkflowNode } from '../shared/types.ts'
@@ -61,21 +62,21 @@ export function StickyNote(p:StickyNoteProps){
   }
   const finishResize=()=>{const pending=pendingResize.current;if(!pending)return;pendingResize.current=undefined;setResizePreview(undefined);const original=noteSize(p.note);if(!p.disabled&&(pending.width!==original.width||pending.height!==original.height))p.onChange({...p.note,...pending})}
   const toolbar=<div className="vdw-canvas-note-tools" role="toolbar" aria-label="便签操作" onPointerDown={event=>event.stopPropagation()}>
-    {anchor&&<span className="vdw-note-anchor-label" title={`已连接 ${anchor.number} ${anchor.title}`}>{anchor.number}</span>}
+    {anchor&&<span className="vdw-note-anchor-label" title={`已连接 ${displayNodeNumber(anchor.number)} ${anchor.title}`}>{displayNodeNumber(anchor.number)}</span>}
     <Button size="sm" variant="ghost" className="vdw-note-tool" aria-label="编辑便签" title="编辑便签 · 双击正文也可编辑" disabled={p.disabled||editing} onClick={beginEdit}><Glyph name="note"/></Button>
     <Menu open={menu==='color'&&!p.disabled} portal onClose={()=>setMenu(undefined)} listClassName="vdw-menu vdw-note-menu" selectedId={color} selection="fill"
       items={NOTE_COLORS.map(item=>({id:item.id,label:item.label,icon:<span className="vdw-note-swatch" style={{background:noteTone({color:item.id})}}/>}))}
       onSelect={id=>{setMenu(undefined);if(!p.disabled&&id!==color)p.onChange({...p.note,color:id as CanvasNote['color']})}}
       anchor={<Button size="sm" variant="ghost" className="vdw-note-tool" aria-label={`便签颜色：${NOTE_COLORS.find(item=>item.id===color)!.label}`} title="便签颜色" aria-haspopup="menu" aria-expanded={menu==='color'} disabled={p.disabled} onClick={()=>setMenu(menu==='color'?undefined:'color')}><span className="vdw-note-swatch" style={{background:noteTone(p.note)}}/></Button>}/>
     <Menu open={menu==='anchor'&&!p.disabled} portal onClose={()=>setMenu(undefined)} listClassName="vdw-menu vdw-note-menu vdw-note-anchor-menu" selectedId={p.note.anchorNodeId||DETACH_ID} selection="fill"
-      items={[{id:DETACH_ID,label:'不连接节点',icon:<Glyph name="close"/>},...p.nodes.map(node=>({id:node.id,label:`${node.number} · ${node.title}`,icon:<Glyph name="link"/>}))]}
+      items={[{id:DETACH_ID,label:'不连接节点',icon:<Glyph name="close"/>},...p.nodes.map(node=>({id:node.id,label:`${displayNodeNumber(node.number)} · ${node.title}`,icon:<Glyph name="link"/>}))]}
       onSelect={id=>{setMenu(undefined);if(p.disabled||id===(p.note.anchorNodeId||DETACH_ID))return;const {anchorNodeId:_,...note}=p.note;p.onChange(id===DETACH_ID?note:{...note,anchorNodeId:id})}}
-      anchor={<Button size="sm" variant="ghost" className={`vdw-note-tool ${anchor?'is-linked':''}`} aria-label={anchor?`便签已连接 ${anchor.number} ${anchor.title}`:'连接便签到节点'} title={anchor?`已连接 ${anchor.number} ${anchor.title}`:'连接节点'} aria-haspopup="menu" aria-expanded={menu==='anchor'} disabled={p.disabled} onClick={()=>setMenu(menu==='anchor'?undefined:'anchor')}><Glyph name="link"/></Button>}/>
+      anchor={<Button size="sm" variant="ghost" className={`vdw-note-tool ${anchor?'is-linked':''}`} aria-label={anchor?`便签已连接 ${displayNodeNumber(anchor.number)} ${anchor.title}`:'连接便签到节点'} title={anchor?`已连接 ${displayNodeNumber(anchor.number)} ${anchor.title}`:'连接节点'} aria-haspopup="menu" aria-expanded={menu==='anchor'} disabled={p.disabled} onClick={()=>setMenu(menu==='anchor'?undefined:'anchor')}><Glyph name="link"/></Button>}/>
     <Button size="sm" variant="ghost" className="vdw-note-tool" aria-label="删除便签" title="删除便签" disabled={p.disabled} onClick={()=>{if(!p.disabled)p.onDelete()}}><Glyph name="trash"/></Button>
   </div>
   return <section className={`vdw-canvas-note ${p.selected?'is-selected':''} ${editing?'is-editing':''}`} data-color={color} data-note-id={p.note.id} data-disabled={p.disabled||undefined}
     style={{left:p.note.x,top:p.note.y,width:size.width,height:size.height,'--vdw-note-tone':noteTone(p.note)} as CSSProperties}
-    role="group" aria-label={anchor?`画布便签，连接 ${anchor.number} ${anchor.title}`:'画布便签'} tabIndex={0}
+    role="group" aria-label={anchor?`画布便签，连接 ${displayNodeNumber(anchor.number)} ${anchor.title}`:'画布便签'} tabIndex={0}
     onPointerDown={event=>{event.stopPropagation();p.onSelect()}} onFocus={p.onSelect}
     onKeyDown={event=>{if(event.target===event.currentTarget&&(event.key==='Enter'||event.key==='F2')){event.preventDefault();event.stopPropagation();beginEdit()}}}>
     <div className="vdw-canvas-note-header" title="拖动便签" aria-hidden="true" onPointerDown={event=>{if(event.button!==0||p.disabled||editing)return;event.preventDefault();p.onSelect();p.onDragStart(event)}}/>

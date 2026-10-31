@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-16",
+  "tests": {
+    "files": 47,
+    "total": 437,
+    "passed": 437,
+    "failed": 0
+  },
+  "python": {
+    "passed": 14
+  },
+  "libraries": [
+    {
+      "index": 1,
+      "unchanged": true,
+      "workflows": 7
+    },
+    {
+      "index": 2,
+      "unchanged": true,
+      "workflows": 2
+    }
+  ],
+  "sourceHashes": {
+    "src/host/runtime.ts": "ce6a50e41661d097857f0289c5c559d8128f7b7df3173db1a9b5e67d1d2aec99",
+    "src/host/template.ts": "00e08abc4a4f7bd92f43dc5c902361dd0d57dd509d4e877bf4c8c93e1e800f36",
+    "src/shared/reference-scope.ts": "9cde609ed65d479eec8ef06e4dda8f2da5d0beeb29c4b6d6326d8c96385a70eb",
+    "src/host/validation.ts": "6042c6a18efefea952791baae22479c5632dafaae8ff0d477fccdf6439334c20",
+    "src/client/nodes.ts": "42b23ba73f16888b0a5a6d4e52486898ba14eccfd36facf0edc593016cdfd7eb",
+    "src/client/canvas.tsx": "0243b1496ac39ede1258d1fa3116c63ae404c461f9f7de07d973fffa86b477a6",
+    "src/client/node-branches.tsx": "624e5694a83d934d98814190ef32199264cad7113115bc696244a04945ae3969"
+  },
+  "pack": {
+    "file": "artifacts/dsh-visible-dynamic-workflows-0.0.1-graphon-fixes-macos-arm64.tgz",
+    "bytes": 31822833,
+    "sha256": "ce816454e046ac6ee9272efb0746e394057299162fe17e98d629bb9b37955358"
+  },
+  "web": {
+    "host": "DeepSeekHarness",
+    "url": "http://127.0.0.1:5188/",
+    "nestedExit": {
+      "passed": true,
+      "result": "1"
+    },
+    "siblingReference": {
+      "passed": true,
+      "rejectedAt": "start-validation"
+    },
+    "duplicateOutput": {
+      "passed": true,
+      "runStatus": "failed",
+      "retained": "first"
+    },
+    "humanDefault": {
+      "passed": true,
+      "afterRename": true,
+      "outputs": {
+        "action": "action",
+        "default": "default"
+      }
+    },
+    "modelCalls": 0,
+    "temporaryWorkflowsRemoved": true,
+    "remainingOriginalWorkflows": 7
+  },
+  "desktop": {
+    "installedAndEnabled": true,
+    "bundlesMatch": true,
+    "existingWorkflow": {
+      "status": "success",
+      "graphUnmodified": true
+    },
+    "humanDefault": {
+      "status": "success",
+      "engine": {
+        "name": "graphon",
+        "version": "0.7.0",
+        "protocol": 1
+      },
+      "selectedPort": "approve",
+      "defaultEdgesAfterRename": 1,
+      "result": "人工默认出口验证"
+    },
+    "cliWorkerBundlesUnchanged": true,
+    "originalWorkflowCount": 2,
+    "currentWorkflowCount": 2,
+    "originalGraphsUnchanged": true,
+    "temporaryWorkflowRemoved": true,
+    "cliWorkerOriginalChildRestored": true
+  },
+  "manual": {
+    "success": true,
+    "markdownPages": 66,
+    "indexedPages": 66,
+    "nodeKinds": 20,
+    "nodePages": 20,
+    "errors": []
+  },
+  "installedBundles": {
+    "lib/index.js": {
+      "sha256": "fcc28f8c343c181bf7471e018f856b5921595e758e8eff435a943f400181a1ef",
+      "equal": true
+    },
+    "lib/client.js": {
+      "sha256": "a7637553a3e3670986982004aa5b174b4028d95eb2ea761270980f3c749d3fff",
+      "equal": true
+    }
+  },
+  "cliWorkerUnchanged": true
+}

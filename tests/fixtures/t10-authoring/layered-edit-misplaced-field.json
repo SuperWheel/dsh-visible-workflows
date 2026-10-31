@@ -1,0 +1,231 @@
+[
+ {
+  "journal": ".test-data/layered-par/shard-4/events.jsonl",
+  "journalSha256": "5a0428b2fb9e3d1b4bb6fe67f4aadf98f700367660ceded5c830a1905025d7ec",
+  "line": 42,
+  "caseId": "local-edit",
+  "arm": "template-fill",
+  "repeat": 1,
+  "status": "failed",
+  "submissionsLog": [
+   {
+    "submission": {
+     "coverage": {
+      "R1": [
+       "n2"
+      ]
+     },
+     "mode": "edit",
+     "summary": "仅修改目标模板节点 n2 的正文为「完成：{{input.text}}」，text 引用工作流输入字段；不改 inputs 映射，其余节点、配置、顺序与连线保持不变。",
+     "updates": {
+      "n2": {
+       "text": "完成：{{input.text}}",
+       "unset": []
+      }
+     }
+    }
+   },
+   {
+    "submission": {
+     "draftRevision": 1,
+     "mode": "repair",
+     "patches": [
+      {
+       "op": "replace",
+       "path": "/updates/n2/text",
+       "value": "完成：{{input.text}}"
+      }
+     ],
+     "summary": "仅修改目标模板节点 n2：将模板正文更新为「完成：{{input.text}}」，text 引用工作流输入；其余节点、配置、顺序与连线保持不变。"
+    }
+   },
+   {
+    "submission": {
+     "draftRevision": 1,
+     "mode": "repair",
+     "patches": [
+      {
+       "op": "add",
+       "path": "/updates/n2/text",
+       "value": "完成：{{input.text}}"
+      }
+     ],
+     "summary": "在 /updates/n2/text 创建修订：模板节点 n2 正文改为「完成：{{input.text}}」，text 引用工作流输入；其余节点与连线保持不变。"
+    }
+   }
+  ],
+  "feedback": [
+   {
+    "status": "repairable",
+    "draftRevision": 1,
+    "issues": [
+     {
+      "code": "TEMPLATE_FIELDS",
+      "message": "Unrecognized key: \"text\"",
+      "path": "/updates/n2",
+      "allowedPaths": [
+       "/updates/n2/text"
+      ],
+      "actualType": "object"
+     }
+    ],
+    "fragments": {
+     "/updates/n2/text": "完成：{{input.text}}"
+    },
+    "allowedPaths": [
+     "/updates/n2/text"
+    ],
+    "remainingSubmissions": 2
+   },
+   {
+    "status": "repairable",
+    "draftRevision": 1,
+    "issues": [
+     {
+      "code": "PATCH_NO_CHANGE",
+      "message": "补丁没有修改任何内容",
+      "allowedPaths": [
+       "/updates",
+       "/addFormsByKey",
+       "/removeNodes",
+       "/addLinksByKey",
+       "/removeLinks",
+       "/title",
+       "/description",
+       "/addRolesByKey",
+       "/updateRoles",
+       "/removeRoles",
+       "/addEnvironmentByKey",
+       "/updateEnvironment",
+       "/removeEnvironment",
+       "/summary",
+       "/assumptions",
+       "/coverage"
+      ]
+     }
+    ],
+    "fragments": {
+     "/updates/n2/text": "完成：{{input.text}}"
+    },
+    "allowedPaths": [
+     "/updates/n2/text"
+    ],
+    "remainingSubmissions": 1
+   }
+  ]
+ },
+ {
+  "journal": ".test-data/layered-par/shard-4/events.jsonl",
+  "journalSha256": "5a0428b2fb9e3d1b4bb6fe67f4aadf98f700367660ceded5c830a1905025d7ec",
+  "line": 73,
+  "caseId": "large-edit",
+  "arm": "template-fill",
+  "repeat": 1,
+  "status": "failed",
+  "submissionsLog": [
+   {
+    "submission": {
+     "coverage": {
+      "R1": [
+       "n30"
+      ]
+     },
+     "mode": "edit",
+     "summary": "仅按要求更新目标模板节点 n30：text 改为「结果：{{input.text}}」，text 取自工作流输入字段；不改动该节点其他配置，也不改动其余节点、配置、顺序与连线。",
+     "updates": {
+      "n30": {
+       "text": "结果：{{input.text}}"
+      }
+     }
+    }
+   },
+   {
+    "submission": {
+     "draftRevision": 1,
+     "mode": "repair",
+     "patches": [
+      {
+       "op": "replace",
+       "path": "/updates/n30/text",
+       "value": "结果：{{input.text}}"
+      }
+     ],
+     "summary": "将 n30 的 text 修正写入允许路径 /updates/n30/text，值为「结果：{{input.text}}」；其余节点、配置、顺序与连线保持不变。"
+    }
+   },
+   {
+    "submission": {
+     "draftRevision": 1,
+     "mode": "repair",
+     "patches": [
+      {
+       "op": "add",
+       "path": "/updates/n30/text",
+       "value": "结果：{{input.text}}"
+      }
+     ],
+     "summary": "在允许路径 /updates/n30/text 上新增（而非替换）目标值「结果：{{input.text}}」，即 n30 的 values.text，text 取自工作流输入；其余节点、配置、顺序与连线保持不变。"
+    }
+   }
+  ],
+  "feedback": [
+   {
+    "status": "repairable",
+    "draftRevision": 1,
+    "issues": [
+     {
+      "code": "TEMPLATE_FIELDS",
+      "message": "Unrecognized key: \"text\"",
+      "path": "/updates/n30",
+      "allowedPaths": [
+       "/updates/n30/text"
+      ],
+      "actualType": "object"
+     }
+    ],
+    "fragments": {
+     "/updates/n30/text": "结果：{{input.text}}"
+    },
+    "allowedPaths": [
+     "/updates/n30/text"
+    ],
+    "remainingSubmissions": 2
+   },
+   {
+    "status": "repairable",
+    "draftRevision": 1,
+    "issues": [
+     {
+      "code": "PATCH_NO_CHANGE",
+      "message": "补丁没有修改任何内容",
+      "allowedPaths": [
+       "/updates",
+       "/addFormsByKey",
+       "/removeNodes",
+       "/addLinksByKey",
+       "/removeLinks",
+       "/title",
+       "/description",
+       "/addRolesByKey",
+       "/updateRoles",
+       "/removeRoles",
+       "/addEnvironmentByKey",
+       "/updateEnvironment",
+       "/removeEnvironment",
+       "/summary",
+       "/assumptions",
+       "/coverage"
+      ]
+     }
+    ],
+    "fragments": {
+     "/updates/n30/text": "结果：{{input.text}}"
+    },
+    "allowedPaths": [
+     "/updates/n30/text"
+    ],
+    "remainingSubmissions": 1
+   }
+  ]
+ }
+]

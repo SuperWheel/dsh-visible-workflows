@@ -1,0 +1,26 @@
+[
+  {
+    "id": "B1",
+    "status": "paid",
+    "category": "book",
+    "amountCents": 100
+  },
+  {
+    "id": "B2",
+    "status": "paid",
+    "category": "food",
+    "amountCents": 200
+  },
+  {
+    "id": "B3",
+    "status": "paid",
+    "category": "food",
+    "amountCents": 500
+  },
+  {
+    "id": "B4",
+    "status": "cancelled",
+    "category": "book",
+    "amountCents": 999
+  }
+]

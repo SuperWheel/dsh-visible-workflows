@@ -1,0 +1,1 @@
+{"submission":{"coverage":{"R1":["n2"]},"mode":"edit","summary":"仅修改目标模板节点 n2 的正文为「完成：{{input.text}}」，text 引用工作流输入字段；不改 inputs 映射，其余节点、配置、顺序与连线保持不变。","updates":{"n2":{"text":"完成：{{input.text}}","unset":[]}}}}

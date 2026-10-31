@@ -1,4 +1,6 @@
+import { CachedBodyError } from '../shared/http-cache.ts'
 import type { JsonValue } from '../shared/types.ts'
+import { ReferenceScopeError } from '../shared/reference-scope.ts'
 
 /** Bounded Jinja-compatible data expressions. No JavaScript evaluation, calls, imports, or property prototypes. */
 export function renderDataTemplate(source:string,lookup:(name:string)=>JsonValue):string {
@@ -37,7 +39,7 @@ export function renderDataTemplate(source:string,lookup:(name:string)=>JsonValue
     if(!/^[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*$/.test(path))throw new Error(`模板表达式不支持：${text}`)
     const [root,...parts]=path.split('.')
     if(Object.prototype.hasOwnProperty.call(locals,root!)){let value:JsonValue|undefined=locals[root!];for(const part of parts){if(['__proto__','prototype','constructor'].includes(part)||value===null||typeof value!=='object'||!Object.prototype.hasOwnProperty.call(value,part))return undefined;value=(value as Record<string,JsonValue>)[part]}return value}
-    try{return lookup(path)}catch{return undefined}
+    try{return lookup(path)}catch(error){if(error instanceof ReferenceScopeError||error instanceof CachedBodyError)throw error;return undefined}
   }
   const truth=(expr:string,locals:Locals):boolean=>{
     const ors=split(expr,' or ');if(ors.length>1)return ors.some(v=>truth(v,locals))

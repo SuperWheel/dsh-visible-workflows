@@ -1,0 +1,91 @@
+{
+  "scope": "retired global Secret interception only; repository source cleanup, no build/pack/install or external data changes",
+  "archivedFiles": 325,
+  "deletedPaths": 68,
+  "archiveBytes": 145963418,
+  "manifestSha256": "04066b78426141f4f2ae16362049f95c1a96539c899a2fac45db9100c0e58346",
+  "sharedSafetyRetained": [
+    "Python sandbox.confine with full enforcement",
+    "document-files and file-evidence path checks",
+    "workflow-package-archive and workflow-import safety",
+    "Graphon content verification capability and dedicated integrity probes",
+    "QuickJS execution limits and bounded process helper",
+    "OS Secret native component and strict neutral broker protocol"
+  ],
+  "modifiedSourceFiles": [
+    "src/host/index.ts",
+    "src/host/execution-adapters.ts",
+    "src/host/os-secret-broker.ts",
+    "tests/protected-broker-contract.test.ts",
+    "scripts/build.mjs",
+    "package.json",
+    "tests/probes/install-current-workflow.mjs"
+  ],
+  "newFiles": [
+    "src/host/secret-broker-protocol.ts",
+    "src/host/workflow-file-effects.ts",
+    "src/host/secret-runtime-compatibility.ts",
+    "tests/secret-runtime-compatibility.test.ts",
+    "tests/probes/current-workflow-package.test.mjs"
+  ],
+  "validation": {
+    "typecheck": "Host and Client passed with --noEmit",
+    "coreRegressions": {
+      "files": 14,
+      "uniqueTestsPassed": 166,
+      "initialEnvironmentFailure": "Local HTTP fixture listen EPERM in restricted sandbox; whole tool-adapters file rerun with loopback permission: 10 passed"
+    },
+    "installerAndRollbackTests": 23,
+    "protocolAndOSBaselineTestsBeforeConcurrentAuthorizationChanges": 78,
+    "scriptSyntaxChecks": [
+      "scripts/build.mjs",
+      "tests/probes/install-current-workflow.mjs",
+      "scripts/stage-typert-sdk.mjs",
+      "scripts/verify-typert-build.mjs"
+    ],
+    "packageManifestOnlyExpectedChanges": true
+  },
+  "preservation": {
+    "checkedAt": "2026-10-17T08:02:49.962583+00:00",
+    "unchangedCount": 432,
+    "missing": [],
+    "changed": [
+      {
+        "path": "src/client/variable-panels.tsx",
+        "beforeSha256": "90b885827b51990762f13d1a4c0f58f708348df63bc8347a2a2900243deb983b",
+        "afterSha256": "53ba19f74cc17c13db0748579af89f874decb06dc38f30f65ee690f99ff1782c",
+        "classification": "concurrent_authorization_work"
+      },
+      {
+        "path": "src/host/workflow-readiness.ts",
+        "beforeSha256": "8833697e68d9d116f6f7a190b8806a987522c16f546e96afeea65b0dcb9c4bfd",
+        "afterSha256": "4f10b910b852a2de52937644bf1542f1bd099c9539b5c94d377340c057510b93",
+        "classification": "concurrent_authorization_work"
+      },
+      {
+        "path": "src/shared/os-secret-storage.ts",
+        "beforeSha256": "ef3a1d4268dc5be3d55f278b3dffffe4d55efcdc7bab4c8f4c4b407ba8511853",
+        "afterSha256": "30f6f3454b10d73b129068e97e47bcf450ddf89ade8432508aaa10bebc9b99cf",
+        "classification": "concurrent_authorization_work"
+      },
+      {
+        "path": "src/shared/protected-secret.ts",
+        "beforeSha256": "4283097929089d4be1070ebaabc72171b827d4f2e902e797fc86458bbc98365d",
+        "afterSha256": "9a2fe542e1c1ef12bcb30a0a46aea14d1c9cc8c5964bdebd332b91cf53c95584",
+        "classification": "concurrent_authorization_work"
+      },
+      {
+        "path": "native/os-secret-broker/Sources/Protocol.swift",
+        "beforeSha256": "18a26469c7f0ed051e2c67c52dbc9e0bd6a4e5476da312fef4ecc507754a4084",
+        "afterSha256": "a82ee8ccce7811d968730a4af942f9532038f9e5d54a9ab32251f8a5a5c98a31",
+        "classification": "concurrent_authorization_work"
+      }
+    ],
+    "archiveVerified": true,
+    "deletedPathsStillAbsent": true,
+    "manifestSha256": "04066b78426141f4f2ae16362049f95c1a96539c899a2fac45db9100c0e58346"
+  },
+  "concurrencyNote": "Root and another agent are implementing user-authorized persistent authorization; their explicit OS/shared/client state changes are classified separately from cleanup.",
+  "sourceArchiveManifestName": "manifest.json",
+  "sourceDeleteListName": "delete-paths.txt"
+}

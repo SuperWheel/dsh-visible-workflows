@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-17T06:59:33.896Z",
+  "sourceId": "162878e8-e655-4572-a573-5649b6100d15",
+  "targetId": "ddb9340b-2880-478e-8abc-055f5446a725",
+  "checks": {
+    "originalWorkflowsUnchanged": true,
+    "originalSecretNoValue": true,
+    "newWorkflowIdentity": true,
+    "nodeCount": true,
+    "edgeCount": true,
+    "positions": true,
+    "nodeKinds": true,
+    "nodeTitles": true,
+    "nodeIdentities": true,
+    "newSecretIdentity": true,
+    "secretMetadata": true,
+    "secretFieldsOnly": true,
+    "credentialReference": true,
+    "outputReference": true,
+    "edgeReferences": true,
+    "viewport": true,
+    "noteGeometry": true,
+    "noteAnchor": true,
+    "annotationGeometry": true,
+    "annotationReference": true
+  },
+  "passed": 20,
+  "total": 20,
+  "valuesRead": false
+}

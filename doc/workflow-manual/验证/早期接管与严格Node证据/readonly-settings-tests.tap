@@ -1,0 +1,15 @@
+[1017/142240.206985:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+✔ requires the exact reviewed official source and contains no filesystem/editor capability (1.202ms)
+✔ uses actual values, omits invented layers, excludes another tree and inactive entries (2.156625ms)
+✔ always strips nested/array secrets and secret schema defaults even when raw reads requested (0.719084ms)
+✔ every write/document/migration entry rejects before observing caller values (0.283292ms)
+✔ initialization never schedules legacy migration or document preparation (3.652041ms)
+✔ revocation, disposal and ambiguous entry identities fail closed (0.561917ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 106.41325

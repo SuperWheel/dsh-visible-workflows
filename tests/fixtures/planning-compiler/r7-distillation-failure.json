@@ -1,0 +1,321 @@
+{
+  "origin": {
+    "sessionId": "76f6605f-2c44-45f6-9216-9d8a2075f517",
+    "parentId": "session-ebfe6768-ad6a-438f-864e-f3ecf6f8c1a8",
+    "seq": 15,
+    "callId": "call_d863f5ee67cc4971b28fb638",
+    "argumentsSha256": "d9cc3077eb96f18b881a048d3281328a25cbb45870eb67d0ec8bace921038a89",
+    "scope": "public structured_output from authorized synthetic R7 acceptance"
+  },
+  "invalidOutput": {
+    "outcome": "procedure",
+    "procedureJson": "{\n  \"goal\": \"读取参数指定的订单 JSON 文件（数组，每条含 id/status/category/amountCents，amountCents 为整数分），筛选 status 严格等于 paid 的订单，按 category 对整数 amountCents 求和，以确定性计算写出固定结构的 summary.json（顶层仅 paidCount、totalCents、byCategory）与固定格式的 report.md（标题“# 已支付订单汇总”，正文仅“笔数：N”“总额（分）：T”及各分类“分类：金额分”行，无任何评价或额外文案）。订单文件路径与输出目录为可变输入，任何统计值与分类名单不得硬编码。样本验收实例：读取工作区 orders.json（5 条合成订单），输出 summary.json 与 report.md 到工作区根目录。\",\n  \"parameters\": [\n    {\n      \"name\": \"ordersFilePath\",\n      \"description\": \"订单 JSON 输入文件路径；内容为数组，每条含 id、status、category、amountCents（整数分）。样本实例：当前工作区 orders.json（5 条合成订单）。\"\n    },\n    {\n      \"name\": \"outputDir\",\n      \"description\": \"输出目录，写入 summary.json 与 report.md 两个产物。样本实例：工作区根目录。\"\n    }\n  ],\n  \"rules\": [\n    \"不得硬编码任何统计值或分类名单（含本次样本值 3、4000、3700、300 及 book/food），全部结果由输入数据动态计算。\",\n    \"筛选逻辑严格 status === \\\"paid\\\"：区分大小写、不宽松匹配，refunded/cancelled 等其他状态一律排除；amountCents 按整数求和。\",\n    \"统计与格式化以确定性方式实现（代码/内置 JSON/模板能力），不依赖模型推断、不调用子 Agent；文件读写使用实际 read/write 工具（与试做证据一致）。\",\n    \"summary.json 顶层仅含 paidCount（number）、totalCents（number）、byCategory（object）三个字段，无多余键。\",\n    \"report.md 结构：首行“# 已支付订单汇总”，空行后依次“- 笔数：N”“- 总额（分）：T”，再按分类首次出现顺序逐行“- 分类：金额分”（全角冒号），不含评价、结论、二级标题或额外文案。\",\n    \"仅处理本地工作区内给定的合成文件，不联网、不访问外部资源。\"\n  ],\n  \"steps\": [\n    {\n      \"id\": \"S1\",\n      \"title\": \"读取订单输入文件\",\n      \"instruction\": \"用 read 工具读取参数 ordersFilePath 指向的订单 JSON 文件并解析为数组；每条订单含 id、status、category、amountCents 四个字段，amountCents 为整数分。文件路径完全来自参数，不硬编码；只读取，不修改输入文件。\",\n      \"dependsOn\": [],\n      \"evidenceRefs\": [\"e16\", \"e17\", \"trialTask.inputs[0]\"],\n      \"requiresReview\": false\n    },\n    {\n      \"id\": \"S2\",\n      \"title\": \"确定性筛选与汇总计算\",\n      \"instruction\": \"基于 S1 解析结果做确定性计算（以代码/内置 JSON 能力实现，不依赖模型推断，不得硬编码任何统计值或分类名单）：①筛选 status 严格等于 \\\"paid\\\" 的订单（区分大小写、不宽松匹配，排除 refunded/cancelled 等其他状态）；②paidCount = 筛选后订单条数；③totalCents = 筛选后订单 amountCents 的整数求和；④byCategory = 按 category 聚合的整数金额对象，键由数据动态产生。输出顺序固定为分类首次出现的先后，保证确定性。\",\n      \"dependsOn\": [\"S1\"],\n      \"evidenceRefs\": [\"trialTask.task\", \"e17\", \"trialTask.reviewItems[2]\", \"trialTask.reviewItems[3]\"],\n      \"requiresReview\": true\n    },\n    {\n      \"id\": \"S3\",\n      \"title\": \"写出 summary.json\",\n      \"instruction\": \"用 write 工具将 S2 结果写入参数 outputDir 下的 summary.json，顶层固定且仅含三个字段：paidCount（number）、totalCents（number）、byCategory（object，键为分类、值为整数金额），不得出现任何多余键；所有数值直接取自 S2 计算结果。\",\n      \"dependsOn\": [\"S2\"],\n      \"evidenceRefs\": [\"e21\", \"e22\", \"trialTask.artifacts[0]\", \"trialTask.reviewItems[0]\"],\n      \"requiresReview\": true\n    },\n    {\n      \"id\": \"S4\",\n      \"title\": \"写出 report.md（仅标题与统计行）\",\n      \"instruction\": \"用 write 工具将报告写入参数 outputDir 下的 report.md，内容仅含：首行固定标题“# 已支付订单汇总”；空行后依次“- 笔数：{paidCount}”“- 总额（分）：{totalCents}”，再按分类首次出现顺序逐行“- {分类}：{金额分}”（冒号为全角“：”，数值取自 S2）；除此之外不含任何评价、结论、二级标题或额外文案。若此前存在含多余小节的初版，必须以本格式覆盖重写。\",\n      \"dependsOn\": [\"S2\"],\n      \"evidenceRefs\": [\"e35\", \"e36\", \"trialTask.artifacts[1]\", \"trialTask.reviewItems[1]\"],\n      \"requiresReview\": true\n    },\n    {\n      \"id\": \"S5\",\n      \"title\": \"回读核对两个产物\",\n      \"instruction\": \"用 read 工具回读 outputDir 下的 summary.json 与 report.md，逐项对照验收检查：summary.json 的 paidCount/totalCents/byCategory 取值与类型正确且无多余键；report.md 标题与全部统计行齐全、无评价或额外文案；发现偏差立即修正重写。回读结果与验收对照一并提交人工核对确认。\",\n      \"dependsOn\": [\"S3\", \"S4\"],\n      \"evidenceRefs\": [\"e28\", \"e30\", \"e40\", \"e41\", \"trialTask.artifacts[0]\", \"trialTask.artifacts[1]\"],\n      \"requiresReview\": true\n    }\n  ],\n  \"excluded\": [\n    {\n      \"evidenceRefs\": [\"e15\"],\n      \"reason\": \"截断且状态 unknown 的助手记录，原文无法完整解析，不能作为已验证事实使用，整条排除。\"\n    },\n    {\n      \"evidenceRefs\": [\"e20\"],\n      \"reason\": \"截断的助手自述计算声明；其数值已由写入内容与回读结果（e21、e30）独立印证，自述本身不作为事实依据，排除。\"\n    },\n    {\n      \"evidenceRefs\": [\"e23\", \"e24\", \"e29\", \"e31\"],\n      \"reason\": \"被撤回的初版 report.md 及其写入结果与回读：内容含多余二级标题“## 按分类金额（分）”，不符合 reviewItems 对无额外文案的要求，随后被最终版覆盖，属被撤回尝试，不进入可复用方法。\"\n    },\n    {\n      \"evidenceRefs\": [\"e27\"],\n      \"reason\": \"截断的过渡性助手语句（宣布回读验证）；实际回读行为由 e28–e31、e40/e41 的工具调用与结果直接佐证，该截断语句排除。\"\n    },\n    {\n      \"evidenceRefs\": [\"e34\"],\n      \"reason\": \"截断的修正动机说明；最终版报告的存在与内容由 e35/e36/e40/e41 及 trialTask.reviewItems[1] 佐证，截断文字不作为事实依据，排除。\"\n    },\n    {\n      \"evidenceRefs\": [\"e39\"],\n      \"reason\": \"截断且状态 unknown 的助手记录，无可提取的完整内容，排除。\"\n    },\n    {\n      \"evidenceRefs\": [\"e44\"],\n      \"reason\": \"截断的“任务完成”自报成功总结，不作为已验证事实；完成性由试做回执与 trialTask.artifacts 检查承载，排除。\"\n    },\n    {\n      \"evidenceRefs\": [\"e45\", \"e46\"],\n      \"reason\": \"试做子会话（childSession 9a741a34…）收尾的 structured_output 汇报动作，属 Harness 协议行为而非可复用业务方法；其汇报内容与冻结验收条件一致但不构成独立验证来源，排除。\"\n    },\n    {\n      \"evidenceRefs\": [\"requirement.R1\"],\n      \"reason\": \"当前 requirement 中的生成、预览、基线、优化、回归与预算要求属图外设计控制，试做中无对应执行证据，不据此建立业务步骤；其中确定性计算、不硬编码、可变输入路径、仅本地不联网等业务约束已并入 rules/parameters 与步骤。\"\n    }\n  ],\n  \"reviewItems\": [\n    \"summary.json 顶层仅含 paidCount、totalCents、byCategory 三个字段，无多余键\",\n    \"report.md 除固定标题与统计行外不含评价、结论或额外文案\",\n    \"统计逻辑严格 status === 'paid'（区分大小写、不宽松匹配），amountCents 按整数求和\",\n    \"工作流定义不得硬编码本次统计值（3、4000、3700、300 或分类名单），订单文件路径与输出目录为可变输入\",\n    \"试做验收报告整体为 needs-review 状态：机械检查已通过，非机械复核项待人工确认；会话中截断/未知记录（e15、e20、e27、e34、e39、e44）与被撤回的初版 report.md（e23、e24、e29、e31）均已排除，不得当作已验证事实。\"\n  ]\n}",
+    "summary": "已从 verified-trial（trial-71128754-f3a1-483e-b5e2-a8eb3dd3ddf9，真实试做子会话 9a741a34…，与根会话身份分离）的冻结证据提炼可复用 procedure，未重新执行：5 个步骤 S1–S5（读取订单 JSON → 确定性筛选汇总（严格 status===\"paid\"、整数求和、不硬编码）→ 写 summary.json（顶层仅三键）→ 写 report.md（仅固定标题与统计行，无额外文案）→ 回读核对）；ordersFilePath 与 outputDir 参数化，规则要求确定性计算、实际 read/write 工具、仅本地不联网。trialTask 的 4 条 reviewItems 逐字保留，并分别由 requiresReview 步骤（S2/S3/S4/S5）承接生成人工核对环节，另补充 1 条说明验收报告 needs-review 状态与排除情况。22 条会话证据全部归属：10 条进入有效步骤，12 条排除并说明原因（截断/未知自述 e15/e20/e27/e34/e39/e44、被撤回的初版 report.md e23/e24/e29/e31、Harness 收尾汇报 e45/e46、requirement 图外设计控制 requirement.R1）。证据完整、无阻塞问题，故不提问。"
+  },
+  "evidence": {
+    "version": 1,
+    "sessionId": "9a741a34-f38c-46b3-a9f2-183856fab3ac",
+    "fromSeq": 4,
+    "throughSeq": 48,
+    "digest": "8a2a12af6f6c1de841db6a4d8d287ead584c6de14b931b405447f2f375a59ff9",
+    "records": [
+      {
+        "id": "e15",
+        "seq": 15,
+        "kind": "assistant",
+        "text": "[结构化材料无法完整解析，未保留原始内容]\n[摘录：原记录未完整保留]",
+        "status": "unknown",
+        "truncated": true
+      },
+      {
+        "id": "e16",
+        "seq": 16,
+        "kind": "tool-call",
+        "text": "{\"file_path\":\"orders.json\"}",
+        "status": "reported-success",
+        "toolName": "read",
+        "callId": "call_17267da2633d409db3c4c33f",
+        "truncated": false
+      },
+      {
+        "id": "e17",
+        "seq": 17,
+        "kind": "tool-result",
+        "text": "<path>/private/tmp/dsh-workflow-r7-acceptance-20261018/orders.json</path>\n<type>file</type>\n<content>\n1: [\n2:   {\n3:     \"id\": \"A1\",\n4:     \"status\": \"paid\",\n5:     \"category\": \"book\",\n6:     \"amountCents\": 1200\n7:   },\n8:   {\n9:     \"id\": \"A2\",\n10:     \"status\": \"paid\",\n11:     \"category\": \"book\",\n12:     \"amountCents\": 2500\n13:   },\n14:   {\n15:     \"id\": \"A3\",\n16:     \"status\": \"paid\",\n17:     \"category\": \"food\",\n18:     \"amountCents\": 300\n19:   },\n20:   {\n21:     \"id\": \"A4\",\n22:     \"status\": \"refunded\",\n23:     \"category\": \"food\",\n24:     \"amountCents\": 900\n25:   },\n26:   {\n27:     \"id\": \"A5\",\n28:     \"status\": \"cancelled\",\n29:     \"category\": \"book\",\n30:     \"amountCents\": 700\n31:   }\n32: ]\n\n(End of file - total 32 lines)\n</content>",
+        "status": "reported-success",
+        "toolName": "read",
+        "callId": "call_17267da2633d409db3c4c33f",
+        "truncated": false
+      },
+      {
+        "id": "e20",
+        "seq": 20,
+        "kind": "assistant",
+        "text": "已读取 orders.json，共 5 条订单。筛选 `status === \"paid\"`（A1、A2、A3），计算：paidCount=3，totalCents=1200+2500+300=4000，byCategory={book: 3700, food: 300}，与预期一致。现在写入两个产物文件：",
+        "status": "unknown",
+        "truncated": true
+      },
+      {
+        "id": "e21",
+        "seq": 21,
+        "kind": "tool-call",
+        "text": "{\"content\":\"{\\n  \\\"paidCount\\\": 3,\\n  \\\"totalCents\\\": 4000,\\n  \\\"byCategory\\\": {\\n    \\\"book\\\": 3700,\\n    \\\"food\\\": 300\\n  }\\n}\\n\",\"file_path\":\"summary.json\"}",
+        "status": "reported-success",
+        "toolName": "write",
+        "callId": "call_8d5deb9c71b947af92b0b3e2",
+        "truncated": false
+      },
+      {
+        "id": "e22",
+        "seq": 22,
+        "kind": "tool-result",
+        "text": "<path>/private/tmp/dsh-workflow-r7-acceptance-20261018/summary.json</path>\n<type>file</type>\n<content>\nCreated file\n</content>",
+        "status": "reported-success",
+        "toolName": "write",
+        "callId": "call_8d5deb9c71b947af92b0b3e2",
+        "truncated": false
+      },
+      {
+        "id": "e23",
+        "seq": 23,
+        "kind": "tool-call",
+        "text": "{\"content\":\"# 已支付订单汇总\\n\\n- 笔数：3\\n- 总额（分）：4000\\n\\n## 按分类金额（分）\\n\\n- book：3700\\n- food：300\\n\",\"file_path\":\"report.md\"}",
+        "status": "reported-success",
+        "toolName": "write",
+        "callId": "call_116e4ddc40a8499b9b8c40c7",
+        "truncated": false
+      },
+      {
+        "id": "e24",
+        "seq": 24,
+        "kind": "tool-result",
+        "text": "<path>/private/tmp/dsh-workflow-r7-acceptance-20261018/report.md</path>\n<type>file</type>\n<content>\nCreated file\n</content>",
+        "status": "reported-success",
+        "toolName": "write",
+        "callId": "call_116e4ddc40a8499b9b8c40c7",
+        "truncated": false
+      },
+      {
+        "id": "e27",
+        "seq": 27,
+        "kind": "assistant",
+        "text": "两个文件已创建。回读验证内容：",
+        "status": "unknown",
+        "truncated": true
+      },
+      {
+        "id": "e28",
+        "seq": 28,
+        "kind": "tool-call",
+        "text": "{\"file_path\":\"summary.json\"}",
+        "status": "reported-success",
+        "toolName": "read",
+        "callId": "call_789157fb0f684eb59632f347",
+        "truncated": false
+      },
+      {
+        "id": "e29",
+        "seq": 29,
+        "kind": "tool-call",
+        "text": "{\"file_path\":\"report.md\"}",
+        "status": "reported-success",
+        "toolName": "read",
+        "callId": "call_5a3e04577ae44bf586904fe6",
+        "truncated": false
+      },
+      {
+        "id": "e30",
+        "seq": 30,
+        "kind": "tool-result",
+        "text": "<path>/private/tmp/dsh-workflow-r7-acceptance-20261018/summary.json</path>\n<type>file</type>\n<content>\n1: {\n2:   \"paidCount\": 3,\n3:   \"totalCents\": 4000,\n4:   \"byCategory\": {\n5:     \"book\": 3700,\n6:     \"food\": 300\n7:   }\n8: }\n\n(End of file - total 8 lines)\n</content>",
+        "status": "reported-success",
+        "toolName": "read",
+        "callId": "call_789157fb0f684eb59632f347",
+        "truncated": false
+      },
+      {
+        "id": "e31",
+        "seq": 31,
+        "kind": "tool-result",
+        "text": "<path>/private/tmp/dsh-workflow-r7-acceptance-20261018/report.md</path>\n<type>file</type>\n<content>\n1: # 已支付订单汇总\n2: \n3: - 笔数：3\n4: - 总额（分）：4000\n5: \n6: ## 按分类金额（分）\n7: \n8: - book：3700\n9: - food：300\n\n(End of file - total 9 lines)\n</content>",
+        "status": "reported-success",
+        "toolName": "read",
+        "callId": "call_5a3e04577ae44bf586904fe6",
+        "truncated": false
+      },
+      {
+        "id": "e34",
+        "seq": 34,
+        "kind": "assistant",
+        "text": "验收逐项核对中。reviewItems 要求 report.md 除固定标题与统计行外不含额外文案，为最严格符合，我去掉多余的二级标题，重写为仅含标题与统计行：",
+        "status": "unknown",
+        "truncated": true
+      },
+      {
+        "id": "e35",
+        "seq": 35,
+        "kind": "tool-call",
+        "text": "{\"content\":\"# 已支付订单汇总\\n\\n- 笔数：3\\n- 总额（分）：4000\\n- book：3700\\n- food：300\\n\",\"file_path\":\"report.md\"}",
+        "status": "reported-success",
+        "toolName": "write",
+        "callId": "call_c04a3cace8054cb583627524",
+        "truncated": false
+      },
+      {
+        "id": "e36",
+        "seq": 36,
+        "kind": "tool-result",
+        "text": "<path>/private/tmp/dsh-workflow-r7-acceptance-20261018/report.md</path>\n<type>file</type>\n<content>\nUpdated file\n</content>",
+        "status": "reported-success",
+        "toolName": "write",
+        "callId": "call_c04a3cace8054cb583627524",
+        "truncated": false
+      },
+      {
+        "id": "e39",
+        "seq": 39,
+        "kind": "assistant",
+        "text": "[结构化材料无法完整解析，未保留原始内容]\n[摘录：原记录未完整保留]",
+        "status": "unknown",
+        "truncated": true
+      },
+      {
+        "id": "e40",
+        "seq": 40,
+        "kind": "tool-call",
+        "text": "{\"file_path\":\"report.md\"}",
+        "status": "reported-success",
+        "toolName": "read",
+        "callId": "call_eda2c85e3426491fb14c2c8b",
+        "truncated": false
+      },
+      {
+        "id": "e41",
+        "seq": 41,
+        "kind": "tool-result",
+        "text": "<path>/private/tmp/dsh-workflow-r7-acceptance-20261018/report.md</path>\n<type>file</type>\n<content>\n1: # 已支付订单汇总\n2: \n3: - 笔数：3\n4: - 总额（分）：4000\n5: - book：3700\n6: - food：300\n\n(End of file - total 6 lines)\n</content>",
+        "status": "reported-success",
+        "toolName": "read",
+        "callId": "call_eda2c85e3426491fb14c2c8b",
+        "truncated": false
+      },
+      {
+        "id": "e44",
+        "seq": 44,
+        "kind": "assistant",
+        "text": "任务完成。已真实执行统计并产出两个文件：\n\n**统计过程**：读取 [orders.json](orders.json) 的 5 条订单，严格按 `status === \"paid\"`（区分大小写）筛选出 A1、A2、A3 三条，整数求和得总额 4000 分；按分类聚合 book=1200+2500=3700、food=300。\n\n**产物**：\n- [summary.json](summary.json)：顶层仅 `paidCount: 3`、`totalCents: 4000`、`byCategory: {\"book\": 3700, \"food\": 300}` 三个字段\n- [report.md](report.md)：标题“# 已支付订单汇总”，含“笔数：3”“总额（分）：4000”“book：3700”“food：300”，无额外文案\n\n结果与预期验收标准完全一致。",
+        "status": "unknown",
+        "truncated": true
+      },
+      {
+        "id": "e45",
+        "seq": 45,
+        "kind": "tool-call",
+        "text": "{\"outcome\":\"completed\",\"questions\":[],\"summary\":\"只读 orders.json（5 条合成订单），严格按 status === \\\"paid\\\" 筛选（A1/A2/A3，3 条；排除 refunded 与 cancelled），按 category 对整数 amountCents 求和：总额 4000 分，book 3700、food 300。已写入 summary.json（顶层仅 paidCount=3、totalCents=4000、byCategory={book:3700,food:300}）和 report.md（标题“# 已支付订单汇总”，含“笔数：3”“总额（分）：4000”“book：3700”“food：300”，无多余文案）至工作区根目录，两文件均已回读验证与预期一致。\"}",
+        "status": "reported-success",
+        "toolName": "structured_output",
+        "callId": "call_d26f8dabe1c6403daec3a91f",
+        "truncated": false
+      },
+      {
+        "id": "e46",
+        "seq": 46,
+        "kind": "tool-result",
+        "text": "Structured output recorded.",
+        "status": "reported-success",
+        "toolName": "structured_output",
+        "callId": "call_d26f8dabe1c6403daec3a91f",
+        "truncated": false
+      }
+    ],
+    "warnings": [
+      "证据来自 Host 管理的真实试做子会话；根对话授权身份另存于试做回执。",
+      "工具成功仅表示调用报告成功；文件验收只证明事先冻结的检查条件，不证明泛化能力。",
+      "Host 下发的执行提示不作为真人用户原话；原始需求与验收规范由试做回执绑定。",
+      "公开内容按既有规则脱敏和限长；自动脱敏不能保证识别所有敏感信息。",
+      "机械检查通过，非机械复核项由真人询问确认；原文件验收报告仍保留 needs-review 状态。",
+      "存在失败、未知或摘录记录，提炼时须保留复核项或说明排除理由。"
+    ]
+  },
+  "trialTask": {
+    "task": "只读当前工作区 orders.json（5 条合成订单），筛选 status===paid，按 category 求和整数 amountCents，写 summary.json 和 report.md 到工作区根目录。正确结果应为 paidCount=3、totalCents=4000、byCategory={book:3700,food:300}；report.md 标题“# 已支付订单汇总”，含“笔数：3”“总额（分）：4000”“book：3700”“food：300”。",
+    "inputs": [
+      "orders.json"
+    ],
+    "artifacts": [
+      {
+        "path": "summary.json",
+        "format": "json",
+        "checks": [
+          {
+            "kind": "json-equals",
+            "pointer": "/paidCount",
+            "value": 3
+          },
+          {
+            "kind": "json-equals",
+            "pointer": "/totalCents",
+            "value": 4000
+          },
+          {
+            "kind": "json-equals",
+            "pointer": "/byCategory",
+            "value": {
+              "book": 3700,
+              "food": 300
+            }
+          },
+          {
+            "kind": "json-type",
+            "pointer": "/paidCount",
+            "value": "number"
+          },
+          {
+            "kind": "json-type",
+            "pointer": "/totalCents",
+            "value": "number"
+          },
+          {
+            "kind": "json-type",
+            "pointer": "/byCategory",
+            "value": "object"
+          }
+        ],
+        "requireChanged": true
+      },
+      {
+        "path": "report.md",
+        "format": "text",
+        "checks": [
+          {
+            "kind": "text-includes",
+            "value": "# 已支付订单汇总"
+          },
+          {
+            "kind": "text-includes",
+            "value": "笔数：3"
+          },
+          {
+            "kind": "text-includes",
+            "value": "总额（分）：4000"
+          },
+          {
+            "kind": "text-includes",
+            "value": "book：3700"
+          },
+          {
+            "kind": "text-includes",
+            "value": "food：300"
+          }
+        ],
+        "requireChanged": true
+      }
+    ],
+    "reviewItems": [
+      "summary.json 顶层仅含 paidCount、totalCents、byCategory 三个字段，无多余键",
+      "report.md 除固定标题与统计行外不含评价、结论或额外文案",
+      "统计逻辑严格 status === 'paid'（区分大小写、不宽松匹配），amountCents 按整数求和",
+      "工作流定义不得硬编码本次统计值（3、4000、3700、300 或分类名单），订单文件路径与输出目录为可变输入"
+    ]
+  }
+}

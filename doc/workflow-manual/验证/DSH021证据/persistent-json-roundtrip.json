@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-17T08:22:54.527Z",
+  "sourceId": "162878e8-e655-4572-a573-5649b6100d15",
+  "copyId": "5c1a6d47-7b93-49e9-ae56-cf3bffbfc7ea",
+  "sourceRevision": 6,
+  "sourceAndSevenOtherDefinitionsUnchanged": true,
+  "copySavedRevision": 1,
+  "nodes": 3,
+  "edges": 2,
+  "notes": 1,
+  "annotations": 1,
+  "positionsReferencesAndViewportPreserved": true,
+  "viewport": {
+    "x": 40,
+    "y": 30,
+    "scale": 0.75
+  },
+  "secretDeclarationFields": [
+    "description",
+    "id",
+    "name",
+    "required",
+    "revision",
+    "type"
+  ],
+  "secretValueOrAuthorizationImported": false,
+  "uiMissingWarning": true,
+  "executeButtonEnabled": true,
+  "clickExecuteDialog": "请先处理缺失配置",
+  "noCopyRunCreated": true,
+  "credentialValueRead": false
+}

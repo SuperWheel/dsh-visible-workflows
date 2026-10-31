@@ -1,0 +1,155 @@
+{
+  "stopResult": {
+    "settled": true,
+    "error": "PROCESS_TREE_SUPERVISION_UNVERIFIED"
+  },
+  "adapterReport": {
+    "launches": 3,
+    "retainedRanges": 0,
+    "controlPipe": false,
+    "pty": false,
+    "treeSupervision": "unverified",
+    "unverifiedTreeRanges": 3
+  },
+  "at": "2026-10-17T03:47:13.166Z",
+  "scope": "Installed Harness runtime and MXC; synthetic fixture only, not live Agent acceptance",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "runtime": "/Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-subprocess-local/lib/index.js",
+  "mxcSha256": "c54390e48a25187fdae10758c6a286bede49416cb610c88c6705fd8445e97f60",
+  "reports": [
+    {
+      "mode": "ordinary",
+      "event": {
+        "pid": 69693,
+        "ppid": 69692,
+        "child": 69694,
+        "token": "2b031b9f-3110-4a25-8bf2-b2f031bd4811"
+      },
+      "before": {
+        "root": "69693 69692 69692 S    Sat Oct 17 11:47:11 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs ordinary 2b031b9f-3110-4a25-8bf2-b2f031bd4811",
+        "child": "69694 69693 69692 R    Sat Oct 17 11:47:11 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs child 2b031b9f-3110-4a25-8bf2-b2f031bd4811"
+      },
+      "direct": {
+        "settled": true,
+        "value": {
+          "exitCode": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "nativeRange": {
+        "settled": true,
+        "value": true
+      },
+      "remainedBeforeCleanup": {
+        "root": false,
+        "child": false
+      },
+      "state": {
+        "root": null,
+        "child": null
+      },
+      "afterFixtureCleanup": {
+        "root": false,
+        "child": false
+      }
+    },
+    {
+      "mode": "detached",
+      "event": {
+        "pid": 69706,
+        "ppid": 69705,
+        "child": 69707,
+        "token": "4a755215-e2ff-48a0-ac33-605832622062"
+      },
+      "before": {
+        "root": "69706 69705 69705 S    Sat Oct 17 11:47:11 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs detached 4a755215-e2ff-48a0-ac33-605832622062",
+        "child": "69707 69706 69707 Rs   Sat Oct 17 11:47:11 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs child 4a755215-e2ff-48a0-ac33-605832622062"
+      },
+      "direct": {
+        "settled": true,
+        "value": {
+          "exitCode": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "nativeRange": {
+        "settled": true,
+        "value": true
+      },
+      "remainedBeforeCleanup": {
+        "root": false,
+        "child": true
+      },
+      "state": {
+        "root": null,
+        "child": "69707     1 69707 Ss   Sat Oct 17 11:47:11 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs child 4a755215-e2ff-48a0-ac33-605832622062"
+      },
+      "afterFixtureCleanup": {
+        "root": false,
+        "child": false
+      }
+    },
+    {
+      "mode": "early-detached",
+      "event": {
+        "pid": 69719,
+        "ppid": 69718,
+        "child": 69720,
+        "token": "6d0db876-d8d4-4cd2-880e-603df6117bc1"
+      },
+      "before": {
+        "root": "69719 69718 69718 S    Sat Oct 17 11:47:12 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs early-detached 6d0db876-d8d4-4cd2-880e-603df6117bc1",
+        "child": "69720 69719 69720 Rs   Sat Oct 17 11:47:12 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs child 6d0db876-d8d4-4cd2-880e-603df6117bc1"
+      },
+      "direct": {
+        "settled": true,
+        "value": {
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      "nativeRange": {
+        "settled": true,
+        "value": true
+      },
+      "remainedBeforeCleanup": {
+        "root": false,
+        "child": true
+      },
+      "state": {
+        "root": null,
+        "child": "69720     1 69720 Ss   Sat Oct 17 11:47:12 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs child 6d0db876-d8d4-4cd2-880e-603df6117bc1"
+      },
+      "afterFixtureCleanup": {
+        "root": false,
+        "child": false
+      }
+    },
+    {
+      "mode": "host-sigkill-detached",
+      "hostPid": 69733,
+      "event": {
+        "pid": 69735,
+        "ppid": 69734,
+        "child": 69736,
+        "token": "d2c5e12a-1157-4990-8b7c-f04490bc8233"
+      },
+      "hostExited": true,
+      "remainedBeforeCleanup": {
+        "root": true,
+        "child": true
+      },
+      "state": {
+        "root": "69735 69734 69734 S    Sat Oct 17 11:47:12 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs detached d2c5e12a-1157-4990-8b7c-f04490bc8233",
+        "child": "69736 69735 69736 Ss   Sat Oct 17 11:47:12 2026     /Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness ~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-lifecycle-20261017/payload.cjs child d2c5e12a-1157-4990-8b7c-f04490bc8233"
+      },
+      "afterFixtureCleanup": {
+        "root": false,
+        "child": false
+      }
+    }
+  ],
+  "pidReuse": "Not forced; no stable kernel process identity contract available, no pass claimed",
+  "conclusion": "Native waitForExit success is insufficient for detached descendants; fixture cleanup does not count as product capability"
+}

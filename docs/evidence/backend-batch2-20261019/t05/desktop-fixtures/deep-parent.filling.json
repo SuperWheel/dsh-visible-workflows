@@ -1,0 +1,69 @@
+{
+  "submission": {
+    "mode": "create",
+    "title": "Synthetic T05 deep subworkflow caller",
+    "forms": [
+      {
+        "key": "start",
+        "template": "input",
+        "values": {
+          "fields": [
+            {
+              "name": "records",
+              "label": "JSON numbers",
+              "required": true,
+              "type": "paragraph"
+            },
+            {
+              "name": "rounds",
+              "label": "Rounds",
+              "required": true,
+              "type": "number"
+            },
+            {
+              "name": "threshold",
+              "label": "Threshold",
+              "required": true,
+              "type": "number"
+            }
+          ]
+        }
+      },
+      {
+        "key": "child",
+        "template": "tool-0f776afbdb2d2ea30daf",
+        "values": {
+          "inputs": {
+            "records": "{{input.records}}",
+            "rounds": "{{input.rounds}}",
+            "threshold": "{{input.threshold}}"
+          }
+        }
+      },
+      {
+        "key": "result",
+        "template": "output",
+        "values": {
+          "text": "{{child.outputs.result}}",
+          "outputName": "result"
+        }
+      }
+    ],
+    "chains": [
+      {
+        "key": "main",
+        "nodes": [
+          "start",
+          "child",
+          "result"
+        ]
+      }
+    ],
+    "coverage": {
+      "R1": [
+        "child",
+        "result"
+      ]
+    }
+  }
+}

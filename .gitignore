@@ -9,6 +9,11 @@ __pycache__/
 *.tsbuildinfo
 coverage/
 .DS_Store
+native/secret-broker/dist/
+native/os-secret-broker/dist/
+native/os-secret-broker/.build-cache/
+native/os-secret-broker/windows/**/bin/
+native/os-secret-broker/windows/**/obj/
 .env
 .env.*
 !.env.example

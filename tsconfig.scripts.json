@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.host-build.json",
+  "compilerOptions": {"rootDir": ".", "noEmit": true, "composite": false, "incremental": false},
+  "include": ["src/host/**/*.ts", "src/shared/**/*.ts", "scripts/**/*.ts"]
+}

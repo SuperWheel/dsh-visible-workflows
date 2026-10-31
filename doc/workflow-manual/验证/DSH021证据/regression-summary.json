@@ -1,0 +1,23 @@
+{
+  "sdk": "0.2.1-rc.1",
+  "initial": {
+    "passedFiles": 19,
+    "totalFiles": 19,
+    "passedTests": 272,
+    "totalTests": 272,
+    "sourceFile": "regression.log",
+    "sourceSha256": "a98568ec768eb5d97a05860aaa7f433c6d585ffc308f04ff1c30f495379f6b3a",
+    "rawLogIncluded": false
+  },
+  "preflightFix": {
+    "passedFiles": 3,
+    "totalFiles": 3,
+    "passedTests": 38,
+    "totalTests": 38,
+    "sourceFile": "preflight-regression.log",
+    "sourceSha256": "f2d00e69e90e0c8f31f8d12b6b6e61806f2da1e049ade6c398f1cd9b3661d48e",
+    "rawLogIncluded": false
+  },
+  "countsOverlap": "These runs overlap and are not added together.",
+  "nativeAuthenticationOrHttpNotProvenByTests": true
+}

@@ -1,0 +1,66 @@
+[
+  {
+    "caseId": "greeting",
+    "digests": [
+      "31805a8e71f0898739eeb4994b15e7bbe3e26860b85213d98fedfbd29780ed42",
+      "0ed0fe4570aa5b340034d090789d59442ceaa4b1a84029a35a04ca98e6e0f554",
+      "58392ee20f2280a3c2d0a1b0bf509d90851170b6adcda559bfc342aede0062c2"
+    ]
+  },
+  {
+    "caseId": "web-process",
+    "digests": [
+      "dfb666f6ddbedb0cbee162e7205c483c1ad7843eaf6c091ecfc5f4c6260c19c5",
+      "c3477787431318d9ab1d2cfd66045573454319f49c5f27ba707206861077b3c5",
+      "b0c539347855aaa1309f5effe4c4dbc4b04701e16bf8714a9a8e86b3f6b37344"
+    ]
+  },
+  {
+    "caseId": "tool-wrapper",
+    "digests": [
+      "66ac88ff79ae7d25b227067ff8f3abc9ffcdba0ace8304e71fd1090efafb7fdc",
+      "65dbf1442761da19d3529c4c14aec6cf29b6317eab83beb2e165e9ace26bc991",
+      "c9131a2352c62065b788b59ad31073b76f0cf9a4750f4cb171c1b98586468aa7"
+    ]
+  },
+  {
+    "caseId": "structured-llm",
+    "digests": [
+      "b4ad117c96d460d01995321ea52576e969d4f1b3b820e2aadd07df4e4a3085ac",
+      "4ae12a2c381da0168426fbb8aa2ddecb38a69b4c0c64b79a73884f13d6614e03",
+      "1b40e78048c582f622b680f9da58fb0d855dc1f0b2cd3cd1827bedbbc4b635bb"
+    ]
+  },
+  {
+    "caseId": "branch",
+    "digests": [
+      "57d92e86327c6baecc0d8838ad7d0ce7bf05d4e94ce98369c7a94472712cbeb5",
+      "8f6b17207b25efb80dca329de59e4c1bfb5d3a1774486179d9408d6c2fd53f96",
+      "e6a5fa11c5ed00900f01e7a1a2f42ea31ac4c610377509ef735875e0640f5eeb"
+    ]
+  },
+  {
+    "caseId": "container",
+    "digests": [
+      "fc6798d26eb81e62f5e097ada8f06f6ca17ba1138243f76514977c742dd50cc5",
+      "31ceb4070979e7e671394ab11cc0c1e933ae5f5c2743a691223696e0f6695341",
+      "674935cbf681c4469790a5d9ae8de6379484d8a9e4c47a3ca7a2fd343cbf3562"
+    ]
+  },
+  {
+    "caseId": "local-edit",
+    "digests": [
+      "2474c08eeb88feb5de82e532a6b8f8a73806f9a21b55988a3d6f3413073910c2",
+      "49a0e51ad3e21d3ef6452f40804047da7273f68e37d15821c3bafb5c19041370",
+      "7f98632362e305bc28020810d906c23d633a20e81c323f58f3487025df78e075"
+    ]
+  },
+  {
+    "caseId": "large-edit",
+    "digests": [
+      "7c54226496bacb8bd0b5fa3ebcae5e1963c7b25de9157dc6e4242688e8304e40",
+      "e957319fa4986a7b22f36674d3640004380e25296a9cbc6d7e900f2ce4d35745",
+      "7578a231c8d602d864b56aa8881e9bb71e75c7466bcecd567cb9eedb7b2ca751"
+    ]
+  }
+]

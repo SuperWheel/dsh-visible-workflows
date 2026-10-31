@@ -1,0 +1,178 @@
+{
+  "scope": "installed-desktop-host-main with real runProfile; only TCP port overridden to a port selected by listen(0); scratch official profile; no production activation",
+  "productionProfileChanged": false,
+  "realDesktopMainExecuted": true,
+  "bootActive": true,
+  "readyIpcReceived": true,
+  "fatal": false,
+  "timedOut": false,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "office": {
+    "available": false,
+    "reason": "OFFICE_UNADAPTED_TO_SECRET_ISOLATION"
+  },
+  "stages": [
+    {
+      "stage": "root-apply",
+      "contextChecks": {
+        "dir": true,
+        "home": true,
+        "overlays": true
+      }
+    },
+    {
+      "stage": "parse-overlay"
+    },
+    {
+      "stage": "parse-overlay"
+    },
+    {
+      "stage": "parse-overlay"
+    },
+    {
+      "stage": "parse-overlay"
+    },
+    {
+      "stage": "parse-overlay"
+    },
+    {
+      "stage": "parse-overlay"
+    },
+    {
+      "stage": "parse-overlay"
+    },
+    {
+      "stage": "resolve-metadata",
+      "resolutionChecks": {
+        "matches": true,
+        "entries": 511,
+        "replace": "function"
+      }
+    },
+    {
+      "stage": "resolution-replaced"
+    },
+    {
+      "stage": "compose"
+    }
+  ],
+  "unreadyAtFailure": [],
+  "inactiveConsumers": [
+    {
+      "id": "planning",
+      "name": "cordis:group",
+      "state": 4
+    },
+    {
+      "id": "compaction",
+      "name": "cordis:group",
+      "state": 4
+    },
+    {
+      "id": "delegation",
+      "name": "cordis:group",
+      "state": 4
+    },
+    {
+      "id": "persistent-shell",
+      "name": "cordis:group",
+      "state": 4
+    },
+    {
+      "id": "persona",
+      "name": "@deepseek-ai/dsh-persona",
+      "state": 4
+    },
+    {
+      "id": "tool-presentation",
+      "name": "@deepseek-ai/dsh-agent-tool-presentation",
+      "state": 4
+    },
+    {
+      "id": "present",
+      "name": "@deepseek-ai/dsh-tool-present",
+      "state": 4
+    },
+    {
+      "id": "tool-cordis",
+      "name": "@deepseek-ai/dsh-tool-cordis",
+      "state": 4
+    },
+    {
+      "id": "tool-ask-user",
+      "name": "@deepseek-ai/dsh-tool-ask-user",
+      "state": 4
+    },
+    {
+      "id": "agent-preset-registry",
+      "name": "@deepseek-ai/dsh-agent-preset-registry",
+      "state": 4
+    },
+    {
+      "id": "tool-plugin-manager",
+      "name": "@deepseek-ai/dsh-plugin-manager/tools",
+      "state": 4
+    },
+    {
+      "id": "tool-goal",
+      "name": "@deepseek-ai/dsh-tool-goal",
+      "state": 4
+    },
+    {
+      "id": "command-goal",
+      "name": "@deepseek-ai/dsh-command-goal",
+      "state": 4
+    },
+    {
+      "id": "tool-todo",
+      "name": "@deepseek-ai/dsh-tool-todo",
+      "state": 4
+    },
+    {
+      "id": "agent-instructions",
+      "name": "@deepseek-ai/dsh-agent-instructions",
+      "state": 4
+    },
+    {
+      "id": "tool-web",
+      "name": "@deepseek-ai/dsh-tool-web",
+      "state": 4
+    },
+    {
+      "id": "tool-skill",
+      "name": "@deepseek-ai/dsh-tool-skill",
+      "state": 4
+    },
+    {
+      "id": "tool-jobs",
+      "name": "@deepseek-ai/dsh-tool-jobs",
+      "state": 4
+    },
+    {
+      "id": "tool-fs-search",
+      "name": "@deepseek-ai/dsh-tool-fs-search",
+      "state": 4
+    },
+    {
+      "id": "tool-fs",
+      "name": "@deepseek-ai/dsh-tool-fs",
+      "state": 4
+    },
+    {
+      "id": "tool-bash",
+      "name": "@deepseek-ai/dsh-tool-bash",
+      "state": 4
+    },
+    {
+      "id": "skill-filesystem",
+      "name": "@deepseek-ai/dsh-skill-filesystem",
+      "state": 4
+    }
+  ],
+  "sanitizedCodes": [],
+  "rawOutputBytesSuppressed": 249,
+  "secretReady": false
+}

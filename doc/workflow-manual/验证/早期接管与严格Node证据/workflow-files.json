@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-17T05:09:04.644Z",
+  "scope": "Real installed Harness subprocess and FsLocal, strict guardian/watchdog/MXC production workers; synthetic files only, no Desktop activation or model-session claim",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "events": [
+    {
+      "name": "production_document_worker_reads_allowed_document",
+      "pass": true
+    },
+    {
+      "name": "protected_symlink_is_not_returned_by_document_worker",
+      "pass": true
+    },
+    {
+      "name": "production_source_preparation_and_evidence",
+      "pass": true
+    },
+    {
+      "name": "actual_fs_local_uses_supervised_worker",
+      "pass": true
+    },
+    {
+      "name": "revocation_blocks_retained_workflow_effects",
+      "pass": true
+    }
+  ],
+  "launches": 8,
+  "failures": [],
+  "protectedCanaryLeaked": false,
+  "passed": true
+}

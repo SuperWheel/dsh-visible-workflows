@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-17T05:00:15.972Z",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "officialSourceSha256": "489fef91b0c11c063029ea7aed27b312817570b9c3177aeaa44983b9a25aedcd",
+  "undiciEntrySha256": "93fc85c00a59b58f410c901e5477d56770de3816bfbe183e751624aeb4a5e6a5",
+  "ipaddrEntrySha256": "52bcb70a2b313469c52a511ab405a4bd73599e36581d6075bbefdb2cfc4b80d8",
+  "results": [
+    {
+      "name": "official_url_validator_rejects_non_http_and_embedded_credentials",
+      "pass": true
+    },
+    {
+      "name": "official_ip_policy_denies_private_loopback_mapped_ipv6_and_encoded_literals",
+      "pass": true
+    },
+    {
+      "name": "official_resolver_denies_mixed_dns_answers",
+      "pass": true
+    },
+    {
+      "name": "official_dns64_discovery_rejects_translated_loopback",
+      "pass": true
+    },
+    {
+      "name": "official_pinned_lookup_does_not_resolve_a_second_dns_answer",
+      "pass": true
+    },
+    {
+      "name": "actual_undici_handler_refuses_internal_http_without_opening_a_dispatcher",
+      "pass": true
+    },
+    {
+      "name": "anonymous_public_ip_https_works_without_using_proxy_environment",
+      "pass": true
+    }
+  ],
+  "totals": {
+    "passed": 7,
+    "count": 7,
+    "localServerRequests": 0,
+    "requestDispatchersCreated": 1
+  },
+  "limitations": [
+    "No production profile or live Agent was changed",
+    "DNS mixed/NAT64 answer sets are synthetic inputs to the actual official validator",
+    "Private headers or Secret credentials were not supplied",
+    "This host resolves example.com to benchmarking fake-IP addresses; those remain blocked. Public connectivity was tested using a TLS-valid public IP endpoint. Response text is not stored."
+  ]
+}

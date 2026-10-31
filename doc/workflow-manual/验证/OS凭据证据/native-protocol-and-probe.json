@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-17T06:43:45.664Z",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "native-protocol-values-identity",
+      "passed": true,
+      "count": 35
+    },
+    {
+      "name": "source-contract-no-global-policy-probe-no-secret-lookup-and-native-paste",
+      "passed": true
+    },
+    {
+      "name": "missing-private-channel",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "wrong-request-binding",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "closed-private-channel",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "unexpected-environment",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "reject-secret-in-protocol",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "reject-resolve-api",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "bound-probe-closed-response-no-authentication-or-keychain-branch",
+      "passed": true,
+      "closed": true,
+      "available": true,
+      "code": "available"
+    }
+  ],
+  "nativeBinarySha256": "321be3c6ca3fa2175afdc155ab9b25b674566994042fd4c7c6ef0eee5e1c0115",
+  "manifestSha256": "538d992cfc77903db4979c35b41d3e6b5403fe41645cdf28d9746eace297523c",
+  "authenticationInvoked": false,
+  "keychainReadOrWrite": false,
+  "uiUsed": false,
+  "networkCalled": false,
+  "productionModified": false,
+  "globalPolicyChanged": false,
+  "limitations": [
+    "Native user authentication, actual Keychain CRUD/CAS and native paste/view require human acceptance; source contracts and protocol tests do not establish those behaviors.",
+    "No protection against same-user arbitrary code is claimed."
+  ]
+}

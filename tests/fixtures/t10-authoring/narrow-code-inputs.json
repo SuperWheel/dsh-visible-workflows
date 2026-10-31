@@ -1,0 +1,93 @@
+{
+ "journal": ".test-data/narrow-par/shard-1/events.jsonl",
+ "journalSha256": "94b8d7e9506deb518c56954a80529aa5ba54fb5d3290fc9a6ed0e052b2f12577",
+ "line": 85,
+ "caseId": "web-process",
+ "arm": "template-fill",
+ "repeat": 2,
+ "status": "failed",
+ "submissionsLog": [
+  {
+   "submission": {
+    "assumptions": [
+     "GET https://fixture.invalid/pages/{{input.page}} 由 oracle 拦截并返回固定离线 HTML，规划阶段不实际访问网络。",
+     "title 与 main 均按“删除标签→连续空白合并为单空格→首尾去空白”处理；main 内容为空字符串或缺失时取“空”。",
+     "输出严格为“{title}|{main}”，由输出节点普通插值拼接，不含字段名、引号或额外空白；不使用模型。"
+    ],
+    "chains": [
+     {
+      "key": "flow",
+      "nodes": [
+       "start",
+       "fetch",
+       "extract",
+       "result"
+      ]
+     }
+    ],
+    "coverage": {
+     "R1": [
+      "start",
+      "fetch",
+      "extract",
+      "result"
+     ]
+    },
+    "description": "用户输入 page，经 HTTP GET https://fixture.invalid/pages/{{input.page}} 获取离线 HTML（oracle 拦截），JavaScript 代码提取 title 与 main 内纯文本（去标签、合并空白、去首尾空白，main 为空用“空”），最终以“{title}|{main}”格式作为 outputs.result 输出；不使用模型。",
+    "forms": [
+     {
+      "key": "start",
+      "template": "input",
+      "title": "用户输入",
+      "values": {
+       "cache": "never",
+       "fields": [
+        {
+         "label": "页面",
+         "name": "page",
+         "required": true,
+         "type": "text"
+        }
+       ]
+      }
+     },
+     {
+      "key": "fetch",
+      "template": "http",
+      "title": "获取页面 HTML",
+      "values": {
+       "cache": "never",
+       "headers": {},
+       "method": "GET",
+       "timeoutMs": 30000,
+       "url": "https://fixture.invalid/pages/{{input.page}}"
+      }
+     },
+     {
+      "key": "extract",
+      "template": "code",
+      "title": "提取 title 与 main 纯文本",
+      "values": {
+       "cache": "never",
+       "code": "function main(inputs) {\n  var html = String(inputs.html == null ? \"\" : inputs.html);\n  function plain(s) {\n    return String(s == null ? \"\" : s)\n      .replace(/<[ci]>>",
+       "timeoutMs": 3000
+      }
+     },
+     {
+      "key": "result",
+      "template": "output",
+      "title": "输出结果",
+      "values": {
+       "cache": "never",
+       "outputName": "result",
+       "text": "{{extract.title}}|{{extract.main}}"
+      }
+     }
+    ],
+    "summary": "start(输入 page) → fetch(HTTP GET fixture.invalid/pages/{{input.page}}) → extract(JavaScript 提取 title/main 纯文本，main 空时为“空”) → result(outputName=result，输出“{title}|{main}”)。",
+    "title": "网页 title 与 main 纯文本提取"
+   }
+  }
+ ],
+ "feedback": []
+}

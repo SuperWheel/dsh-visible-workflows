@@ -1,0 +1,299 @@
+{
+  "submission": {
+    "mode": "create",
+    "title": "Bounded repeated threshold totals",
+    "forms": [
+      {
+        "key": "start",
+        "template": "input",
+        "values": {
+          "fields": [
+            {
+              "name": "records",
+              "label": "JSON numbers",
+              "type": "paragraph",
+              "required": true
+            },
+            {
+              "name": "rounds",
+              "label": "Rounds",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "threshold",
+              "label": "Threshold",
+              "type": "number",
+              "required": true
+            }
+          ]
+        }
+      },
+      {
+        "key": "parse",
+        "template": "code",
+        "values": {
+          "language": "javascript",
+          "inputs": {
+            "records": "{{input.records}}",
+            "rounds": "{{input.rounds}}"
+          },
+          "code": "function main(inputs) { var records = JSON.parse(inputs.records); if (!Array.isArray(records) || records.some(function (v) { return typeof v !== \"number\" || !Number.isFinite(v); })) throw new Error(\"records must be finite numbers\"); if (!Number.isInteger(inputs.rounds) || inputs.rounds < 1 || inputs.rounds > 5) throw new Error(\"rounds must be 1..5\"); return { records: records }; }",
+          "outputSchema": [
+            {
+              "name": "records",
+              "type": "array",
+              "required": true
+            }
+          ]
+        }
+      },
+      {
+        "key": "batches",
+        "template": "iteration",
+        "values": {
+          "iterator": "parse.records",
+          "outputVariable": "repeat.variables.sum",
+          "errorMode": "terminate"
+        }
+      },
+      {
+        "key": "result",
+        "template": "output",
+        "values": {
+          "text": "{{batches.result}}",
+          "outputName": "result"
+        }
+      },
+      {
+        "key": "batchEntry",
+        "template": "input",
+        "scope": [
+          "batches"
+        ],
+        "values": {
+          "fields": []
+        }
+      },
+      {
+        "key": "repeat",
+        "template": "loop",
+        "scope": [
+          "batches"
+        ],
+        "values": {
+          "initialVariables": {
+            "sum": 0,
+            "count": 0
+          },
+          "maxIterations": 5,
+          "until": {
+            "variable": "vars.count",
+            "operator": "gte",
+            "value": "{{input.rounds}}"
+          }
+        }
+      },
+      {
+        "key": "batchExit",
+        "template": "output",
+        "scope": [
+          "batches"
+        ],
+        "values": {
+          "text": "{{repeat.variables.sum}}",
+          "outputName": "batch"
+        }
+      },
+      {
+        "key": "roundEntry",
+        "template": "input",
+        "scope": [
+          "batches",
+          "repeat"
+        ],
+        "values": {
+          "fields": []
+        }
+      },
+      {
+        "key": "gate",
+        "template": "if",
+        "scope": [
+          "batches",
+          "repeat"
+        ],
+        "values": {
+          "variable": "item",
+          "operator": "gt",
+          "value": "{{input.threshold}}"
+        }
+      },
+      {
+        "key": "accept",
+        "template": "code",
+        "scope": [
+          "batches",
+          "repeat"
+        ],
+        "values": {
+          "language": "javascript",
+          "inputs": {
+            "item": "{{item}}",
+            "threshold": "{{input.threshold}}"
+          },
+          "code": "function main(inputs) { return { delta: inputs.item }; }",
+          "outputSchema": [
+            {
+              "name": "delta",
+              "type": "number",
+              "required": true
+            }
+          ]
+        }
+      },
+      {
+        "key": "reject",
+        "template": "code",
+        "scope": [
+          "batches",
+          "repeat"
+        ],
+        "values": {
+          "language": "javascript",
+          "code": "function main() { return { delta: 0 }; }",
+          "outputSchema": [
+            {
+              "name": "delta",
+              "type": "number",
+              "required": true
+            }
+          ]
+        }
+      },
+      {
+        "key": "merge",
+        "template": "aggregator",
+        "scope": [
+          "batches",
+          "repeat"
+        ],
+        "values": {
+          "groups": [
+            {
+              "name": "delta",
+              "variables": [
+                "accept.delta",
+                "reject.delta"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "increment",
+        "template": "assigner",
+        "scope": [
+          "batches",
+          "repeat"
+        ],
+        "values": {
+          "assignments": [
+            {
+              "name": "sum",
+              "operation": "add",
+              "value": "{{merge.delta}}"
+            },
+            {
+              "name": "count",
+              "operation": "add",
+              "value": 1
+            }
+          ]
+        }
+      },
+      {
+        "key": "roundExit",
+        "template": "output",
+        "scope": [
+          "batches",
+          "repeat"
+        ],
+        "values": {
+          "text": "{{vars.sum}}",
+          "outputName": "round"
+        }
+      }
+    ],
+    "chains": [
+      {
+        "key": "main",
+        "nodes": [
+          "start",
+          "parse",
+          "batches",
+          "result"
+        ]
+      },
+      {
+        "key": "batch",
+        "nodes": [
+          "batchEntry",
+          "repeat",
+          "batchExit"
+        ]
+      },
+      {
+        "key": "roundPrefix",
+        "nodes": [
+          "roundEntry",
+          "gate"
+        ]
+      },
+      {
+        "key": "roundSuffix",
+        "nodes": [
+          "merge",
+          "increment",
+          "roundExit"
+        ]
+      }
+    ],
+    "links": [
+      {
+        "key": "take",
+        "source": "gate",
+        "target": "accept",
+        "port": "true"
+      },
+      {
+        "key": "skip",
+        "source": "gate",
+        "target": "reject",
+        "port": "false"
+      },
+      {
+        "key": "takeMerge",
+        "source": "accept",
+        "target": "merge"
+      },
+      {
+        "key": "skipMerge",
+        "source": "reject",
+        "target": "merge"
+      }
+    ],
+    "coverage": {
+      "R1": [
+        "parse",
+        "batches",
+        "repeat",
+        "gate",
+        "accept",
+        "reject",
+        "increment",
+        "result"
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "status": "experimental-unintegrated",
+  "files": [
+    {
+      "source": "supervisor.c",
+      "binary": "workflow-leaf-supervisor",
+      "sourceSha256": "bb361029977c74567d901ed76f1c437e722fd6b39b880f7cbd2249026043bb83",
+      "binarySha256": "918fb176b95137e49a4c1ffc96eada579ad4440c8b2d2d2f4737d66340bba062"
+    },
+    {
+      "source": "probe-syscalls.c",
+      "binary": "probe-syscalls",
+      "sourceSha256": "64dbb89fbd4ab5cef96a37589b22ec197e3b60cdac50525286ae7d19d19e7b8a",
+      "binarySha256": "3d50fbade0c7b63a49462ba6a8d4c5267092b67dfc85fa81d8f8c45b92d4c629"
+    }
+  ]
+}

@@ -1,0 +1,2278 @@
+{
+ "name": "structured_output",
+ "description": "Submit compiler input. After a repairable error follow the next schema and latest compiler diagnostics. Success concludes the turn immediately.",
+ "parameters": {
+  "additionalProperties": false,
+  "properties": {
+   "submission": {
+    "oneOf": [
+     {
+      "additionalProperties": false,
+      "properties": {
+       "mode": {
+        "const": "needs-input",
+        "type": "string"
+       },
+       "questions": {
+        "items": {
+         "additionalProperties": false,
+         "properties": {
+          "id": {
+           "type": "string"
+          },
+          "options": {
+           "items": {
+            "type": "string"
+           },
+           "type": "array"
+          },
+          "question": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "id",
+          "question"
+         ],
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "summary": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "mode",
+       "questions"
+      ],
+      "type": "object"
+     },
+     {
+      "additionalProperties": false,
+      "properties": {
+       "draftRevision": {
+        "const": 1,
+        "type": "integer"
+       },
+       "mode": {
+        "const": "repair",
+        "type": "string"
+       },
+       "patches": {
+        "items": {
+         "oneOf": [
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/reviewLoop/values/initialVariables",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "approved": {
+               "type": "string"
+              },
+              "draft": {
+               "type": "string"
+              },
+              "reviewBase": {
+               "type": "string"
+              },
+              "reviewNote": {
+               "type": "string"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/reviewLoop/values/initialVariables",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "approved": {
+               "type": "string"
+              },
+              "draft": {
+               "type": "string"
+              },
+              "reviewBase": {
+               "type": "string"
+              },
+              "reviewNote": {
+               "type": "string"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/reviewLoop/values/initialVariables",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/title",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/title",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/title",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "find": {
+             "type": "string"
+            },
+            "op": {
+             "const": "replace-text",
+             "type": "string"
+            },
+            "path": {
+             "const": "/title",
+             "type": "string"
+            },
+            "replace": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "find",
+            "replace"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/description",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/description",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/description",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "find": {
+             "type": "string"
+            },
+            "op": {
+             "const": "replace-text",
+             "type": "string"
+            },
+            "path": {
+             "const": "/description",
+             "type": "string"
+            },
+            "replace": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "find",
+            "replace"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "approvedIf": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "operator": {
+                   "type": "string"
+                  },
+                  "value": {
+                   "type": "string"
+                  },
+                  "variable": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "approvedOut": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "outputName": {
+                   "type": "string"
+                  },
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "draftInit": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "notApprovedMsg": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "notApprovedOut": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "outputName": {
+                   "type": "string"
+                  },
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "probeIf": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "operator": {
+                   "type": "string"
+                  },
+                  "variable": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "probeTarget": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "inputs": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "pattern": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "readFile": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "inputs": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "file_path": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "renderDraft": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "review": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "actions": {
+                   "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                     "id": {
+                      "type": "string"
+                     },
+                     "label": {
+                      "type": "string"
+                     }
+                    },
+                    "type": "object"
+                   },
+                   "type": "array"
+                  },
+                  "prompt": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "reviewLoop": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "initialVariables": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "approved": {
+                     "type": "string"
+                    },
+                    "draft": {
+                     "type": "string"
+                    },
+                    "reviewBase": {
+                     "type": "string"
+                    },
+                    "reviewNote": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  },
+                  "maxIterations": {
+                   "type": "number"
+                  },
+                  "outputVariable": {
+                   "type": "string"
+                  },
+                  "until": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "operator": {
+                     "type": "string"
+                    },
+                    "value": {
+                     "type": "string"
+                    },
+                    "variable": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "saveReview": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "assignments": {
+                   "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                     "name": {
+                      "type": "string"
+                     },
+                     "operation": {
+                      "type": "string"
+                     },
+                     "value": {
+                      "type": "string"
+                     }
+                    },
+                    "type": "object"
+                   },
+                   "type": "array"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "setApproved": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "assignments": {
+                   "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                     "name": {
+                      "type": "string"
+                     },
+                     "operation": {
+                      "type": "string"
+                     },
+                     "value": {
+                      "type": "string"
+                     }
+                    },
+                    "type": "object"
+                   },
+                   "type": "array"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "start": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {},
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "writeDraftFile": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "inputs": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "content": {
+                     "type": "string"
+                    },
+                    "file_path": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "writeTarget": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "inputs": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "content": {
+                     "type": "string"
+                    },
+                    "file_path": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "approvedIf": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "operator": {
+                   "type": "string"
+                  },
+                  "value": {
+                   "type": "string"
+                  },
+                  "variable": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "approvedOut": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "outputName": {
+                   "type": "string"
+                  },
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "draftInit": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "notApprovedMsg": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "notApprovedOut": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "outputName": {
+                   "type": "string"
+                  },
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "probeIf": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "operator": {
+                   "type": "string"
+                  },
+                  "variable": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "probeTarget": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "inputs": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "pattern": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "readFile": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "inputs": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "file_path": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "renderDraft": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "text": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "review": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "actions": {
+                   "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                     "id": {
+                      "type": "string"
+                     },
+                     "label": {
+                      "type": "string"
+                     }
+                    },
+                    "type": "object"
+                   },
+                   "type": "array"
+                  },
+                  "prompt": {
+                   "type": "string"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "reviewLoop": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "initialVariables": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "approved": {
+                     "type": "string"
+                    },
+                    "draft": {
+                     "type": "string"
+                    },
+                    "reviewBase": {
+                     "type": "string"
+                    },
+                    "reviewNote": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  },
+                  "maxIterations": {
+                   "type": "number"
+                  },
+                  "outputVariable": {
+                   "type": "string"
+                  },
+                  "until": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "operator": {
+                     "type": "string"
+                    },
+                    "value": {
+                     "type": "string"
+                    },
+                    "variable": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "saveReview": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "assignments": {
+                   "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                     "name": {
+                      "type": "string"
+                     },
+                     "operation": {
+                      "type": "string"
+                     },
+                     "value": {
+                      "type": "string"
+                     }
+                    },
+                    "type": "object"
+                   },
+                   "type": "array"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "setApproved": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "assignments": {
+                   "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                     "name": {
+                      "type": "string"
+                     },
+                     "operation": {
+                      "type": "string"
+                     },
+                     "value": {
+                      "type": "string"
+                     }
+                    },
+                    "type": "object"
+                   },
+                   "type": "array"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "start": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {},
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "writeDraftFile": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "inputs": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "content": {
+                     "type": "string"
+                    },
+                    "file_path": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              },
+              "writeTarget": {
+               "additionalProperties": false,
+               "properties": {
+                "template": {
+                 "type": "string"
+                },
+                "title": {
+                 "type": "string"
+                },
+                "values": {
+                 "additionalProperties": false,
+                 "properties": {
+                  "inputs": {
+                   "additionalProperties": false,
+                   "properties": {
+                    "content": {
+                     "type": "string"
+                    },
+                    "file_path": {
+                     "type": "string"
+                    }
+                   },
+                   "type": "object"
+                  }
+                 },
+                 "type": "object"
+                }
+               },
+               "type": "object"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/chainsByKey",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "afterLoop": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "approvedPath": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "body": {
+               "additionalProperties": false,
+               "properties": {
+                "container": {
+                 "type": "string"
+                },
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "main": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "notApprovedPath": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "onApprove": {
+               "additionalProperties": false,
+               "properties": {
+                "container": {
+                 "type": "string"
+                },
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "onReject": {
+               "additionalProperties": false,
+               "properties": {
+                "container": {
+                 "type": "string"
+                },
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "readToLoop": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/chainsByKey",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "afterLoop": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "approvedPath": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "body": {
+               "additionalProperties": false,
+               "properties": {
+                "container": {
+                 "type": "string"
+                },
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "main": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "notApprovedPath": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "onApprove": {
+               "additionalProperties": false,
+               "properties": {
+                "container": {
+                 "type": "string"
+                },
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "onReject": {
+               "additionalProperties": false,
+               "properties": {
+                "container": {
+                 "type": "string"
+                },
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              },
+              "readToLoop": {
+               "additionalProperties": false,
+               "properties": {
+                "nodes": {
+                 "items": {
+                  "type": "string"
+                 },
+                 "type": "array"
+                }
+               },
+               "type": "object"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/chainsByKey",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/linksByKey",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "approvedNo": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "approvedYes": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "doApprove": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "doReject": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "probeNo": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "probeYes": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/linksByKey",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "approvedNo": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "approvedYes": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "doApprove": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "doReject": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "probeNo": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              },
+              "probeYes": {
+               "additionalProperties": false,
+               "properties": {
+                "port": {
+                 "type": "string"
+                },
+                "source": {
+                 "type": "string"
+                },
+                "target": {
+                 "type": "string"
+                }
+               },
+               "type": "object"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/linksByKey",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/summary",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/summary",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/summary",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "find": {
+             "type": "string"
+            },
+            "op": {
+             "const": "replace-text",
+             "type": "string"
+            },
+            "path": {
+             "const": "/summary",
+             "type": "string"
+            },
+            "replace": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "find",
+            "replace"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/assumptions",
+             "type": "string"
+            },
+            "value": {
+             "items": {
+              "type": "string"
+             },
+             "type": "array"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/assumptions",
+             "type": "string"
+            },
+            "value": {
+             "items": {
+              "type": "string"
+             },
+             "type": "array"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/assumptions",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/coverage",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "R1": {
+               "items": {
+                "type": "string"
+               },
+               "type": "array"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/coverage",
+             "type": "string"
+            },
+            "value": {
+             "additionalProperties": false,
+             "properties": {
+              "R1": {
+               "items": {
+                "type": "string"
+               },
+               "type": "array"
+              }
+             },
+             "type": "object"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/coverage",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/writeDraftFile/values/inputs/file_path",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/writeDraftFile/values/inputs/file_path",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/writeDraftFile/values/inputs/file_path",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "find": {
+             "type": "string"
+            },
+            "op": {
+             "const": "replace-text",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/writeDraftFile/values/inputs/file_path",
+             "type": "string"
+            },
+            "replace": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "find",
+            "replace"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "add",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/writeTarget/values/inputs/file_path",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "replace",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/writeTarget/values/inputs/file_path",
+             "type": "string"
+            },
+            "value": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "value"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "op": {
+             "const": "remove",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/writeTarget/values/inputs/file_path",
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path"
+           ],
+           "type": "object"
+          },
+          {
+           "additionalProperties": false,
+           "properties": {
+            "find": {
+             "type": "string"
+            },
+            "op": {
+             "const": "replace-text",
+             "type": "string"
+            },
+            "path": {
+             "const": "/formsByKey/writeTarget/values/inputs/file_path",
+             "type": "string"
+            },
+            "replace": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "op",
+            "path",
+            "find",
+            "replace"
+           ],
+           "type": "object"
+          }
+         ]
+        },
+        "type": "array"
+       },
+       "summary": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "mode",
+       "draftRevision",
+       "patches"
+      ],
+      "type": "object"
+     }
+    ]
+   }
+  },
+  "required": [
+   "submission"
+  ],
+  "type": "object"
+ }
+}

@@ -1,0 +1,119 @@
+{
+  "format": "dsh-visible-workflow",
+  "formatVersion": 2,
+  "runtime": {
+    "engine": "graphon",
+    "protocol": 1
+  },
+  "workflow": {
+    "nodes": [
+      {
+        "id": "6143f5dd-cc1f-402f-bce4-b15d7985d398",
+        "number": "a-1",
+        "kind": "input",
+        "title": "接收文本",
+        "x": 90,
+        "y": 180,
+        "fixed": false,
+        "config": {
+          "fields": []
+        }
+      },
+      {
+        "id": "ea882c12-1236-459e-b078-170d44b87694",
+        "number": "a-2",
+        "kind": "http",
+        "title": "待配置的受控请求",
+        "x": 340.25,
+        "y": 160.5,
+        "fixed": false,
+        "config": {
+          "credentialOperation": {
+            "secretVariableId": "9a52e0dc-eafe-405d-815e-ec507a8f1075",
+            "operationId": "deepseek.account-status.v1"
+          }
+        }
+      },
+      {
+        "id": "a243fa93-8891-4dcf-aa52-9333761e84d0",
+        "number": "a-3",
+        "kind": "output",
+        "title": "输出结果",
+        "x": 710,
+        "y": 180,
+        "fixed": false,
+        "config": {
+          "text": "{{ea882c12-1236-459e-b078-170d44b87694.status_code}}",
+          "outputName": "result"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "bba98079-95a7-4803-93e1-200494be7c98",
+        "source": "6143f5dd-cc1f-402f-bce4-b15d7985d398",
+        "target": "ea882c12-1236-459e-b078-170d44b87694"
+      },
+      {
+        "id": "ef19fcd1-f85a-47fd-b26e-ef4ffdee72a0",
+        "source": "ea882c12-1236-459e-b078-170d44b87694",
+        "target": "a243fa93-8891-4dcf-aa52-9333761e84d0"
+      }
+    ],
+    "id": "d509d971-a850-4a8c-895b-c01069b87094",
+    "workspaceId": "import-required",
+    "title": "Secret 与导入导出兼容验收 · 1017",
+    "description": "只含Secret声明，无实际密钥；用于导入、告警和拒绝路径验收。",
+    "revision": 0,
+    "notes": [
+      {
+        "id": "bd540850-7402-4e77-aab6-829e70733ec5",
+        "text": "Secret只保存声明；导入后重新配置",
+        "x": 340.25,
+        "y": 350.5,
+        "width": 310,
+        "height": 140,
+        "color": "yellow",
+        "anchorNodeId": "ea882c12-1236-459e-b078-170d44b87694"
+      }
+    ],
+    "createdAt": "2026-10-17T04:01:16.526Z",
+    "updatedAt": "2026-10-17T04:01:16.526Z",
+    "environmentVariables": [
+      {
+        "id": "9a52e0dc-eafe-405d-815e-ec507a8f1075",
+        "name": "API_KEY_ACCEPTANCE",
+        "description": "只迁移声明，需目标端重新配置",
+        "required": true,
+        "revision": 0,
+        "type": "secret"
+      }
+    ],
+    "editor": {
+      "viewport": {
+        "x": 40,
+        "y": 30,
+        "scale": 0.75
+      },
+      "scopePath": [],
+      "annotations": [
+        {
+          "id": "45368d2a-f7eb-46d7-927c-5fae894d8edb",
+          "number": 1,
+          "nodeIds": [
+            "ea882c12-1236-459e-b078-170d44b87694"
+          ],
+          "text": "核对变量绑定与批注是否保留",
+          "position": {
+            "x": 460.25,
+            "y": 80.5,
+            "scopePath": []
+          }
+        }
+      ]
+    }
+  },
+  "workflows": [],
+  "presets": [],
+  "dependencies": []
+}

@@ -1,0 +1,52 @@
+{
+  "at": "2026-10-17T05:08:19.646Z",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "workerSha256": "21ce098bb6d96e9303eb22cfb9706071d704b9352da82850d04de0042033efeb",
+  "results": [
+    {
+      "name": "strict_worker_exports_public_file_and_secret_declaration_with_canvas",
+      "pass": true
+    },
+    {
+      "name": "strict_worker_materializes_and_rolls_back_without_host_filesystem_effects",
+      "pass": true
+    },
+    {
+      "name": "actual_os_denies_protected_read_even_when_request_claims_it_is_the_workspace",
+      "pass": true
+    },
+    {
+      "name": "actual_os_denies_protected_materialization_and_rollback",
+      "pass": true
+    },
+    {
+      "name": "workspace_symlink_cannot_export_protected_file",
+      "pass": true
+    },
+    {
+      "name": "actual_os_denies_cleanup_even_with_a_valid_protected_directory_owner_receipt",
+      "pass": true
+    },
+    {
+      "name": "archive_file_size_limit_remains_enforced_in_real_worker",
+      "pass": true
+    },
+    {
+      "name": "revocation_blocks_archive_before_worker_launch",
+      "pass": true
+    }
+  ],
+  "totals": {
+    "passed": 8,
+    "count": 8,
+    "operationWorkers": 9,
+    "protectedCanaryLeaked": false
+  },
+  "supervisorFailures": [],
+  "limitations": [
+    "Synthetic files only; no production profile or live Agent activation",
+    "Trusted probe pins the fixed worker and uses the actual native supervisor/MXC; complete Desktop runtime trust remains a separate integration requirement",
+    "Kernel restriction is the protected-path boundary; marker and stat checks alone are not claimed to solve mutable-parent TOCTOU"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "at": "2026-10-17T07:11:51.278Z",
+  "status": "partial-real-desktop-acceptance",
+  "nativeProbe": true,
+  "userNativeSave": "confirmed-with-ui-corroboration",
+  "realDesktopJsonRoundtrip": {
+    "passed": 20,
+    "total": 20
+  },
+  "sourceWorkflowsUnchanged": 7,
+  "mainAgentGet": "passed-real-retry-completed-public-declarations-only",
+  "nativeChildAgentGet": "passed-real-retry-completed-public-declarations-only",
+  "osSecretTransferTests": {
+    "passed": 20,
+    "total": 20
+  },
+  "combinedTransferRuntimeTests": {
+    "files": 3,
+    "passed": 31,
+    "total": 31
+  },
+  "windows": "source-only-not-compiled-not-validated",
+  "pending": [
+    "native-view-edit-delete",
+    "fixed-network-consumer",
+    "Windows-native-build-and-acceptance"
+  ],
+  "credentialsInEvidence": false,
+  "firstChildFailureRetained": true,
+  "agentWorkspaceComponents": {
+    "passed": 7,
+    "total": 7,
+    "modelRequests": 0
+  },
+  "targetedAgentFixTests": {
+    "files": 10,
+    "passed": 87,
+    "total": 87
+  },
+  "buildAgent": {
+    "coordinatingAgentReportedExitCode": 0,
+    "log": "build-agent.log"
+  },
+  "postRestart": {
+    "passiveConfiguredStateRetained": true,
+    "canvasRetained": true,
+    "nativeManagerOpened": false,
+    "keychainValueRead": false,
+    "managementAuthenticationRetested": false
+  },
+  "hostFixtureRegression": {
+    "files": 5,
+    "passed": 87,
+    "total": 87,
+    "scope": "Host API, SDK contracts, model defaults, chat bridge and workspace identity; overlapping tests are not summed",
+    "fixtureOnlyCorrection": true
+  }
+}

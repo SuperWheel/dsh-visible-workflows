@@ -1,0 +1,214 @@
+{
+  "at": "2026-10-17T05:49:14.784Z",
+  "scope": "Actual installed Harness Node and actual strict launcher, fixed synthetic N-API worker; no production activation or gate grant",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "hashes": {
+    "host-extensions/dsh-secret-isolation/strict-node-launcher.ts": "c4e58d5e0d5ce1888eea45d570d3827e8d81e980bd67fee2e9c1bdcf79c583b5",
+    "native/process-supervisor/dist/darwin-arm64/workflow-leaf-supervisor": "e1873d75985b27c0eb6cea3ab8a6f2674946dd7838d98689110ed1066ae47769",
+    "native/mxc/dist/darwin-arm64/mxc-exec-mac": "c54390e48a25187fdae10758c6a286bede49416cb610c88c6705fd8445e97f60",
+    "tests/fixtures/harness-ipc-gui-probe.mjs": "b5962e40505c5ad708d484284335758dff1b040b656148b543a3163c5148a632",
+    "tests/fixtures/harness-ipc-gui-addon.c": "fef2d41f51c0db81affd21f4d06b0a90051e62c44a4a0005700bc4a67eb45d87",
+    "tests/fixtures/harness-ipc-gui-worker.cjs": "2039ace5ebe00278e94ecffcba51a2c04492cde4ced8111a85708617a743209e"
+  },
+  "checks": [
+    {
+      "name": "unconfined_positive_file_and_inherited_descriptors",
+      "pass": true
+    },
+    {
+      "name": "unconfined_positive_network_targets",
+      "pass": true
+    },
+    {
+      "name": "confined_ordinary_file_positive",
+      "pass": true
+    },
+    {
+      "name": "confined_protected_path_denied",
+      "pass": true
+    },
+    {
+      "name": "injected_file_and_socket_fds_removed",
+      "pass": true,
+      "detail": [
+        {
+          "name": "synthetic_protected_file",
+          "matches": false,
+          "error": "EBADF"
+        },
+        {
+          "name": "synthetic_socketpair",
+          "matches": false,
+          "error": "EBADF"
+        }
+      ]
+    },
+    {
+      "name": "confined_ipv4_connection_denied",
+      "pass": true,
+      "detail": {
+        "connected": false,
+        "error": "EPERM"
+      }
+    },
+    {
+      "name": "confined_ipv6_connection_denied",
+      "pass": true,
+      "detail": {
+        "connected": false,
+        "error": "EPERM"
+      }
+    },
+    {
+      "name": "confined_unix_connection_denied",
+      "pass": true,
+      "detail": {
+        "connected": false,
+        "error": "EPERM"
+      }
+    },
+    {
+      "name": "mach_lookup_denied:com.apple.windowserver.active",
+      "pass": true,
+      "detail": {
+        "baseline": 0,
+        "confined": 1100,
+        "interpretation": "service accessible outside confinement"
+      }
+    },
+    {
+      "name": "mach_lookup_denied:com.apple.pasteboard.1",
+      "pass": true,
+      "detail": {
+        "baseline": 0,
+        "confined": 1100,
+        "interpretation": "service accessible outside confinement"
+      }
+    },
+    {
+      "name": "mach_lookup_denied:com.apple.coreservices.launchservicesd",
+      "pass": true,
+      "detail": {
+        "baseline": 0,
+        "confined": 1100,
+        "interpretation": "service accessible outside confinement"
+      }
+    },
+    {
+      "name": "mach_lookup_denied:com.apple.SecurityServer",
+      "pass": true,
+      "detail": {
+        "baseline": 0,
+        "confined": 1100,
+        "interpretation": "service accessible outside confinement"
+      }
+    },
+    {
+      "name": "baseline_mach_logger_still_available",
+      "pass": true,
+      "detail": {
+        "baseline": 0,
+        "confined": 0
+      }
+    },
+    {
+      "name": "worker_fd7_is_data_only_not_lifecycle_authority",
+      "pass": true
+    }
+  ],
+  "baseline": {
+    "pid": 11118,
+    "ordinaryFileReadable": true,
+    "inherited": [
+      {
+        "name": "synthetic_protected_file",
+        "matches": true
+      },
+      {
+        "name": "synthetic_socketpair",
+        "matches": true
+      }
+    ],
+    "mach": {
+      "com.apple.windowserver.active": 0,
+      "com.apple.windowserver.session": 1102,
+      "com.apple.pasteboard.1": 0,
+      "com.apple.coreservices.launchservicesd": 0,
+      "com.apple.SecurityServer": 0,
+      "com.apple.system.logger": 0
+    },
+    "network": {
+      "ipv4": {
+        "connected": true
+      },
+      "ipv6": {
+        "connected": true
+      },
+      "unix": {
+        "connected": true
+      }
+    },
+    "protectedPathReadable": true
+  },
+  "confined": {
+    "pid": 11128,
+    "ordinaryFileReadable": true,
+    "inherited": [
+      {
+        "name": "synthetic_protected_file",
+        "matches": false,
+        "error": "EBADF"
+      },
+      {
+        "name": "synthetic_socketpair",
+        "matches": false,
+        "error": "EBADF"
+      }
+    ],
+    "mach": {
+      "com.apple.windowserver.active": 1100,
+      "com.apple.windowserver.session": 1100,
+      "com.apple.pasteboard.1": 1100,
+      "com.apple.coreservices.launchservicesd": 1100,
+      "com.apple.SecurityServer": 1100,
+      "com.apple.system.logger": 0
+    },
+    "network": {
+      "ipv4": {
+        "connected": false,
+        "error": "EPERM"
+      },
+      "ipv6": {
+        "connected": false,
+        "error": "EPERM"
+      },
+      "unix": {
+        "connected": false,
+        "error": "EPERM"
+      }
+    },
+    "protectedPathReadable": false,
+    "protectedPathError": "EPERM",
+    "workerControlSent": true
+  },
+  "unavailableOutsidePositiveControls": [
+    "com.apple.windowserver.session"
+  ],
+  "failureCodes": [],
+  "statuses": [
+    "started",
+    "quiescent",
+    "finished",
+    "started",
+    "quiescent",
+    "finished"
+  ],
+  "injectedLaunches": 2,
+  "observedProcesses": 7,
+  "residualCount": 0,
+  "fixtureRemoved": true,
+  "modelRequests": 0,
+  "secretGateRegistered": false,
+  "passed": true
+}

@@ -1,0 +1,161 @@
+{
+  "at": "2026-10-17T07:14:41.862Z",
+  "entries": [
+    {
+      "file": "first-plugin-installation.json",
+      "source": ".cache/os-secret-20261017/plugin-installation.json",
+      "bytes": 820,
+      "sha256": "c92776e9e47fcfb1608964d65e8ef3e7bc232fc3872e5b8cf0524e12ccde9073",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "data-before-install.json",
+      "source": ".cache/os-secret-20261017/data-before.json",
+      "bytes": 6529,
+      "sha256": "1fd2d41c75fc836c06368f1c9a6b8ebc069e22c12abecd76047f5267c9203ac7",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "data-after-install.json",
+      "source": ".cache/os-secret-20261017/data-after-install.json",
+      "bytes": 83,
+      "sha256": "22df009bc4a8735ba7bf6a975c2680e012edf997fc9eef4a1cd4f510df8ffcd2",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "desktop-configured-secret.workflow.json",
+      "source": ".cache/os-secret-20261017/desktop-configured-secret.workflow.json",
+      "bytes": 3173,
+      "sha256": "e111f719d5b08616da5d4a87fd9f60bb65ae2049c2956384aa3c9c7d4a67a133",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "desktop-transfer-validation.json",
+      "source": ".cache/os-secret-20261017/desktop-transfer-validation.json",
+      "bytes": 787,
+      "sha256": "0113c2ea934b3b07b1b9690235f2f81d27480ef1de721d44ca655de9b76abfd6",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "export-check.json",
+      "source": ".cache/os-secret-20261017/export-check.json",
+      "bytes": 331,
+      "sha256": "1495d53646c3dbfa82025789f01499d01e8ef06405cea99e844877905f1a4139",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "main-agent-first.json",
+      "source": ".cache/os-secret-20261017/session-session-9d7a7b32-47a9-4795-89d6-0b288507a0f6-evidence.json",
+      "bytes": 1112,
+      "sha256": "447fbe3b77103c1295774a146582cca370c87c78ad43047ef608aa2fb10166da",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "child-agent-first-failed.json",
+      "source": ".cache/os-secret-20261017/session-c26e9df7-81a9-4e27-a935-60a88363e2ca-evidence.json",
+      "bytes": 466,
+      "sha256": "af7a233aadce0ce4e8a710b4aaf3aa1c35f6a40473d89a4c44e38842e30998c2",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "native-protocol-and-probe.json",
+      "source": ".cache/os-secret-broker-20261017/results.json",
+      "bytes": 1691,
+      "sha256": "41acd7c331502c8d79dad110671f28d2256a0501b15d53cd0ce27d44dcca399c",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "original-entity-hashes.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-entities-before.json",
+      "bytes": 2113,
+      "sha256": "a3c6493d3c94c6698f5e36d1e32180bc90acb491e37dc89ab24996709e9cd135",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "desktop-user-save-observation.json",
+      "bytes": 906,
+      "sha256": "10061e949d9ff30183044269703400b1e03a69adde1b6ce81cd15dcb1d770dcf",
+      "kind": "derived-summary"
+    },
+    {
+      "file": "package-and-profile-summary.json",
+      "bytes": 1009,
+      "sha256": "f6df29ddf038f158b67c79d1a612ec70fc6bafd31b35702b27865d095017d8fc",
+      "kind": "derived-summary"
+    },
+    {
+      "file": "second-plugin-installation.json",
+      "source": ".cache/os-secret-20261017-agent/plugin-installation.json",
+      "bytes": 820,
+      "sha256": "be4b834295d5229ad710ab5901cfa2b6b65fd1ed6d45d8bfe4f657c3397c3000",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "main-agent-retry-completed.json",
+      "source": ".cache/os-secret-20261017/session-session-9d7a7b32-47a9-4795-89d6-0b288507a0f6-evidence.json",
+      "bytes": 1819,
+      "sha256": "070d771885b770e2c7bbb107f2f6cc11bdab176972aed3d00f1e594432efa302",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "child-agent-retry-completed.json",
+      "source": ".cache/os-secret-20261017/session-228b0b71-fa53-4276-9b5a-43bfd6375f87-evidence.json",
+      "bytes": 616,
+      "sha256": "9e98242f033830936e64a8a78a8351b187828156ac548490ecac80f2c995ca16",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "native-agent-workspace-components.json",
+      "source": ".cache/agent-workspace-20261017/results.json",
+      "bytes": 1313,
+      "sha256": "8f60a5c61ff1e4e64ebabf173f2890e2a18189469e40d7769d42e997c7de9301",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "targeted-tests-agent.log",
+      "source": ".cache/os-secret-20261017/targeted-tests-agent.log",
+      "bytes": 258,
+      "sha256": "46f825de0f3cf80efc6b9c11871a49e18e0791e92ce28d52886b9e043c091cb0",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "build-agent.log",
+      "source": ".cache/os-secret-20261017/build-agent.log",
+      "bytes": 2462,
+      "sha256": "5f86da889f5d6970c388944a4986f72c213213e37c868f409f61792b0b97a75b",
+      "kind": "source-evidence"
+    },
+    {
+      "file": "second-package-and-profile-summary.json",
+      "bytes": 1009,
+      "sha256": "258ce6ffcbae36cdfd560be1db2d36967bd530fe6f28773d241d9e2fd8168238",
+      "kind": "derived-summary"
+    },
+    {
+      "file": "desktop-agent-retry-observation.json",
+      "bytes": 786,
+      "sha256": "ad9f303fee46b1cba4f4a42c0cf8cdf0501dfbb359bedbfc56f58ada6e5e167e",
+      "kind": "derived-summary"
+    },
+    {
+      "file": "desktop-post-restart-observation.json",
+      "source": ".cache/os-secret-20261017/desktop-post-restart-observation.json",
+      "kind": "source-evidence",
+      "bytes": 1021,
+      "sha256": "fb97dab4cb46bb293ed4bb5964b5cc982dc2002b426299837dd2156d2c3af1bb"
+    },
+    {
+      "file": "verification-summary.json",
+      "kind": "derived-summary",
+      "bytes": 1558,
+      "sha256": "aa70074148478d0147ae352ad2160ac5a8a78840b77502dc9903f51a676842f3"
+    },
+    {
+      "file": "host-fixture-regression-final.log",
+      "source": ".cache/os-secret-20261017/host-fixture-regression-final.log",
+      "kind": "source-evidence",
+      "bytes": 256,
+      "sha256": "b89bd36f7b55937b7ce7762a536425e9a25dc843fbd4d5f8cd1aa1d1d503d1a5"
+    }
+  ]
+}

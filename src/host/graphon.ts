@@ -42,7 +42,7 @@ export class GraphonBridge {
   private closed = false
   private ready?: { resolve: () => void; reject: (error: Error) => void }
   readonly engine = { name: 'graphon' as const, version: '0.7.0', protocol: 1 }
-  constructor(private readonly directory: string, private readonly options: { assetsDirectory?: string; bridgePath?: string } = {}) {}
+  constructor(private readonly directory: string, private readonly options: { assetsDirectory?: string; bridgePath?: string; verifyRuntimeContents?: boolean } = {}) {}
 
   private async start(): Promise<void> {
     if (this.closed) throw new Error('工作流引擎已关闭')
@@ -52,7 +52,7 @@ export class GraphonBridge {
   }
   private async boot(): Promise<void> {
     const root = packageDirectory()
-    const runtime = await ensureGraphonEnvironment({ directory: this.directory, assetsDirectory: this.options.assetsDirectory ?? join(root, 'runtime-assets'), signal: this.lifetime.signal })
+    const runtime = await ensureGraphonEnvironment({ directory: this.directory, assetsDirectory: this.options.assetsDirectory ?? join(root, 'runtime-assets'), signal: this.lifetime.signal, verifyRuntimeContents: this.options.verifyRuntimeContents })
     this.lifetime.signal.throwIfAborted()
     const script = this.options.bridgePath ?? join(root, 'runtime', 'graphon_bridge', 'main.py')
     if (!existsSync(script)) throw new Error('工作流引擎文件缺失，请重新安装插件')
@@ -152,8 +152,10 @@ export class GraphonBridge {
       try { this.send({ ...frame, id }); if (signal.aborted) abort() } catch (error) { cleanup(); this.pending.delete(id); reject(error) }
     })
   }
-  async execute(graph: NodeGraph, signal: AbortSignal, node: NonNullable<Pending['node']>, skipped: NonNullable<Pending['skipped']>): Promise<GraphonResult> {
-    return this.request({ type: 'execute', graph: { nodes: graph.nodes.map(n => ({ id: n.id, kind: n.kind })), edges: graph.edges.map(e => ({ id: e.id, source: e.source, target: e.target, ...(e.port ? { port: e.port } : {}) })) } }, signal, node, skipped)
+  async execute(graph: NodeGraph, signal: AbortSignal, node: NonNullable<Pending['node']>, skipped: NonNullable<Pending['skipped']>, options:{maxWorkers?:number}={}): Promise<GraphonResult> {
+    const maxWorkers=options.maxWorkers??3
+    if(!Number.isInteger(maxWorkers)||maxWorkers<1||maxWorkers>8)throw new Error('图执行并发数必须在 1–8 之间')
+    return this.request({ type: 'execute', maxWorkers, graph: { nodes: graph.nodes.map(n => ({ id: n.id, kind: n.kind })), edges: graph.edges.map(e => ({ id: e.id, source: e.source, target: e.target, ...(e.port ? { port: e.port } : {}) })) } }, signal, node, skipped)
   }
   async countTokens(text: string, signal: AbortSignal): Promise<TokenEstimate> { return this.request({ type: 'count_tokens', text }, signal) }
   async close(): Promise<void> {

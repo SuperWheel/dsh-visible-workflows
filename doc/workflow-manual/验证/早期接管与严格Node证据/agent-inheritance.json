@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-17T05:53:35.758Z",
+  "scope": "Installed Harness boot/Loader/AgentLoop/spawn-in-process and ToolRuntime; source native workflow adapter held at actual child creation before model execution; component only, no production activation or OS confinement attestation",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "bundleSha256": "a1f521d9de413fba2b3bb8a9949b04d761cdb8a40b31019c1ecaae7dc9de8542",
+  "sourceHashes": {
+    "src/host/native-agent.ts": "dedb2884551a4504bdd4e5a9910b403a7f8e11ec83aeeaa1e0cc3e70a28a8816",
+    "src/host/tool-catalog.ts": "3336c632892f86612b6f15ce09a2d1db17a197de13cf10887d720c4f35eabd5a",
+    "host-extensions/dsh-secret-isolation/workflow-tools.ts": "d8d11ce13701af06e02e51fdb40a1306704e42b1dcda302bec1f7309a75bfc9b"
+  },
+  "installedHashes": {
+    "dsh-app-boot": "234db45e1b3f8c683b5bc1f551948b2a2ec52a6468c7b6937725a23f1c0e0d96",
+    "dsh-tools": "40f47709337c3c205d4e09e647f8588f4977e66f6d52f019b3cc7ef81159d84f",
+    "dsh-agent": "7b9aa39474de83115cf890dd7f8904cf0d59df0811cb335ab85565a04f1aac93",
+    "dsh-agent-loop": "00c4814d63f3d1e2754eb09144832d19b30499d6ea444730473f740b587948c2",
+    "dsh-subagent": "75b50b1c9452a6aeb10d1c859e3f45b05e062ea1fad6ed3bcd9577f2bc912541",
+    "dsh-subagent-spawn-in-process": "11c92108dd145957f8251a81fc9bfb8a30e7f6f25d96e34a5cb8581a4be4be06"
+  },
+  "results": [
+    {
+      "name": "real_parent_and_child_inherit_global_guard",
+      "pass": true
+    },
+    {
+      "name": "native_spawn_child_registered_exact_workflow_bridge",
+      "pass": true
+    },
+    {
+      "name": "native_child_still_cannot_run_unreviewed_or_raw_read_tools",
+      "pass": true
+    },
+    {
+      "name": "grant_does_not_cross_to_parent_or_another_child_even_with_same_instance",
+      "pass": true
+    },
+    {
+      "name": "same_name_replacement_and_mutated_executor_are_rejected",
+      "pass": true
+    },
+    {
+      "name": "cancellation_removes_native_bridge_authority_before_scope_disposal",
+      "pass": true
+    },
+    {
+      "name": "boundary_revocation_closes_a_live_independent_binding",
+      "pass": true
+    }
+  ],
+  "failures": [],
+  "creationEvents": 3,
+  "grantCalls": 1,
+  "modelRequests": 0,
+  "timedOut": false,
+  "remainingAgents": 0,
+  "nativeOutcome": {
+    "success": false,
+    "message": "This operation was aborted"
+  },
+  "fixtureRemoved": true,
+  "passed": true
+}

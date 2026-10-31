@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-17",
+  "tests": [
+    {
+      "file": "vitest-final.json",
+      "total": 891,
+      "passed": 891,
+      "failed": 0,
+      "files": 88,
+      "success": true
+    },
+    {
+      "file": "vitest-incremental.json",
+      "total": 27,
+      "passed": 27,
+      "failed": 0,
+      "files": 2,
+      "success": true
+    },
+    {
+      "description": "执行弹窗相关增量回归，与全量计数重叠",
+      "total": 56,
+      "passed": 56,
+      "failed": 0,
+      "files": 4,
+      "success": true,
+      "suites": {
+        "workflow-readiness-client.test.tsx": 13,
+        "run-governance-client.test.tsx": 20,
+        "client-store.test.ts": 16,
+        "canvas-top-actions.test.tsx": 7
+      }
+    }
+  ],
+  "build": {
+    "host": true,
+    "client": true,
+    "remotes": true
+  },
+  "package": {
+    "filename": "dsh-visible-dynamic-workflows-0.0.1.tgz",
+    "files": 356,
+    "sha256": "ed8abbc0f8d277b33faac8f469745bb0e133fe0fa1dea658dd6b86cb4dd878dd",
+    "helperIncluded": true
+  },
+  "nativeVerification": {
+    "completedAt": "2026-10-17T03:19:40.909Z",
+    "application": "DeepSeek Harness Desktop 0.2rc2",
+    "installedHostSha256": "e633d8a01945d0858efed43c9b4dec2016a2fe61d207562601d56b405d2d59bf",
+    "installedClientSha256": "19317d74528939837f8345202f2fec097efcf1afe7cc2c897cda05c46042c0ee",
+    "workflowId": "d09b8fe9-ad6c-4777-8dd5-deeb7b95abbb",
+    "workflowTitle": "JSON 待配置验收 · 1017",
+    "importedDirectlyIntoCanvas": true,
+    "missingValueSavedAndReopened": true,
+    "missingNodeTriangleVisible": true,
+    "rightPendingListVisible": true,
+    "executeClickableWithMissingValue": true,
+    "clickShowsMissingConfigurationModal": true,
+    "goProcessExpandsAndFocusesList": true,
+    "blockedClickCreatesNoRun": {
+      "at": "2026-10-17T03:18:03.543Z",
+      "runFilesUnchanged": true,
+      "before": 16,
+      "after": 16
+    },
+    "configuredValueClearsWarnings": true,
+    "successfulRunIds": [
+      "391f64cf-da99-49a3-82a7-a4e9bcde76c7",
+      "f3ec4f45-d976-437f-a0b7-0639cdeb8df7"
+    ],
+    "latestObservedOutput": {
+      "result": "导入补齐验收通过"
+    },
+    "modelCalls": 0,
+    "agentTasks": 0,
+    "canvasCoordinatesNotesAndAnnotationsPreserved": true,
+    "jsonExportPreviewChecked": true,
+    "zipDesktopDownloadChecked": false,
+    "preservation": {
+      "profileUnchanged": true,
+      "originalWorkflowsUnchanged": true,
+      "originalPresetsUnchanged": true,
+      "originalRunFilesUnchanged": true
+    },
+    "activeRunsAtCompletion": []
+  }
+}

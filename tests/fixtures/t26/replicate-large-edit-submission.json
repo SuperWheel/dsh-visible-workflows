@@ -1,0 +1,1 @@
+{"submission":{"coverage":{"R1":["n30"]},"mode":"edit","summary":"仅修改目标模板节点 n30：把模板正文从「原文 {{input.text}}」改为「结果：{{input.text}}」，text 引用工作流输入字段 text；不改动 inputs 映射，其余节点、配置、顺序与连线全部保留。","updates":{"n30":{"text":"结果：{{input.text}}","unset":[]}}}}

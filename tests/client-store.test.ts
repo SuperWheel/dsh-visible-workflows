@@ -5,7 +5,7 @@ import { remapNodeConfig } from '../src/client/copy.ts'
 function fixture(){
   const flow=makeWorkflow('workspace','Example',true);flow.revision=1
   const library:LibrarySnapshot={workflows:[flow],workspaces:[{id:'workspace',name:'Project'}],presets:[],runs:[]}
-  const api={list:vi.fn(async()=>structuredClone(library)),get:vi.fn(async()=>structuredClone(flow)),save:vi.fn(async(raw:string,revision:number)=>({...JSON.parse(raw),revision:revision+1})),models:vi.fn(async()=>[]),start:vi.fn()} as unknown as WorkflowAPI
+  const api={inspectReadiness:vi.fn(async(workflow:Workflow)=>({workflowId:workflow.id,revision:workflow.revision,canRun:true,issues:[]})),list:vi.fn(async()=>structuredClone(library)),get:vi.fn(async()=>structuredClone(flow)),save:vi.fn(async(raw:string,revision:number)=>({...JSON.parse(raw),revision:revision+1})),models:vi.fn(async()=>[]),start:vi.fn()} as unknown as WorkflowAPI
   const store=new WorkflowStore(api)
   return {flow,library,api,store}
 }
@@ -36,10 +36,10 @@ describe('workflow editor persistence',()=>{
   it('adopts an Agent edit only when the local draft is clean',async()=>{
     vi.useFakeTimers();const {store,library,api}=fixture();await store.load();await store.open('id')
     library.workflows[0]={...library.workflows[0]!,title:'Agent edit',revision:2};await vi.advanceTimersByTimeAsync(3000);expect(store.getSnapshot().workflow?.title).toBe('Agent edit')
-    store.edit({...store.getSnapshot().workflow!,title:'local pending'});vi.mocked(api.save).mockRejectedValue(new Error('revision conflict'));library.workflows[0]={...library.workflows[0]!,title:'another Agent edit',revision:3};await vi.advanceTimersByTimeAsync(3000);expect(store.getSnapshot().workflow?.title).toBe('local pending');expect(store.getSnapshot().saveState).toBe('error');store.dispose()
+    store.edit({...store.getSnapshot().workflow!,title:'local pending'});vi.mocked(api.save).mockRejectedValue(new Error('revision conflict'));library.workflows[0]={...library.workflows[0]!,title:'another Agent edit',revision:3};await vi.advanceTimersByTimeAsync(3000);expect(store.getSnapshot().workflow?.title).toBe('local pending');expect(store.getSnapshot().saveState).toBe('dirty');await expect(store.save()).rejects.toThrow('revision conflict');expect(store.getSnapshot().saveState).toBe('error');store.dispose()
   })
-  it('protects the current graph when a running record is not the displayed record',async()=>{
-    const {store,flow,library}=fixture();library.runs=[{id:'active',workflowId:flow.id,workspaceId:'workspace',workflowTitle:flow.title,sourceRevision:1,graph:flow,status:'running',inputs:{},outputs:{},executions:[],startedAt:new Date().toISOString()}];await store.load();await store.open('id');store.update({run:undefined});expect(()=>store.edit({...flow,title:'cannot overwrite'})).toThrow('停止当前运行');store.dispose()
+  it('saves future edits without changing an active run snapshot even when history is selected',async()=>{
+    const {store,flow,library}=fixture();library.runs=[{id:'active',workflowId:flow.id,workspaceId:'workspace',workflowTitle:flow.title,sourceRevision:1,graph:structuredClone(flow),status:'running',inputs:{},outputs:{},executions:[],startedAt:new Date().toISOString()}];await store.load();await store.open('id');store.update({run:undefined});store.edit({...flow,title:'next run definition'});await store.flush();expect(store.getSnapshot().workflow?.title).toBe('next run definition');expect(store.getSnapshot().library.runs[0]?.graph.title).toBe(flow.title);expect(store.getSnapshot().library.runs[0]?.sourceRevision).toBe(1);store.dispose()
   })
   it('ignores an old navigation after a newer workflow has opened and been edited',async()=>{
     const {store,api,flow}=fixture();await store.load()
@@ -79,7 +79,7 @@ describe('expanded canvas graph editing',()=>{
   it('persists the active session as execution context without invoking a main Agent',async()=>{
     const {store,api,flow}=fixture();await store.load();await store.open(flow.id);store.update({sessionId:'conversation-id'})
     api.start=vi.fn(async()=>({id:'r',workflowId:flow.id,workspaceId:flow.workspaceId,workflowTitle:flow.title,sourceRevision:1,graph:flow,status:'success',inputs:{},outputs:{},executions:[],startedAt:''}))
-    await store.execute({text:'example'});expect(api.start).toHaveBeenCalledWith(flow.id,'{"text":"example"}','conversation-id');store.dispose()
+    await store.execute({text:'example'});expect(api.start).toHaveBeenCalledWith(flow.id,'{"text":"example"}','conversation-id',expect.any(String));store.dispose()
   })
   it('creates saveable node configurations for every selectable node kind',async()=>{
     const {newNode,NODE_DEFINITIONS}=await import('../src/client/nodes.ts')
@@ -137,4 +137,76 @@ describe('runtime-consistent variable hints',()=>{
     expect(newNode('code').config.timeoutMs).toBeLessThanOrEqual(codeTimeout('javascript'))
     expect(codeTimeout('javascript')).toBe(3000);expect(codeTimeout('python')).toBe(10000)
   })
+})
+
+
+describe('client run request identities',()=>{
+  it('keeps the start identity after a lost response and uses a fresh identity after a successful reply',async()=>{
+    const {store,api,flow}=fixture();await store.load();await store.open(flow.id)
+    const run={id:'done',workflowId:flow.id,workspaceId:flow.workspaceId,workflowTitle:flow.title,sourceRevision:flow.revision,graph:flow,status:'success',inputs:{},outputs:{},executions:[],startedAt:''} as WorkflowRun
+    api.start=vi.fn().mockRejectedValueOnce(Error('lost response')).mockResolvedValue(run)
+    await expect(store.execute({text:'same'})).rejects.toThrow('lost response')
+    await store.execute({text:'same'})
+    const calls=vi.mocked(api.start).mock.calls
+    expect(calls[0]![3]).toEqual(expect.any(String));expect(calls[1]![3]).toBe(calls[0]![3])
+    await store.execute({text:'same'});expect(calls[2]![3]).not.toBe(calls[0]![3]);store.dispose()
+  })
+  it.each(['recover','rerun'] as const)('keeps a %s confirmation identity after a lost response and separates changed parameters',async mode=>{
+    const {store,api,flow}=fixture();await store.load();await store.open(flow.id)
+    api[mode]=vi.fn().mockRejectedValueOnce(Error('lost response')).mockResolvedValue({id:'done',workflowId:flow.id,status:'success'})
+    await expect(store.control(mode,'source','digest')).rejects.toThrow('lost response')
+    await store.control(mode,'source','digest')
+    const calls=vi.mocked(api[mode]!).mock.calls
+    expect(calls[0]!.at(-1)).toEqual(expect.any(String));expect(calls[1]!.at(-1)).toBe(calls[0]!.at(-1))
+    await store.control(mode,'source','digest');expect(calls[2]!.at(-1)).not.toBe(calls[0]!.at(-1));store.dispose()
+  })
+  it('a late duplicate reply cannot clear the identity of a newer execution with the same parameters',async()=>{
+    const {store,api,flow}=fixture();await store.load();await store.open(flow.id)
+    const replies:Array<(run:WorkflowRun)=>void>=[],run={id:'done',workflowId:flow.id,status:'success'} as WorkflowRun
+    api.start=vi.fn(()=>new Promise(resolve=>replies.push(resolve)))
+    const first=store.execute({text:'same'}),duplicate=store.execute({text:'same'}),accepted=store.execute({text:'same'})
+    while(replies.length<3)await new Promise(resolve=>setImmediate(resolve))
+    replies[2]!(run);await accepted
+    const newer=store.execute({text:'same'})
+    while(replies.length<4)await new Promise(resolve=>setImmediate(resolve))
+    replies[0]!(run);await first
+    // The newer request loses its reply; its retry must keep the newer ID.
+    const retry=store.execute({text:'same'})
+    while(replies.length<5)await new Promise(resolve=>setImmediate(resolve))
+    const calls=vi.mocked(api.start).mock.calls
+    expect(calls[0]![3]).toBe(calls[2]![3]);expect(calls[3]![3]).not.toBe(calls[0]![3]);expect(calls[4]![3]).toBe(calls[3]![3])
+    replies[1]!(run);replies[3]!(run);replies[4]!(run);await duplicate;await newer;await retry;store.dispose()
+  })
+  it.each(['start','rerun','recover'] as const)('retains the %s identity when the latest reply is lost and an older success is discarded',async operation=>{
+    const {store,api,flow}=fixture();await store.load();await store.open(flow.id)
+    const receipts=new Map<string,WorkflowRun>(),replies:Array<{run:WorkflowRun;resolve:(run:WorkflowRun)=>void;reject:(error:Error)=>void}>=[]
+    let effects=0
+    // In-memory server enforces the production receipt contract; transport loss
+    // is injected independently after the business effect has completed.
+    const dispatch=vi.fn((...args:unknown[])=>{
+      const requestId=args.at(-1) as string
+      let run=receipts.get(requestId)
+      if(!run){effects++;run={id:'effect-'+effects,workflowId:flow.id,status:'success'} as WorkflowRun;receipts.set(requestId,run)}
+      return new Promise<WorkflowRun>((resolve,reject)=>replies.push({run,resolve,reject}))
+    })
+    if(operation==='start')api.start=dispatch as WorkflowAPI['start']
+    else if(operation==='rerun')api.rerun=dispatch as WorkflowAPI['rerun']
+    else api.recover=dispatch as WorkflowAPI['recover']
+    const submit=()=>operation==='start'?store.execute({text:'same'}):store.control(operation,'source','digest')
+    try{
+      const older=submit()
+      while(replies.length<1)await new Promise(resolve=>setImmediate(resolve))
+      const newer=submit(),lost=expect(newer).rejects.toThrow('latest reply lost')
+      while(replies.length<2)await new Promise(resolve=>setImmediate(resolve))
+      replies[1]!.reject(Error('latest reply lost'));await lost
+      replies[0]!.resolve(replies[0]!.run);await older
+      expect(store.getSnapshot().run).toBeUndefined()
+      const retry=submit()
+      while(replies.length<3)await new Promise(resolve=>setImmediate(resolve))
+      expect(dispatch.mock.calls.map(args=>args.at(-1))).toEqual([expect.any(String),dispatch.mock.calls[0]!.at(-1),dispatch.mock.calls[0]!.at(-1)])
+      replies[2]!.resolve(replies[2]!.run);await retry
+      expect(store.getSnapshot().run?.id).toBe('effect-1');expect(effects).toBe(1)
+    }finally{store.dispose()}
+  })
+
 })

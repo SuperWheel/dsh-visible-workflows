@@ -6,7 +6,9 @@ import {WorkflowStore} from '../client/store.ts'
 import type {WorkflowAPI} from '../shared/types.ts'
 import '../../.cache/preview/native-theme.css'
 import {styles} from '../client/styles.ts'
+import {installWorkflowMotion} from '../client/workflow-motion.ts'
 const style=document.createElement('style');style.textContent=styles+annotationEditorStyles;document.head.appendChild(style)
+window.addEventListener('pagehide',installWorkflowMotion(document),{once:true})
 import './preview.css'
 
 const api=new Proxy({} as WorkflowAPI,{get:(_,method:string)=>(...args:unknown[])=>fetch('/__workflow',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({method,args})}).then(async r=>{const result=await r.json();if(!r.ok)throw new Error(result.error);return result.value})})

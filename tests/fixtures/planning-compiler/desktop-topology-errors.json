@@ -1,0 +1,133 @@
+{
+  "sourceEvidence": "docs/evidence/backend-batch2-20261019/live/planner-topology-errors-public-fixture.json",
+  "classification": "Minimized synthetic equivalent of public seq23/24/29/30; excludes business prompts/code/sample values.",
+  "wire": {
+    "submission": {
+      "mode": "create",
+      "title": "Scope and branch diagnostics regression",
+      "forms": [
+        {
+          "key": "start",
+          "template": "input",
+          "values": {
+            "fields": [
+              {
+                "name": "flag",
+                "type": "text",
+                "label": "flag",
+                "required": true
+              }
+            ]
+          }
+        },
+        {
+          "key": "choose",
+          "template": "if",
+          "values": {
+            "variable": "input.flag",
+            "operator": "equals",
+            "value": "yes"
+          }
+        },
+        {
+          "key": "review",
+          "template": "human",
+          "scope": [
+            "main"
+          ],
+          "values": {
+            "prompt": "Confirm",
+            "fields": [],
+            "actions": [
+              {
+                "id": "approve",
+                "label": "Approve"
+              },
+              {
+                "id": "reject",
+                "label": "Reject"
+              }
+            ]
+          }
+        },
+        {
+          "key": "result",
+          "template": "output",
+          "values": {
+            "text": "ok",
+            "outputName": "result"
+          }
+        },
+        {
+          "key": "failed",
+          "template": "output",
+          "values": {
+            "text": "failed",
+            "outputName": "failed"
+          }
+        },
+        {
+          "key": "rejected",
+          "template": "output",
+          "values": {
+            "text": "rejected",
+            "outputName": "rejected"
+          }
+        }
+      ],
+      "chains": [
+        {
+          "key": "main",
+          "nodes": [
+            "start",
+            "choose",
+            "review",
+            "result",
+            "failed",
+            "rejected"
+          ]
+        }
+      ],
+      "links": [
+        {
+          "key": "entry",
+          "source": "start",
+          "target": "choose"
+        },
+        {
+          "key": "yes",
+          "source": "choose",
+          "target": "review",
+          "port": "true"
+        },
+        {
+          "key": "no",
+          "source": "choose",
+          "target": "failed",
+          "port": "false"
+        },
+        {
+          "key": "approve",
+          "source": "review",
+          "target": "result",
+          "port": "approve"
+        },
+        {
+          "key": "reject",
+          "source": "review",
+          "target": "rejected",
+          "port": "reject"
+        }
+      ],
+      "coverage": {
+        "R1": [
+          "choose",
+          "review",
+          "result",
+          "failed",
+          "rejected"
+        ]
+      }
+    }
+  }
+}

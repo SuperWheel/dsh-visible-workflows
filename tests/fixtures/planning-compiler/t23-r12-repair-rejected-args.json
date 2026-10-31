@@ -1,0 +1,332 @@
+{
+ "submission": {
+  "draftRevision": 1,
+  "mode": "repair",
+  "patches": [
+   {
+    "op": "replace",
+    "path": "/formsByKey",
+    "value": {
+     "approvedIf": {
+      "template": "if",
+      "title": "是否已通过（循环外分流）",
+      "values": {
+       "operator": "equals",
+       "value": "true",
+       "variable": "reviewLoop.variables.approved"
+      }
+     },
+     "approvedMsg": {
+      "template": "template",
+      "title": "通过结果文本",
+      "values": {
+       "text": "已通过人工审核，最终审核稿已写入 t20-review.txt。"
+      }
+     },
+     "approvedOut": {
+      "template": "output",
+      "title": "通过出口",
+      "values": {
+       "outputName": "result",
+       "text": "{{approvedMsg.text}}"
+      }
+     },
+     "draftInit": {
+      "template": "template",
+      "title": "生成固定初稿",
+      "values": {
+       "text": "T20 初稿：待审核内容。"
+      }
+     },
+     "notApprovedMsg": {
+      "template": "template",
+      "title": "未通过结果文本",
+      "values": {
+       "text": "not-approved"
+      }
+     },
+     "notApprovedOut": {
+      "template": "output",
+      "title": "not-approved 出口",
+      "values": {
+       "outputName": "result",
+       "text": "{{notApprovedMsg.text}}"
+      }
+     },
+     "probeIf": {
+      "template": "if",
+      "title": "目标是否存在",
+      "values": {
+       "operator": "not_empty",
+       "variable": "probeTarget.value.paths"
+      }
+     },
+     "probeTarget": {
+      "template": "tool-4dcbcd9ad7c1998e6530",
+      "title": "精确探测目标文件",
+      "values": {
+       "inputs": {
+        "pattern": "t20-review.txt"
+       }
+      }
+     },
+     "readFile": {
+      "template": "tool-ac4c8a5b6b2521f8338a",
+      "title": "读取目标文件（仅观察一次）",
+      "values": {
+       "inputs": {
+        "file_path": "t20-review.txt"
+       }
+      }
+     },
+     "renderDraft": {
+      "template": "template",
+      "title": "合成当前草稿正文",
+      "values": {
+       "text": "{% if vars.reviewBase %}{{vars.reviewBase}}\n{{vars.reviewNote}}{% else %}{{vars.draft}}{% endif %}"
+      }
+     },
+     "review": {
+      "template": "human",
+      "title": "人工审核",
+      "values": {
+       "actions": [
+        {
+         "id": "approve",
+         "label": "通过"
+        },
+        {
+         "id": "reject",
+         "label": "退回"
+        }
+       ],
+       "fields": [
+        {
+         "defaultValue": "{{renderDraft.text}}",
+         "label": "审核正文（直接编辑草稿文件不用于提交，以表单 content 字段为准）",
+         "name": "content",
+         "required": false,
+         "type": "paragraph"
+        },
+        {
+         "label": "审核意见（退回时填写）",
+         "name": "note",
+         "required": false,
+         "type": "paragraph"
+        }
+       ],
+       "prompt": "请审核本轮草稿正文（已写入 .dsh-drafts/{{sys.workflow_run_id}}/t20-review.txt，该文件只供查看）。直接编辑草稿文件不用于提交，以表单 content 字段为准；如需修改请直接在下方 content 字段中编辑。同意请点「通过」；需修改请填写审核意见并点「退回」。"
+      }
+     },
+     "reviewLoop": {
+      "template": "loop",
+      "title": "人工审核循环（最多3轮）",
+      "values": {
+       "initialVariables": {
+        "approved": false,
+        "draft": "{{draftInit.text}}",
+        "reviewBase": "",
+        "reviewNote": ""
+       },
+       "maxIterations": 3,
+       "until": {
+        "operator": "equals",
+        "value": "true",
+        "variable": "vars.approved"
+       }
+      }
+     },
+     "saveReview": {
+      "template": "assigner",
+      "title": "保存退回意见",
+      "values": {
+       "assignments": [
+        {
+         "name": "reviewBase",
+         "operation": "set",
+         "value": "{{review.content}}"
+        },
+        {
+         "name": "reviewNote",
+         "operation": "set",
+         "value": "{{review.note}}"
+        }
+       ]
+      }
+     },
+     "setApproved": {
+      "template": "assigner",
+      "title": "标记审核通过",
+      "values": {
+       "assignments": [
+        {
+         "name": "approved",
+         "operation": "set",
+         "value": true
+        }
+       ]
+      }
+     },
+     "start": {
+      "template": "input",
+      "title": "运行入口",
+      "values": {
+       "fields": []
+      }
+     },
+     "writeDraftFile": {
+      "template": "tool-e54cee15d98bc6604069",
+      "title": "写入草稿文件",
+      "values": {
+       "inputs": {
+        "content": "{{renderDraft.text}}",
+        "file_path": ".dsh-drafts/{{sys.workflow_run_id}}/t20-review.txt"
+       }
+      }
+     },
+     "writeTarget": {
+      "template": "tool-e54cee15d98bc6604069",
+      "title": "写入目标文件（approve 出口独占触发）",
+      "values": {
+       "inputs": {
+        "content": "{{review.content}}",
+        "file_path": "t20-review.txt"
+       }
+      }
+     }
+    }
+   },
+   {
+    "op": "replace",
+    "path": "/chainsByKey",
+    "value": {
+     "afterLoop": {
+      "nodes": [
+       "reviewLoop",
+       "approvedIf"
+      ]
+     },
+     "approvedPath": {
+      "nodes": [
+       "approvedMsg",
+       "approvedOut"
+      ]
+     },
+     "body": {
+      "container": "reviewLoop",
+      "nodes": [
+       "renderDraft",
+       "writeDraftFile",
+       "review"
+      ]
+     },
+     "main": {
+      "nodes": [
+       "start",
+       "draftInit",
+       "probeTarget",
+       "probeIf"
+      ]
+     },
+     "notApprovedPath": {
+      "nodes": [
+       "notApprovedMsg",
+       "notApprovedOut"
+      ]
+     },
+     "onApprove": {
+      "container": "reviewLoop",
+      "nodes": [
+       "writeTarget",
+       "setApproved"
+      ]
+     },
+     "onReject": {
+      "container": "reviewLoop",
+      "nodes": [
+       "saveReview"
+      ]
+     },
+     "readToLoop": {
+      "nodes": [
+       "readFile",
+       "reviewLoop"
+      ]
+     }
+    }
+   },
+   {
+    "op": "replace",
+    "path": "/linksByKey",
+    "value": {
+     "approvedNo": {
+      "port": "false",
+      "source": "approvedIf",
+      "target": "notApprovedMsg"
+     },
+     "approvedYes": {
+      "port": "true",
+      "source": "approvedIf",
+      "target": "approvedMsg"
+     },
+     "doApprove": {
+      "port": "approve",
+      "source": "review",
+      "target": "writeTarget"
+     },
+     "doReject": {
+      "port": "reject",
+      "source": "review",
+      "target": "saveReview"
+     },
+     "probeNo": {
+      "port": "false",
+      "source": "probeIf",
+      "target": "reviewLoop"
+     },
+     "probeYes": {
+      "port": "true",
+      "source": "probeIf",
+      "target": "readFile"
+     }
+    }
+   },
+   {
+    "op": "replace",
+    "path": "/description",
+    "value": "新建可视化工作流《T20 表单审核文件写入（r12）》：template 生成固定初稿「T20 初稿：待审核内容。」→ 循环前 native:glob 精确探测目标 t20-review.txt，存在才 native:read 读取一次（不存在跳过）→ 进入最多 3 轮人工审核 loop（initialVariables.approved=false，until vars.approved equals true）：每轮先把当前草稿写入 .dsh-drafts/{{sys.workflow_run_id}}/t20-review.txt，再由 human 审核（paragraph 字段 content 默认值为当前生成正文，注明直接编辑草稿文件不用于提交、以表单 content 字段为准）；退回经 assigner 同时保存 reviewBase 与 reviewNote，下一轮生成节点显式引用二者拼接作为修改基础；approve 出口独占连接正式写入节点，把审核表单 content 直接写入目标 t20-review.txt 后 assigner 置 approved=true 退出循环，写入失败/冲突按工具默认行为报错不吞错，批准后的写入不读取目标或草稿文件；循环外按 loop.variables.approved 分流：true 走通过出口，false（超 3 轮未通过）走 not-approved 出口。全程无 llm/agent。"
+   },
+   {
+    "op": "replace",
+    "path": "/summary",
+    "value": "T20 表单审核文件写入（r12）：确定性无模型流程；loop(最多3轮, until vars.approved=true, 初始 approved=false) 内每轮写草稿+human 审核，退回保存 reviewBase/reviewNote 供下轮拼接；approve 出口独占把表单 content 写入目标 t20-review.txt（失败不吞错）后置 approved=true 退出；循环外按 loop.variables.approved 分流，超限走 not-approved 出口。"
+   },
+   {
+    "op": "replace",
+    "path": "/coverage",
+    "value": {
+     "R1": [
+      "start",
+      "draftInit",
+      "probeTarget",
+      "probeIf",
+      "readFile",
+      "reviewLoop",
+      "renderDraft",
+      "writeDraftFile",
+      "review",
+      "saveReview",
+      "writeTarget",
+      "setApproved",
+      "approvedIf",
+      "approvedMsg",
+      "notApprovedMsg",
+      "approvedOut",
+      "notApprovedOut"
+     ]
+    }
+   }
+  ],
+  "summary": "按诊断重构为标准审核配方：approved 以布尔 false 初始化、until 用 vars.approved equals true；正式目标写入移入 loop 并独占连接 review 的 approve 出口（先写目标、成功后置 approved=true 退出）；循环外按 loop.variables.approved 分流 true/false，超限未批准走 not-approved 输出。"
+ }
+}

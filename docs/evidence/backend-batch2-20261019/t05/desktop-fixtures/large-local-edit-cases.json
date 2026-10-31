@@ -1,0 +1,29 @@
+{
+  "baselineNodes": 31,
+  "targetBeforeImport": {
+    "id": "target",
+    "title": "target",
+    "kind": "template",
+    "text": "原文 {{input.text}}"
+  },
+  "instruction": "仅修改标题为 target 的模板节点，把 text 改为“结果：{{input.text}}”。先读取导入后的实际工作流 ID、revision 与 target 节点 ID，使用 operation=revise、expectedRevision 和 targetNodeIds；其余节点、配置、边、notes、环境变量和身份保持不变。先返回待接受提案，不直接写入。",
+  "oracle": "接受后导出图，将唯一目标 text 还原后，与接受前基线逐字段深相等；不允许只比较节点数。",
+  "cases": [
+    {
+      "inputs": {
+        "text": "甲"
+      },
+      "expectedOutputs": {
+        "result": "结果：甲"
+      }
+    },
+    {
+      "inputs": {
+        "text": "乙"
+      },
+      "expectedOutputs": {
+        "result": "结果：乙"
+      }
+    }
+  ]
+}

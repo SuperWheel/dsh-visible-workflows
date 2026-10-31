@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-17T06:15:04.001Z",
+  "workflows": [
+    {
+      "id": "e6525265-51fb-4921-b062-45ce978c3d6a",
+      "sha256": "787b2613601a8308bfecfd42c05f3c877074020def1a0dfb9ef54e704c45befa"
+    },
+    {
+      "id": "fe11cb39-b8c0-4318-af7e-158e19ad994f",
+      "sha256": "624e31dceaa686424020bb768b205daf2db71c068241c9058dbff49a7084bf9d"
+    },
+    {
+      "id": "3b2ac60b-9f97-4ce7-a2a5-fdd2c8a7e391",
+      "sha256": "b32448ed13e783451c4bfa5bfc1bea7143dfc84f23b13221600245041eb8a547"
+    },
+    {
+      "id": "80a4a541-90c9-496b-b097-53fa3e266353",
+      "sha256": "1f1f5501bb29b7e6961ebb90db4b3a981039c31ef28ead6368f9810184c3740c"
+    },
+    {
+      "id": "d09b8fe9-ad6c-4777-8dd5-deeb7b95abbb",
+      "sha256": "003f5b388c31cbe7659113438fcf141a096167dc9dc22c8cc7694e47b1a19396"
+    },
+    {
+      "id": "162878e8-e655-4572-a573-5649b6100d15",
+      "sha256": "cb420c690f119c3925e8878c81a6c37730d445508568cb9f3d37c497ff986324"
+    },
+    {
+      "id": "d509d971-a850-4a8c-895b-c01069b87094",
+      "sha256": "b17963f6298ef68af6baf56256439f338f7508e4a77c784b28ff3eeea1e1b4ea"
+    }
+  ],
+  "presets": [],
+  "drafts": [
+    {
+      "id": "455967d0-d19b-4cc2-89ad-a408ca129839",
+      "keys": [
+        "id",
+        "workflowId",
+        "workspaceId",
+        "sessionId",
+        "kind",
+        "payload",
+        "revision",
+        "updatedAt"
+      ],
+      "sha256": "883a6454028458620f30973bd9eda1219aec364d21906fcf9e1b54e304419b8e"
+    },
+    {
+      "id": "9fe652b7-f250-4a52-8677-29365063ddc2",
+      "keys": [
+        "id",
+        "workflowId",
+        "workspaceId",
+        "kind",
+        "payload",
+        "revision",
+        "updatedAt"
+      ],
+      "sha256": "8a98addf94c42050407752f4438bb7e9c1732af9b7a7b3e322e582049af871ff"
+    },
+    {
+      "id": "1ebfd2a9-acdb-421d-8005-301aa38ced5b",
+      "keys": [
+        "id",
+        "workflowId",
+        "workspaceId",
+        "sessionId",
+        "kind",
+        "payload",
+        "revision",
+        "updatedAt"
+      ],
+      "sha256": "adec2fa8ecb0afab0b83dffa3fe4efdec117bb0ba50c9ad2f255d5814205385e"
+    }
+  ],
+  "proposals": []
+}

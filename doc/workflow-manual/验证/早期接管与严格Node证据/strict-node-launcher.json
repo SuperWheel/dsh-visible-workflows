@@ -1,0 +1,190 @@
+{
+  "passed": true,
+  "failures": [],
+  "scope": "Installed Harness runtime with actual Host launcher, fixed synthetic worker only; no Desktop/global Secret activation",
+  "reports": [
+    {
+      "mode": "normal",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "confirmed": true,
+      "leafAlive": false,
+      "guardianAlive": false,
+      "output": "LEAF:97336\n{\"mode\":\"normal\",\"blocked\":true,\"write\":true}\n",
+      "controlOutput": "",
+      "diagnostics": "",
+      "failureCodes": [],
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97333,
+          "watchdog": 97334,
+          "runner": 97335,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "quiescent",
+          "guardian": 97333,
+          "watchdog": 97334,
+          "runner": 97335,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97333,
+          "watchdog": 97334,
+          "runner": 97335,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "mode": "control",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "confirmed": true,
+      "leafAlive": false,
+      "guardianAlive": false,
+      "output": "LEAF:97348\n{\"mode\":\"normal\",\"blocked\":true,\"write\":true}\n",
+      "controlOutput": "echo:synthetic\n",
+      "diagnostics": "",
+      "failureCodes": [],
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97345,
+          "watchdog": 97346,
+          "runner": 97347,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "quiescent",
+          "guardian": 97345,
+          "watchdog": 97346,
+          "runner": 97347,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97345,
+          "watchdog": 97346,
+          "runner": 97347,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "mode": "timeout",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "confirmed": true,
+      "leafAlive": false,
+      "guardianAlive": false,
+      "output": "LEAF:97360\n",
+      "controlOutput": "",
+      "diagnostics": "",
+      "failureCodes": [],
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97357,
+          "watchdog": 97358,
+          "runner": 97359,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "quiescent",
+          "guardian": 97357,
+          "watchdog": 97358,
+          "runner": 97359,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97357,
+          "watchdog": 97358,
+          "runner": 97359,
+          "code": 124,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "mode": "cancel",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "confirmed": true,
+      "leafAlive": false,
+      "guardianAlive": false,
+      "output": "LEAF:97373\n",
+      "controlOutput": "",
+      "diagnostics": "",
+      "failureCodes": [],
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97370,
+          "watchdog": 97371,
+          "runner": 97372,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "quiescent",
+          "guardian": 97370,
+          "watchdog": 97371,
+          "runner": 97372,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97370,
+          "watchdog": 97371,
+          "runner": 97372,
+          "code": 125,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "mode": "guardian-crash",
+      "errorCode": "STRICT_NODE_EXIT_UNCONFIRMED",
+      "confirmed": false,
+      "leafAlive": false,
+      "guardianAlive": false,
+      "output": "LEAF:97385\n",
+      "controlOutput": "",
+      "diagnostics": "",
+      "failureCodes": [
+        "STRICT_NODE_EXIT_UNCONFIRMED"
+      ],
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97382,
+          "watchdog": 97383,
+          "runner": 97384,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    }
+  ]
+}

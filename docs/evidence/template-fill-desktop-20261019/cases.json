@@ -1,0 +1,103 @@
+{
+  "workspace": "/private/tmp/dsh-template-fill-acceptance-20261019",
+  "workflowTitle": "模板驱动验收·库存补货清单",
+  "cases": [
+    {
+      "name": "primary",
+      "records": [
+        {
+          "sku": "A",
+          "stock": 2
+        },
+        {
+          "sku": "B",
+          "stock": 10
+        },
+        {
+          "sku": "C",
+          "stock": 12
+        }
+      ],
+      "threshold": 10,
+      "outputPath": "primary.md",
+      "expectedLines": [
+        "# 库存补货清单",
+        "品类：1",
+        "补货总数：8",
+        "A：8"
+      ]
+    },
+    {
+      "name": "holdout",
+      "records": [
+        {
+          "sku": "clip",
+          "stock": 2
+        },
+        {
+          "sku": "box",
+          "stock": 6
+        }
+      ],
+      "threshold": 1,
+      "outputPath": "holdout.md",
+      "expectedLines": [
+        "# 库存补货清单",
+        "品类：0",
+        "补货总数：0",
+        "无需补货"
+      ]
+    },
+    {
+      "name": "revised",
+      "records": [
+        {
+          "sku": "ink",
+          "stock": 1
+        },
+        {
+          "sku": "pad",
+          "stock": 2
+        }
+      ],
+      "threshold": 4,
+      "outputPath": "revised.md",
+      "expectedLines": [
+        "# 库存补货清单（验收修订）",
+        "品类：2",
+        "补货总数：5",
+        "ink：3",
+        "pad：2"
+      ]
+    }
+  ],
+  "invalidCase": {
+    "records": [
+      {
+        "sku": "invalid",
+        "stock": -1
+      }
+    ],
+    "threshold": 4,
+    "outputPath": "invalid-must-not-exist.md"
+  },
+  "recoveryCase": {
+    "records": [
+      {
+        "sku": "recover",
+        "stock": 1
+      }
+    ],
+    "threshold": 3,
+    "outputPath": "recovery-obstacle/result.md",
+    "expectedLines": [
+      "# 库存补货清单",
+      "品类：1",
+      "补货总数：2",
+      "recover：2"
+    ],
+    "scenario": "Fail revision 1 before accepting the pending title-only revision 2; recover the frozen revision 1 after revision 2 exists.",
+    "expectedSourceRevision": 1,
+    "expectedCurrentRevisionAtRecovery": 2
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "sourceFile": "localhost-regression.log",
+  "sourceSha256": "75d15df179a5630474bbddc0f2848b6ff8b8757172980344ef13247e529cd5d7",
+  "passedFiles": 2,
+  "totalFiles": 2,
+  "passedTests": 11,
+  "totalTests": 11,
+  "rawLogIncluded": false,
+  "files": [
+    "tests/tool-adapters.test.ts",
+    "tests/graphon-capability-audit.test.ts"
+  ],
+  "scope": "Rerun only the two previously sandbox-blocked files with local loopback listening permitted.",
+  "priorEpermFailuresResolved": true,
+  "countsOverlapInitialFullRun": true
+}

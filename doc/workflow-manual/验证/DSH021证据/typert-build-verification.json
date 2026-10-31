@@ -1,0 +1,35 @@
+{
+  "sdk": "0.2.1-rc.1",
+  "remoteMethods": 50,
+  "hostClientSchemasMatch": true,
+  "clientImports": [
+    "@deepseek-ai/dsh-client-ui-primitives",
+    "react",
+    "react-dom",
+    "react/jsx-runtime"
+  ],
+  "sdkOwners": 60,
+  "publishedDeclarationsUnchanged": 360,
+  "artifacts": [
+    {
+      "file": "lib/index.js",
+      "sha256": "6df3c1c5262cdb99165d9bc1d2c60fe46514ce7f902c5bc420b170f1be86d1e0"
+    },
+    {
+      "file": "lib/client.js",
+      "sha256": "8f1f24b0bbdec315f271317f0de7757978dd7a026857c0e3b671d49c27efbe49"
+    },
+    {
+      "file": "lib/typert.host.js",
+      "sha256": "38c47fa3c92dadd78563a44520752decbe01913fc1e5aeadbcf5be7a6e13309c"
+    },
+    {
+      "file": "lib/typert.remote-client.js",
+      "sha256": "cf719c6c3787f87344785ad9ee58386ba40ee5a7395a856938c9878f6cfe86d0"
+    },
+    {
+      "file": "native/os-secret-broker/dist/integrity.json",
+      "sha256": "538d992cfc77903db4979c35b41d3e6b5403fe41645cdf28d9746eace297523c"
+    }
+  ]
+}

@@ -1,0 +1,1137 @@
+[
+ {
+  "journal": ".test-data/t10-rerun/container/events.jsonl",
+  "journalSha256": "f3128febcef7678ae11e24224b36aab90978721200b3e99c5b842b7852b470c8",
+  "line": 52,
+  "caseId": "container",
+  "arm": "template-fill",
+  "repeat": 1,
+  "status": "failed",
+  "submissionsLog": [
+   {
+    "submission": {
+     "chains": [
+      {
+       "description": "根层顺序：输入 → 迭代容器 → 紧凑 JSON 模板 → 输出",
+       "key": "main-flow",
+       "nodes": [
+        "start",
+        "iter",
+        "json_text",
+        "result"
+       ]
+      }
+     ],
+     "coverage": {
+      "R1": [
+       "start",
+       "iter",
+       "fmt",
+       "json_text",
+       "result"
+      ]
+     },
+     "description": "输入 items（json 字符串数组）后，由 iteration 容器逐项遍历；内部子图用 template 节点生成“项：{item}”，容器按输入顺序收集该模板 text；迭代后用 tojson 过滤器渲染结果数组的紧凑 JSON 文本并作为 result 输出，空数组输出 []。",
+     "forms": [
+      {
+       "key": "start",
+       "template": "input",
+       "title": "用户输入",
+       "values": {
+        "fields": [
+         {
+          "label": "items（字符串数组）",
+          "name": "items",
+          "required": true,
+          "type": "json"
+         }
+        ]
+       }
+      },
+      {
+       "key": "iter",
+       "template": "iteration",
+       "title": "遍历 items",
+       "values": {
+        "errorMode": "terminate",
+        "iterator": "start.items",
+        "outputVariable": "fmt.text",
+        "parallel": false
+       }
+      },
+      {
+       "key": "fmt",
+       "scope": [
+        "iter"
+       ],
+       "template": "template",
+       "title": "生成“项：{item}”",
+       "values": {
+        "inputs": {
+         "item": "{{item}}"
+        },
+        "text": "项：{{item}}"
+       }
+      },
+      {
+       "key": "json_text",
+       "template": "template",
+       "title": "结果数组转紧凑 JSON",
+       "values": {
+        "inputs": {
+         "results": "{{iter.result}}"
+        },
+        "text": "{{results | tojson}}"
+       }
+      },
+      {
+       "key": "result",
+       "template": "output",
+       "title": "输出结果",
+       "values": {
+        "outputName": "result",
+        "text": "{{json_text.text}}"
+       }
+      }
+     ],
+     "links": [
+      {
+       "key": "inner-entry",
+       "scope": [
+        "iter"
+       ],
+       "source": "start",
+       "target": "fmt"
+      }
+     ],
+     "summary": "start(items) → iter(iteration, iterator=start.items, outputVariable=fmt.text, 顺序执行) ；iter 内部 scope=[iter] 的 fmt 模板输出“项：{{item}}”；根层 json_text 模板将 {{iter.result}} 用 tojson 渲染为紧凑 JSON（空数组为 []）；result 输出 {{json_text.text}}。未用代码/模型/工具或模板循环替代 iteration。",
+     "title": "迭代遍历 items 生成“项：{item}”并汇总为紧凑 JSON"
+    }
+   },
+   {
+    "submission": {
+     "draftRevision": 1,
+     "mode": "repair",
+     "patches": [
+      {
+       "op": "replace",
+       "path": "/chainsByKey/main-flow",
+       "value": {
+        "nodes": [
+         "start",
+         "iter",
+         "json_text",
+         "result"
+        ]
+       }
+      }
+     ],
+     "summary": "移除 chain 中不被支持的 description 字段，仅保留 nodes 顺序段：start → iter → json_text → result。其余规划不变。"
+    }
+   },
+   {
+    "submission": {
+     "draftRevision": 2,
+     "mode": "repair",
+     "patches": [
+      {
+       "op": "add",
+       "path": "/formsByKey/repairNode1",
+       "value": {
+        "scope": [
+         "iter"
+        ],
+        "template": "input",
+        "title": "迭代子图入口",
+        "values": {
+         "fields": []
+        }
+       }
+      },
+      {
+       "op": "add",
+       "path": "/chainsByKey/repair1",
+       "value": {
+        "nodes": [
+         "repairNode1",
+         "fmt"
+        ]
+       }
+      },
+      {
+       "op": "replace",
+       "path": "/coverage/R1",
+       "value": [
+        "start",
+        "iter",
+        "repairNode1",
+        "fmt",
+        "json_text",
+        "result"
+       ]
+      }
+     ],
+     "summary": "按 CONTAINER_ENTRY 反馈补齐 iter 容器内部子图：新增 scope=[\"iter\"] 的空表单 input 节点 repairNode1 作为内层唯一入口，并用 chain repair1 连接 repairNode1 → fmt（fmt.key 不变，outputVariable 仍为 fmt.text）。同时更新 coverage/R1 纳入内层入口。根层顺序 start → iter → json_text → result 不变。"
+    }
+   }
+  ],
+  "feedback": [
+   {
+    "status": "repairable",
+    "draftRevision": 1,
+    "issues": [
+     {
+      "code": "INVALID_FIELDS",
+      "message": "Unrecognized key: \"description\"",
+      "path": "/chainsByKey/main-flow",
+      "allowedPaths": [
+       "/chainsByKey/main-flow"
+      ],
+      "actualType": "object"
+     }
+    ],
+    "fragments": {
+     "/chainsByKey/main-flow": {
+      "description": "根层顺序：输入 → 迭代容器 → 紧凑 JSON 模板 → 输出",
+      "nodes": [
+       "start",
+       "iter",
+       "json_text",
+       "result"
+      ]
+     }
+    },
+    "allowedPaths": [
+     "/chainsByKey/main-flow"
+    ],
+    "remainingSubmissions": 2
+   },
+   {
+    "status": "repairable",
+    "draftRevision": 2,
+    "issues": [
+     {
+      "code": "CONTAINER_ENTRY",
+      "path": "/formsByKey/iter/values",
+      "message": "容器 iter 的内部节点必须与容器同列声明，scope=[\"iter\"]；不要填写 config.body。每层运行图必须有且只有一个 input（可用 values:{fields:[]}），并用 chain/links 连接到内部 template；只有 template 的子图不能运行。内部节点用其声明 key 寻址，outputVariable 和 coverage 均可引用。将 body.nodes 的 id 改为声明 key，body.edges 改为 chains/links，删除 body 时同时保留这些声明。修复使用 formsByKey 下反馈给出的独立节点路径；add /formsByKey 或 /chainsByKey 会替换整张映射，不能用它追加单项。",
+      "allowedPaths": [
+       "/formsByKey/repairNode1",
+       "/formsByKey/repairNode2",
+       "/formsByKey/repairNode3",
+       "/formsByKey/repairNode4",
+       "/formsByKey/repairNode5",
+       "/formsByKey/repairNode6",
+       "/formsByKey/repairNode7",
+       "/formsByKey/repairNode8",
+       "/chainsByKey/main-flow",
+       "/chainsByKey/repair1",
+       "/chainsByKey/repair2",
+       "/chainsByKey/repair3",
+       "/chainsByKey/repair4",
+       "/chainsByKey/repair5",
+       "/chainsByKey/repair6",
+       "/chainsByKey/repair7",
+       "/chainsByKey/repair8",
+       "/coverage/R1"
+      ],
+      "contracts": {
+       "/formsByKey/repairNode1": {
+        "type": "object",
+        "properties": {
+         "title": {
+          "type": "string"
+         },
+         "scope": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "template": {
+          "type": "string",
+          "enum": [
+           "input",
+           "template",
+           "llm",
+           "if",
+           "output",
+           "agent",
+           "knowledge",
+           "classifier",
+           "human",
+           "iteration",
+           "loop",
+           "exit_loop",
+           "code",
+           "aggregator",
+           "document",
+           "assigner",
+           "extractor",
+           "http",
+           "list",
+           "tool"
+          ]
+         },
+         "values": {
+          "type": "object",
+          "additionalProperties": true
+         }
+        },
+        "required": [
+         "template",
+         "values",
+         "scope"
+        ],
+        "additionalProperties": false
+       },
+       "/formsByKey/repairNode2": {
+        "type": "object",
+        "properties": {
+         "title": {
+          "type": "string"
+         },
+         "scope": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "template": {
+          "type": "string",
+          "enum": [
+           "input",
+           "template",
+           "llm",
+           "if",
+           "output",
+           "agent",
+           "knowledge",
+           "classifier",
+           "human",
+           "iteration",
+           "loop",
+           "exit_loop",
+           "code",
+           "aggregator",
+           "document",
+           "assigner",
+           "extractor",
+           "http",
+           "list",
+           "tool"
+          ]
+         },
+         "values": {
+          "type": "object",
+          "additionalProperties": true
+         }
+        },
+        "required": [
+         "template",
+         "values",
+         "scope"
+        ],
+        "additionalProperties": false
+       },
+       "/formsByKey/repairNode3": {
+        "type": "object",
+        "properties": {
+         "title": {
+          "type": "string"
+         },
+         "scope": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "template": {
+          "type": "string",
+          "enum": [
+           "input",
+           "template",
+           "llm",
+           "if",
+           "output",
+           "agent",
+           "knowledge",
+           "classifier",
+           "human",
+           "iteration",
+           "loop",
+           "exit_loop",
+           "code",
+           "aggregator",
+           "document",
+           "assigner",
+           "extractor",
+           "http",
+           "list",
+           "tool"
+          ]
+         },
+         "values": {
+          "type": "object",
+          "additionalProperties": true
+         }
+        },
+        "required": [
+         "template",
+         "values",
+         "scope"
+        ],
+        "additionalProperties": false
+       },
+       "/formsByKey/repairNode4": {
+        "type": "object",
+        "properties": {
+         "title": {
+          "type": "string"
+         },
+         "scope": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "template": {
+          "type": "string",
+          "enum": [
+           "input",
+           "template",
+           "llm",
+           "if",
+           "output",
+           "agent",
+           "knowledge",
+           "classifier",
+           "human",
+           "iteration",
+           "loop",
+           "exit_loop",
+           "code",
+           "aggregator",
+           "document",
+           "assigner",
+           "extractor",
+           "http",
+           "list",
+           "tool"
+          ]
+         },
+         "values": {
+          "type": "object",
+          "additionalProperties": true
+         }
+        },
+        "required": [
+         "template",
+         "values",
+         "scope"
+        ],
+        "additionalProperties": false
+       },
+       "/formsByKey/repairNode5": {
+        "type": "object",
+        "properties": {
+         "title": {
+          "type": "string"
+         },
+         "scope": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "template": {
+          "type": "string",
+          "enum": [
+           "input",
+           "template",
+           "llm",
+           "if",
+           "output",
+           "agent",
+           "knowledge",
+           "classifier",
+           "human",
+           "iteration",
+           "loop",
+           "exit_loop",
+           "code",
+           "aggregator",
+           "document",
+           "assigner",
+           "extractor",
+           "http",
+           "list",
+           "tool"
+          ]
+         },
+         "values": {
+          "type": "object",
+          "additionalProperties": true
+         }
+        },
+        "required": [
+         "template",
+         "values",
+         "scope"
+        ],
+        "additionalProperties": false
+       },
+       "/formsByKey/repairNode6": {
+        "type": "object",
+        "properties": {
+         "title": {
+          "type": "string"
+         },
+         "scope": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "template": {
+          "type": "string",
+          "enum": [
+           "input",
+           "template",
+           "llm",
+           "if",
+           "output",
+           "agent",
+           "knowledge",
+           "classifier",
+           "human",
+           "iteration",
+           "loop",
+           "exit_loop",
+           "code",
+           "aggregator",
+           "document",
+           "assigner",
+           "extractor",
+           "http",
+           "list",
+           "tool"
+          ]
+         },
+         "values": {
+          "type": "object",
+          "additionalProperties": true
+         }
+        },
+        "required": [
+         "template",
+         "values",
+         "scope"
+        ],
+        "additionalProperties": false
+       },
+       "/formsByKey/repairNode7": {
+        "type": "object",
+        "properties": {
+         "title": {
+          "type": "string"
+         },
+         "scope": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "template": {
+          "type": "string",
+          "enum": [
+           "input",
+           "template",
+           "llm",
+           "if",
+           "output",
+           "agent",
+           "knowledge",
+           "classifier",
+           "human",
+           "iteration",
+           "loop",
+           "exit_loop",
+           "code",
+           "aggregator",
+           "document",
+           "assigner",
+           "extractor",
+           "http",
+           "list",
+           "tool"
+          ]
+         },
+         "values": {
+          "type": "object",
+          "additionalProperties": true
+         }
+        },
+        "required": [
+         "template",
+         "values",
+         "scope"
+        ],
+        "additionalProperties": false
+       },
+       "/formsByKey/repairNode8": {
+        "type": "object",
+        "properties": {
+         "title": {
+          "type": "string"
+         },
+         "scope": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "template": {
+          "type": "string",
+          "enum": [
+           "input",
+           "template",
+           "llm",
+           "if",
+           "output",
+           "agent",
+           "knowledge",
+           "classifier",
+           "human",
+           "iteration",
+           "loop",
+           "exit_loop",
+           "code",
+           "aggregator",
+           "document",
+           "assigner",
+           "extractor",
+           "http",
+           "list",
+           "tool"
+          ]
+         },
+         "values": {
+          "type": "object",
+          "additionalProperties": true
+         }
+        },
+        "required": [
+         "template",
+         "values",
+         "scope"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/main-flow": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/repair1": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/repair2": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/repair3": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/repair4": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/repair5": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/repair6": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/repair7": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/chainsByKey/repair8": {
+        "type": "object",
+        "properties": {
+         "nodes": {
+          "type": "array",
+          "items": {
+           "type": "string",
+           "enum": [
+            "start",
+            "iter",
+            "fmt",
+            "json_text",
+            "result",
+            "n1",
+            "n2",
+            "repairNode1",
+            "repairNode2",
+            "repairNode3",
+            "repairNode4",
+            "repairNode5",
+            "repairNode6",
+            "repairNode7",
+            "repairNode8"
+           ]
+          },
+          "minItems": 2
+         }
+        },
+        "required": [
+         "nodes"
+        ],
+        "additionalProperties": false
+       },
+       "/coverage/R1": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "start",
+          "iter",
+          "fmt",
+          "json_text",
+          "result",
+          "n1",
+          "n2",
+          "repairNode1",
+          "repairNode2",
+          "repairNode3",
+          "repairNode4",
+          "repairNode5",
+          "repairNode6",
+          "repairNode7",
+          "repairNode8"
+         ]
+        }
+       }
+      },
+      "actualType": "object"
+     }
+    ],
+    "fragments": {
+     "/chainsByKey/main-flow": {
+      "nodes": [
+       "start",
+       "iter",
+       "json_text",
+       "result"
+      ]
+     },
+     "/coverage/R1": [
+      "start",
+      "iter",
+      "fmt",
+      "json_text",
+      "result"
+     ]
+    },
+    "allowedPaths": [
+     "/formsByKey/repairNode1",
+     "/formsByKey/repairNode2",
+     "/formsByKey/repairNode3",
+     "/formsByKey/repairNode4",
+     "/formsByKey/repairNode5",
+     "/formsByKey/repairNode6",
+     "/formsByKey/repairNode7",
+     "/formsByKey/repairNode8",
+     "/chainsByKey/main-flow",
+     "/chainsByKey/repair1",
+     "/chainsByKey/repair2",
+     "/chainsByKey/repair3",
+     "/chainsByKey/repair4",
+     "/chainsByKey/repair5",
+     "/chainsByKey/repair6",
+     "/chainsByKey/repair7",
+     "/chainsByKey/repair8",
+     "/coverage/R1"
+    ],
+    "remainingSubmissions": 1
+   },
+   {
+    "status": "repairable",
+    "draftRevision": 3,
+    "issues": [
+     {
+      "code": "EDGE_SCOPE",
+      "message": "连线端点必须在相同 scope",
+      "allowedPaths": [
+       "/title",
+       "/description",
+       "/formsByKey",
+       "/chainsByKey",
+       "/linksByKey",
+       "/rolesByKey",
+       "/environmentByKey",
+       "/summary",
+       "/assumptions",
+       "/coverage"
+      ]
+     }
+    ],
+    "fragments": {
+     "/title": "迭代遍历 items 生成“项：{item}”并汇总为紧凑 JSON",
+     "/description": "输入 items（json 字符串数组）后，由 iteration 容器逐项遍历；内部子图用 template 节点生成“项：{item}”，容器按输入顺序收集该模板 text；迭代后用 tojson 过滤器渲染结果数组的紧凑 JSON 文本并作为 result 输出，空数组输出 []。",
+     "/formsByKey": {
+      "start": {
+       "template": "input",
+       "title": "用户输入",
+       "values": {
+        "fields": [
+         {
+          "label": "items（字符串数组）",
+          "name": "items",
+          "required": true,
+          "type": "json"
+         }
+        ]
+       }
+      },
+      "iter": {
+       "template": "iteration",
+       "title": "遍历 items",
+       "values": {
+        "errorMode": "terminate",
+        "iterator": "start.items",
+        "outputVariable": "fmt.text",
+        "parallel": false
+       }
+      },
+      "fmt": {
+       "scope": [
+        "iter"
+       ],
+       "template": "template",
+       "title": "生成“项：{item}”",
+       "values": {
+        "inputs": {
+         "item": "{{item}}"
+        },
+        "text": "项：{{item}}"
+       }
+      },
+      "json_text": {
+       "template": "template",
+       "title": "结果数组转紧凑 JSON",
+       "values": {
+        "inputs": {
+         "results": "{{iter.result}}"
+        },
+        "text": "{{results | tojson}}"
+       }
+      },
+      "result": {
+       "template": "output",
+       "title": "输出结果",
+       "values": {
+        "outputName": "result",
+        "text": "{{json_text.text}}"
+       }
+      },
+      "repairNode1": {
+       "scope": [
+        "iter"
+       ],
+       "template": "input",
+       "title": "迭代子图入口",
+       "values": {
+        "fields": []
+       }
+      }
+     },
+     "/chainsByKey": {
+      "main-flow": {
+       "nodes": [
+        "start",
+        "iter",
+        "json_text",
+        "result"
+       ]
+      },
+      "repair1": {
+       "nodes": [
+        "repairNode1",
+        "fmt"
+       ]
+      }
+     },
+     "/linksByKey": {
+      "inner-entry": {
+       "scope": [
+        "iter"
+       ],
+       "source": "start",
+       "target": "fmt"
+      }
+     },
+     "/summary": "start(items) → iter(iteration, iterator=start.items, outputVariable=fmt.text, 顺序执行) ；iter 内部 scope=[iter] 的 fmt 模板输出“项：{{item}}”；根层 json_text 模板将 {{iter.result}} 用 tojson 渲染为紧凑 JSON（空数组为 []）；result 输出 {{json_text.text}}。未用代码/模型/工具或模板循环替代 iteration。",
+     "/coverage": {
+      "R1": [
+       "start",
+       "iter",
+       "repairNode1",
+       "fmt",
+       "json_text",
+       "result"
+      ]
+     }
+    },
+    "allowedPaths": [
+     "/title",
+     "/description",
+     "/formsByKey",
+     "/chainsByKey",
+     "/linksByKey",
+     "/rolesByKey",
+     "/environmentByKey",
+     "/summary",
+     "/assumptions",
+     "/coverage"
+    ],
+    "remainingSubmissions": 0
+   }
+  ]
+ }
+]

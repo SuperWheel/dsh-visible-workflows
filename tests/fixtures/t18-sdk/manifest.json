@@ -1,0 +1,21 @@
+{
+  "source": "Installed DeepSeek Harness.app app.asar/dsh/node_modules; copied read-only on 2026-10-21",
+  "license": "MIT",
+  "boundary": "Official registration, read/write bodies and observation policy; tests substitute filesystem provider, sandbox and context, not live Desktop or OS sandbox acceptance. SDK does not publish operationContract metadata: fixture attestation is explicit; production stays unknown without that registry extension.",
+  "packages": [
+    {
+      "package": "@deepseek-ai/dsh-tool-fs",
+      "version": "0.2.1-rc.2",
+      "path": "lib/index.js",
+      "sha256": "b11d3fa50b9042019a91cc38a6abe35d74ed651374278f95e60b42734e079df1",
+      "fixture": "dsh-tool-fs.js.txt"
+    },
+    {
+      "package": "@deepseek-ai/dsh-fs-observation-policy",
+      "version": "0.2.1-rc.2",
+      "path": "lib/index.js",
+      "sha256": "e36b54cdb5c6fa01ccfa29f0433753e810ec1ac29a6a22be349d66b77eb64b03",
+      "fixture": "dsh-fs-observation-policy.js.txt"
+    }
+  ]
+}

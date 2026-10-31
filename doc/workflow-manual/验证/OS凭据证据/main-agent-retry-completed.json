@@ -1,0 +1,78 @@
+{
+  "id": "session-9d7a7b32-47a9-4795-89d6-0b288507a0f6",
+  "origin": "main",
+  "parentSession": null,
+  "tools": [
+    {
+      "tool": "visible_workflow_get",
+      "callId": "call_37f64e0a3c2a4718aeee004b",
+      "resultPresent": true,
+      "isError": false,
+      "publicDeclarationFields": [
+        [
+          "id",
+          "name",
+          "description",
+          "required",
+          "revision",
+          "type"
+        ]
+      ],
+      "valueFieldsPresent": false,
+      "workspaceDenied": false
+    },
+    {
+      "tool": "subagent",
+      "callId": "call_16237b7e6f1042449dbb05f4",
+      "resultPresent": true,
+      "isError": false,
+      "publicDeclarationFields": [],
+      "valueFieldsPresent": null,
+      "workspaceDenied": true
+    },
+    {
+      "tool": "send_message",
+      "callId": "call_62b2fdb6c0ae422a9a1520be",
+      "resultPresent": true,
+      "isError": true,
+      "publicDeclarationFields": [],
+      "valueFieldsPresent": null,
+      "workspaceDenied": false
+    },
+    {
+      "tool": "visible_workflow_get",
+      "callId": "call_4dc766063b044e8799c0bee9",
+      "resultPresent": true,
+      "isError": false,
+      "publicDeclarationFields": [
+        [
+          "id",
+          "name",
+          "description",
+          "required",
+          "revision",
+          "type"
+        ]
+      ],
+      "valueFieldsPresent": false,
+      "workspaceDenied": false
+    },
+    {
+      "tool": "subagent",
+      "callId": "call_846aaccf6865458cb15714b8",
+      "resultPresent": true,
+      "isError": false,
+      "publicDeclarationFields": [],
+      "valueFieldsPresent": null,
+      "workspaceDenied": false
+    }
+  ],
+  "children": [
+    "c26e9df7-81a9-4e27-a935-60a88363e2ca",
+    "228b0b71-fa53-4276-9b5a-43bfd6375f87"
+  ],
+  "turnEnd": [
+    "completed",
+    "completed"
+  ]
+}

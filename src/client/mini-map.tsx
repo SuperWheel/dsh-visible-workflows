@@ -1,3 +1,4 @@
+import { t, useLocale } from './i18n.ts'
 import { useEffect, useMemo, useRef, type KeyboardEvent, type PointerEvent } from 'react'
 import type { WorkflowNode } from '../shared/types.ts'
 import { nodeSize } from './nodes.ts'
@@ -13,7 +14,7 @@ export interface MiniMapProps {
 const WIDTH=160,HEIGHT=100
 interface Drag { pointerId:number; map:MiniMapTransform; offset:Point; viewport:Viewport; width:number; height:number }
 /** One bitmap for the entire graph; no React subtree is created for individual nodes. */
-export function MiniMap(props:MiniMapProps){
+export function MiniMap(props:MiniMapProps){useLocale();
   const canvas=useRef<HTMLCanvasElement>(null),drag=useRef<Drag>(),frame=useRef<number>(),pending=useRef<Viewport>(),latest=useRef(props),requestRedraw=useRef<()=>void>(()=>{})
   latest.current=props
   const index=useMemo(()=>createViewportIndex(props.nodes,[]),[props.nodes])
@@ -81,5 +82,5 @@ export function MiniMap(props:MiniMapProps){
       event.preventDefault();event.stopPropagation();const bounds=index.bounds;schedule(centerViewport({x:bounds.x+bounds.width/2,y:bounds.y+bounds.height/2},view,current.width,current.height))
     }
   }
-  return <canvas ref={canvas} className="vdw-minimap" style={{width:WIDTH,height:HEIGHT,touchAction:'none',display:'block'}} tabIndex={0} role="button" aria-roledescription="交互式缩略图" aria-label="工作流缩略图，点击或拖动定位；方向键移动视野，Home 或回车回到流程中心" title="点击或拖动定位；方向键移动视野" onKeyDown={key} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={end} onLostPointerCapture={end} onWheel={event=>event.stopPropagation()}/>
+  return <canvas ref={canvas} className="vdw-minimap" style={{width:WIDTH,height:HEIGHT,touchAction:'none',display:'block'}} tabIndex={0} role="button" aria-roledescription={t("交互式缩略图")} aria-label={t("工作流缩略图，点击或拖动定位；方向键移动视野，Home 或回车回到流程中心")} title={t("点击或拖动定位；方向键移动视野")} onKeyDown={key} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={end} onLostPointerCapture={end} onWheel={event=>event.stopPropagation()}/>
 }

@@ -1,0 +1,12 @@
+{
+  "state": "installed",
+  "role": "fixed-runtime-helper-not-host",
+  "packageRoot": "~/.dsh/dsh-runtimes/visible-workflow-isolation/752044906c7ecb1c7a8d7ff2f7a3d469cb44ec12ed62728d77c997a272398d1c/package",
+  "archiveSha256": "752044906c7ecb1c7a8d7ff2f7a3d469cb44ec12ed62728d77c997a272398d1c",
+  "packageFingerprint": "a70bbea36666ff8826f98847034c9b2e55af79fa4dd4e2f4390f93371a65379e",
+  "files": 410,
+  "bytes": 34230786,
+  "reusable": false,
+  "profileReadDeny": "entire-profile-directory",
+  "secretReady": false
+}

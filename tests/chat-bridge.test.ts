@@ -6,9 +6,11 @@ import type { InputTriggerSource } from '@deepseek-ai/dsh-client-ui-input-trigge
 import type { ReferenceInsert, InputState } from '@deepseek-ai/dsh-client-ui-conversation/client'
 import { acceptedAnnotationTokens, createChatBridge, type ChatBridge } from '../src/client/chat-bridge.tsx'
 import { makeWorkflow } from '../src/shared/types.ts'
+import type { AnnotationPosition } from '../src/client/annotation-position.ts'
 
 // These tests exercise our native-SDK contract, without loading the Desktop UI or any model.
 vi.mock('@deepseek-ai/dsh-client-ui-primitives', () => ({ Button: 'button', Modal: () => null }))
+vi.mock('../src/client/annotation-editor.tsx',()=>({AnnotationEditor:(props:Record<string,unknown>)=>React.createElement('annotation-editor-mock',props)}))
 
 const PREFIX = 'visible-workflow-annotation-admission:'
 const renderers: ReactTestRenderer[] = []
@@ -36,15 +38,16 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-function setup() {
-  const flow = makeWorkflow('workspace-a', '稳定引用样例', true)
+function setup(options:{flow?:ReturnType<typeof makeWorkflow>;input?:InputState;controlRect?:{left:number;right:number;top:number;bottom:number}}={}) {
+  const flow = options.flow??makeWorkflow('workspace-a', '稳定引用样例', true)
   flow.revision = 3
   const other = makeWorkflow('workspace-b', '其他工作区样例')
-  let input = { draft: '保留我已有的文字 ', draftRev: 1, phase: 'plain', occurrences: [], attachmentIds: [], queue: [] } as unknown as InputState
+  let input = options.input??{ draft: '保留我已有的文字 ', draftRev: 1, phase: 'plain', occurrences: [], attachmentIds: [], queue: [] } as unknown as InputState
   const inputState = observable(input)
   const setInput = (next: InputState) => { input = next; inputState.set(next) }
   const events = observable({ entries: [] as unknown[] })
   const inbox = observable<unknown>({ 'next-turn': [], 'next-step': [] })
+  const workspaces=observable({items:[{workspaceId:'workspace-a',sessionIds:['session-a']}]})
   const actions = {
     captureInsertion: () => ({ start: input.draft.length - input.occurrences.reduce((n, item) => n + item.length - 1, 0),
       end: input.draft.length - input.occurrences.reduce((n, item) => n + item.length - 1, 0), draftRev: input.draftRev }),
@@ -68,13 +71,16 @@ function setup() {
   let Control!: React.ComponentType<any>
   const disposeSource = vi.fn(), disposeSlot = vi.fn(), release = vi.fn()
   const scope = {
-    bail: vi.fn((_subject, event: string, request: { reference?: ReferenceInsert; text?: string; span: { draftRev: number } }) => {
+    bail: vi.fn((_subject, event: string, request: { reference?: ReferenceInsert; text?: string; span: { start:number;end:number;draftRev: number } }) => {
       if (request.span.draftRev !== input.draftRev || input.phase !== 'plain') return false
       if (event === 'slash/input-insert-reference' && request.reference) {
         const reference = request.reference
-        setInput({ ...input, draft: input.draft + reference.clipboardText + ' ', draftRev: input.draftRev + 1,
-          occurrences: [...input.occurrences, { ...reference, occurrenceId: input.occurrences.length + 1,
-            offset: input.draft.length, length: reference.clipboardText.length }] })
+        const expand=(position:number)=>{let delta=0;for(const item of input.occurrences){if(item.offset-delta>=position)break;delta+=item.length-1}return position+delta}
+        const start=expand(request.span.start),end=expand(request.span.end),text=reference.clipboardText+' '
+        const occurrences=input.occurrences.filter(item=>item.offset<start||item.offset>=end).map(item=>item.offset>=end?{...item,offset:item.offset+text.length-(end-start)}:item)
+        const occurrenceId=Math.max(0,...input.occurrences.map(item=>item.occurrenceId))+1
+        setInput({ ...input,draft:input.draft.slice(0,start)+text+input.draft.slice(end),draftRev:input.draftRev+1,
+          occurrences:[...occurrences,{...reference,occurrenceId,offset:start,length:reference.clipboardText.length}].sort((a,b)=>a.offset-b.offset) })
         return true
       }
       if (event === 'slash/input-insert-text' && request.text) {
@@ -86,7 +92,7 @@ function setup() {
   const facade = { state: inputState, focus: vi.fn() }
   const binding = { ctx: scope, eventSource: events, session: { projections: { faceOf: () => inbox } } }
   const context = {
-    workspaces: { list: { getSnapshot: () => ({ items: [{ workspaceId: 'workspace-a', sessionIds: ['session-a'] }] }) } },
+    workspaces: { list: workspaces },
     sessions: { scope: (id: string) => id === 'session-a' ? scope : undefined,
       retain: () => ({ binding, ready: Promise.resolve(binding), release }), binding: () => binding },
     conversation: { input: { for: () => facade } },
@@ -95,8 +101,9 @@ function setup() {
       register: (_entry: unknown, component: React.ComponentType<any>) => { Control = component; return disposeSlot } },
   }
   const getWorkflow = vi.fn(async (id: string) => {
-    if (id !== flow.id) throw new Error('工作流不存在')
-    return structuredClone(flow)
+    if(id===flow.id)return structuredClone(flow)
+    if(id===other.id)return structuredClone(other)
+    throw new Error('工作流不存在')
   })
   const openWorkflow = vi.fn()
   const bridge = createChatBridge(context as unknown as Context, {
@@ -105,8 +112,8 @@ function setup() {
   bridges.push(bridge)
   let renderer!: ReactTestRenderer
   act(() => { renderer = create(React.createElement(Control, { sessionId: 'session-a',
-    useInput: (select: (state: InputState) => unknown) => select(React.useSyncExternalStore(inputState.subscribe, inputState.getSnapshot)), inputActions: actions })); renderers.push(renderer) })
-  return { flow, other, bridge, source, events, inbox, getWorkflow, openWorkflow, release, renderer, actions,
+    useInput: (select: (state: InputState) => unknown) => select(React.useSyncExternalStore(inputState.subscribe, inputState.getSnapshot)), inputActions: actions }),{createNodeMock:node=>node.type==='button'?{getBoundingClientRect:()=>options.controlRect??{left:10,right:110,top:600,bottom:628}}:null}); renderers.push(renderer) })
+  return { flow, other, bridge, source, events, inbox, workspaces, getWorkflow, openWorkflow, release, renderer, actions,
     input: () => input,
     optimisticClear() { act(() => setInput({ ...input, draft: '', occurrences: [], draftRev: input.draftRev + 1 })) },
     restoreDraft(previous: InputState) { act(() => setInput(previous)) },
@@ -135,6 +142,75 @@ describe('原生消息准入识别', () => {
 })
 
 describe('草稿、引用与准入闭环（SDK 边界模拟）', () => {
+  it('需求更新替换同一原生引用，保留邻接正文和其他引用，不往编辑框加入协议 JSON',async()=>{
+    const f=setup()
+    await f.bridge.insertWorkflow('session-a',f.flow)
+    await f.bridge.insertGenerateRequest('session-a','原需求',f.flow)
+    const previous=f.bridge.getGenerateRequest('session-a',f.flow.id)!,other=f.input().occurrences[0]!
+    await f.bridge.insertGenerateRequest('session-a','更新后的\n完整需求',f.flow)
+    expect(f.input().occurrences).toHaveLength(2)
+    expect(f.input().occurrences[0]).toEqual(other)
+    expect(f.input().draft).toContain('保留我已有的文字')
+    expect(f.input().draft).not.toContain('原需求')
+    expect(f.input().draft).not.toContain('visible_workflow_plan')
+    expect(f.input().draft).not.toContain(f.flow.id)
+    expect(f.bridge.getGenerateRequest('session-a',f.flow.id)).toMatchObject({id:previous.id,text:'更新后的\n完整需求',revision:2,status:'draft'})
+    const payload=await f.source.codec!.serialize(f.input().occurrences[1]!.ref,new AbortController().signal)
+    expect(payload).toContain(JSON.stringify('更新后的\n完整需求'))
+    expect(payload).toContain(f.flow.id)
+  })
+  it('需求只有匹配版本的真人准入才消费，序列化、乐观清空和旧回执都保留当前草稿',async()=>{
+    const f=setup()
+    await f.bridge.insertGenerateRequest('session-a','第一次需求',f.flow)
+    const old=await f.source.codec!.serialize(f.input().occurrences[0]!.ref,new AbortController().signal)
+    await f.bridge.insertGenerateRequest('session-a','第二次需求',f.flow)
+    act(()=>f.events.set({entries:[{type:'event',event:{type:'user/message',data:userMessage(old)}}]}))
+    expect(f.bridge.getGenerateRequest('session-a',f.flow.id)?.text).toBe('第二次需求')
+    const current=await f.source.codec!.serialize(f.input().occurrences[0]!.ref,new AbortController().signal)
+    f.optimisticClear()
+    expect(f.bridge.getGenerateRequest('session-a',f.flow.id)?.status).toBe('sending')
+    expect(await f.bridge.insertGenerateRequest('session-a','发送中禁止改写',f.flow)).toBe(false)
+    const request=JSON.parse(current.split('\n').find(line=>line.startsWith('规划请求：'))!.slice('规划请求：'.length))
+    // A typed-edit result does not acknowledge the composer's human message.
+    act(()=>f.events.set({entries:[{type:'event',event:{type:'tool/result',data:{name:'visible_workflow_edit',requestId:request.requestId,receipt:{kind:'proposed'},message:userMessage(current)}}}]}))
+    expect(request).toMatchObject({operation:'revise',targetWorkflowId:f.flow.id,instruction:'第二次需求'})
+    expect(current.indexOf('visible_workflow_edit')).toBeLessThan(current.indexOf('visible_workflow_plan'))
+    expect(f.bridge.getGenerateRequest('session-a',f.flow.id)).toBeDefined()
+    act(()=>f.inbox.set({'next-turn':[userMessage(current)],'next-step':[]}))
+    expect(f.bridge.getGenerateRequest('session-a',f.flow.id)).toBeUndefined()
+    await f.bridge.insertGenerateRequest('session-a','新一轮需求',f.flow)
+    expect(f.bridge.getGenerateRequest('session-a',f.flow.id)).toMatchObject({text:'新一轮需求',revision:1})
+  })
+  it('需求插入CAS失败时不丢失原草稿，取消发送后可继续编辑',async()=>{
+    const f=setup()
+    await f.bridge.insertGenerateRequest('session-a','保留需求',f.flow)
+    const before=f.input(),original=f.bridge.getGenerateRequest('session-a',f.flow.id)
+    const capture=f.actions.captureInsertion
+    f.actions.captureInsertion=()=>({...capture(),draftRev:-1})
+    // New target insertion uses a captured revision, never a whole-composer setDraft.
+    expect(await f.bridge.insertGenerateRequest('session-a','无法插入的新建需求')).toBe(false)
+    expect(f.input()).toEqual(before)
+    expect(f.bridge.getGenerateRequest('session-a',f.flow.id)).toEqual(original)
+    const controller=new AbortController()
+    await f.source.codec!.serialize(f.input().occurrences[0]!.ref,controller.signal)
+    f.optimisticClear();controller.abort();f.restoreDraft(before)
+    f.actions.captureInsertion=capture
+    expect(await f.bridge.insertGenerateRequest('session-a','取消后继续改',f.flow)).toBe(true)
+    expect(f.input().occurrences).toHaveLength(1)
+  })
+  it('全局流程可精确引用，本项目之外的私有流程与伪造范围不可引用',async()=>{
+    const f=setup(),request={query:'',position:'inline' as const,drilled:false,signal:new AbortController().signal}
+    f.other.scope='global';f.other.title=f.flow.title
+    const candidates=await f.source.candidates({sessionId:'session-a' as never},request)
+    expect(candidates.map(item=>item.name)).toEqual([f.flow.id,f.other.id])
+    const candidate=candidates.find(item=>item.name===f.other.id)!
+    const picked=f.source.onPick({session:{sessionId:'session-a'},candidate,action:'insert'} as never) as {insert:ReferenceInsert}
+    expect(JSON.parse(picked.insert.ref)).toMatchObject({workflowId:f.other.id,workspaceId:f.other.workspaceId,sessionId:'session-a'})
+    await f.bridge.insertWorkflow('session-a',f.other)
+    f.other.scope='workspace'
+    await expect(f.source.codec!.serialize(f.input().occurrences[0]!.ref,new AbortController().signal)).rejects.toThrow('当前工作区或全局范围')
+    await expect(f.bridge.insertGenerateRequest('session-a','不能伪造全局',{...f.other,scope:'global'})).rejects.toThrow('复制到当前对话所属工作区')
+  })
   it('两条注释共用一个原生引用，修改使用稳定 ID，最终历史不携带注释序号', async () => {
     const fixture = setup(), { flow, bridge, source } = fixture
     await act(async () => {
@@ -152,10 +228,44 @@ describe('草稿、引用与准入闭环（SDK 边界模拟）', () => {
       annotations: [{ nodeIds: [flow.nodes[1]!.id], requirement: '改为三段' },
         { nodeIds: [flow.nodes[1]!.id, flow.nodes[2]!.id], requirement: '保持两处术语一致' }] })
     expect(json.annotations.every((note: object) => !('number' in note))).toBe(true)
-    expect(text).toContain('visible_workflow_get'); expect(text).toContain('visible_workflow_save')
+    expect(text).toContain('visible_workflow_get'); expect(text).toContain('visible_workflow_plan')
+    expect(text.indexOf('visible_workflow_edit')).toBeLessThan(text.indexOf('visible_workflow_plan'))
+    expect(text).toContain('handoff.mode=partial');expect(text).toContain('handoff.mode=module')
+    // Routing changes cannot turn a tool proposal receipt into native message admission.
+    act(()=>fixture.events.set({entries:[{type:'event',event:{type:'tool/result',data:{name:'visible_workflow_edit',requestId:json.requestId,receipt:{kind:'proposed'}}}}]}))
+    expect(bridge.getAnnotations(flow.id)).toHaveLength(2)
+    expect(text).not.toContain('visible_workflow_save')
+    expect(json.requestId).toBe(tokenIn(text))
+    expect(json.targetNodeIds).toEqual([flow.nodes[1]!.id, flow.nodes[2]!.id])
+    expect(text.indexOf('visible_workflow_nodes')).toBeLessThan(text.indexOf('visible_workflow_get'))
+    expect(text).toContain('当前读取版本使用 currentRevision')
+    expect(text).toContain('不自动换目标、扩大范围或新建 requestId')
+    expect(text).toContain('expectedRevision 使用刚读取的最新 revision')
+    expect(text).toContain('完整保留 annotations 的每项 nodeIds 和 requirement')
     expect(bridge.getAnnotations(flow.id)).toHaveLength(2)
     act(() => fixture.inbox.set({ 'next-turn': [userMessage(text)], 'next-step': [] }))
     expect(bridge.getAnnotations(flow.id)).toEqual([])
+  })
+  it('修改引用节点仍保持注释身份和编号，发送载荷使用更新后的稳定 ID', async () => {
+    const fixture = setup(), { flow, bridge, source } = fixture
+    await act(async () => bridge.stageAnnotation('session-a', flow, [flow.nodes[1]!.id], '原始要求'))
+    const original = bridge.getAnnotations(flow.id)[0]!
+    await act(async () => bridge.stageAnnotation('session-a', flow, [flow.nodes[0]!.id, flow.nodes[2]!.id, flow.nodes[2]!.id], '改用这两个节点', original.id))
+    const edited = bridge.getAnnotations(flow.id)[0]!
+    expect(edited).toMatchObject({id:original.id,number:original.number,nodeIds:[flow.nodes[0]!.id,flow.nodes[2]!.id],text:'改用这两个节点'})
+    const serialized = await source.codec!.serialize(fixture.input().occurrences[0]!.ref, new AbortController().signal)
+    const payload = JSON.parse(serialized.split('\n').find(line => line.startsWith('{'))!)
+    expect(payload.annotations[0]).toEqual({nodeIds:edited.nodeIds,requirement:edited.text})
+    expect(fixture.input().draft).toContain('保留我已有的文字')
+  })
+  it('拒绝清空或引用无效节点，原注释和正文保持不变', async () => {
+    const fixture=setup(), {flow,bridge}=fixture
+    await act(async()=>bridge.stageAnnotation('session-a',flow,[flow.nodes[1]!.id],'保留原要求'))
+    const original=bridge.getAnnotations(flow.id)[0]!,before=fixture.input().draft
+    expect(()=>bridge.editAnnotation('session-a',original.id,'无效要求',[])).toThrow('至少一个有效节点')
+    expect(()=>bridge.editAnnotation('session-a',original.id,'无效要求',['unknown-node'])).toThrow('至少一个有效节点')
+    expect(bridge.getAnnotations(flow.id)[0]).toEqual(original)
+    expect(fixture.input().draft).toBe(before)
   })
   it('原生草稿清空和序列化不代表接收，失败恢复后可重试', async () => {
     const fixture = setup(), { flow, bridge, source } = fixture
@@ -211,27 +321,111 @@ describe('草稿、引用与准入闭环（SDK 边界模拟）', () => {
   it('新建请求包含专属新 ID，已有流程请求只修改原 ID，不混入新建指令', async () => {
     const fixture = setup()
     expect(await fixture.bridge.insertGenerateRequest('session-a', '整理会议纪要')).toBe(true)
-    const createDraft = fixture.input().draft
+    expect(fixture.input().draft).not.toContain('visible_workflow_plan')
+    const createDraft=await fixture.source.codec!.serialize(fixture.input().occurrences[0]!.ref,new AbortController().signal)
+    expect(createDraft).toContain('等待真人回答后');expect(createDraft).not.toContain('预算')
     const identity = JSON.parse(createDraft.split('\n').find(line => line.startsWith('新工作流身份：'))!.slice('新工作流身份：'.length))
     expect(identity).toMatchObject({ workspaceId: fixture.flow.workspaceId })
     expect(identity.workflowId).not.toBe(fixture.flow.id)
-    expect(createDraft).toContain('expected_revision=0')
+    const createRequest = JSON.parse(createDraft.split('\n').find(line => line.startsWith('规划请求：'))!.slice('规划请求：'.length))
+    expect(createRequest).toMatchObject({ operation: 'create', instruction: '整理会议纪要', targetWorkflowId: identity.workflowId, expectedRevision: 0 })
+    expect(createRequest.requestId).toBe(createDraft.split('\n').find(line => line.startsWith('visible-workflow-generation-admission:'))!.slice('visible-workflow-generation-admission:'.length))
+    expect(createDraft).not.toContain('visible_workflow_save')
+    expect(createDraft).toContain('visible_workflow_plan_answer')
     fixture.optimisticClear()
     expect(await fixture.bridge.insertGenerateRequest('session-a', '增加检查步骤', fixture.flow)).toBe(true)
-    const editDraft = fixture.input().draft
+    const editDraft = await fixture.source.codec!.serialize(fixture.input().occurrences[0]!.ref,new AbortController().signal)
+    expect(fixture.input().draft).toContain(`@${fixture.flow.title}`)
+    expect(fixture.input().draft).not.toContain(fixture.flow.id)
     expect(editDraft).toContain('请修改已有工作流')
     expect(editDraft).toContain(`"workflowId":"${fixture.flow.id}"`)
     expect(editDraft).toContain('visible_workflow_get')
-    expect(editDraft).toContain('同一 ID 和最新 expected_revision')
+    const editRequest = JSON.parse(editDraft.split('\n').find(line => line.startsWith('规划请求：'))!.slice('规划请求：'.length))
+    expect(editRequest).toMatchObject({ operation: 'revise', instruction: '增加检查步骤', targetWorkflowId: fixture.flow.id })
+    expect(editRequest.requestId).toBeTruthy()
+    expect(editRequest).not.toHaveProperty('expectedRevision')
+    expect(editDraft).toContain('此需求草稿没有当前 revision 时，可先用 visible_workflow_get')
+    expect(editDraft).toContain('最新 revision 填入规划请求的 expectedRevision')
+    expect(editDraft).toContain('visible_workflow_plan')
+    expect(editDraft.indexOf('visible_workflow_edit')).toBeLessThan(editDraft.indexOf('visible_workflow_plan'))
+    expect(editDraft).toContain('request_id 使用原规划 requestId')
+    expect(editDraft).toContain('target_node_ids 保留原明确 targetNodeIds')
+    expect(editDraft).not.toContain('visible_workflow_save')
     expect(editDraft).not.toContain('请生成一个工作流')
-    expect(editDraft).not.toContain('generation-admission:')
+    expect(editDraft).toContain('generation-admission:')
     await expect(fixture.bridge.insertGenerateRequest('session-a', '修改其他流程', fixture.other)).rejects.toThrow('复制到当前对话所属工作区')
+  })
+  it('规划请求完整保留多行、引号及长需求，不让主对话再生成图 JSON', async () => {
+    const fixture = setup(), requirement = `第一步：读取提供的资料\n第二步：保留字段 "金额" 与 "期间"\n${'不得省略这个检查要求。'.repeat(300)}\n最后输出 JSON 和摘要`
+    expect(await fixture.bridge.insertGenerateRequest('session-a', requirement)).toBe(true)
+    const serialized=await fixture.source.codec!.serialize(fixture.input().occurrences[0]!.ref,new AbortController().signal)
+    const request = JSON.parse(serialized.split('\n').find(line => line.startsWith('规划请求：'))!.slice('规划请求：'.length))
+    expect(request.instruction).toBe(requirement)
+    expect(serialized).toContain('不自行设计完整 JSON 或调用保存工具')
+    expect(fixture.openWorkflow).not.toHaveBeenCalled()
+  })
+  it('交给 Agent 的优化请求保留问题和待接受提案闭环且不发起预算选择',async()=>{
+    const f=setup();await f.bridge.insertGenerateRequest('session-a','帮我优化这个 workflow',f.flow)
+    const text=await f.source.codec!.serialize(f.input().occurrences[0]!.ref,new AbortController().signal)
+    const request=JSON.parse(text.split('\n').find(line=>line.startsWith('规划请求：'))!.slice('规划请求：'.length))
+    expect(request).toMatchObject({operation:'revise',targetWorkflowId:f.flow.id,instruction:'帮我优化这个 workflow'})
+    expect(request).not.toHaveProperty('targetNodeIds')
+    expect(text).toContain('visible_workflow_plan_answer');expect(text).toContain('visible_workflow_plan_get')
+    expect(text).toContain('receipt.kind=proposed');expect(text).toContain('不自动接受提案或执行流程')
+    expect(text).not.toContain('预算');expect(text).not.toContain('额度')
+    expect(text).not.toContain('预算选择持久绑定此工作流')
+  })
+  it('等待目标读取时工作区变化，不把旧需求写进新工作区的草稿',async()=>{
+    const f=setup();let release!:(value:typeof f.flow)=>void
+    f.getWorkflow.mockImplementationOnce(()=>new Promise(resolve=>{release=resolve}))
+    const pending=f.bridge.insertGenerateRequest('session-a','优化原工作区流程',f.flow)
+    await Promise.resolve()
+    f.workspaces.set({items:[{workspaceId:'workspace-b',sessionIds:['session-a']}]})
+    release(structuredClone(f.flow))
+    await expect(pending).rejects.toThrow('当前对话或工作区已变化')
+    expect(f.input().occurrences).toHaveLength(0)
+  })
+  it('发送时目标读取期间工作区变化，不序列化陈旧的规划请求',async()=>{
+    const f=setup();await f.bridge.insertGenerateRequest('session-a','优化原工作区流程',f.flow)
+    let release!:(value:typeof f.flow)=>void
+    f.getWorkflow.mockImplementationOnce(()=>new Promise(resolve=>{release=resolve}))
+    const pending=f.source.codec!.serialize(f.input().occurrences[0]!.ref,new AbortController().signal)
+    f.workspaces.set({items:[{workspaceId:'workspace-b',sessionIds:['session-a']}]})
+    release(structuredClone(f.flow))
+    await expect(pending).rejects.toThrow('当前对话的工作区已变化')
+    expect(f.bridge.getGenerateRequest('session-a',f.flow.id)?.status).toBe('draft')
+  })
+  it('普通工作流引用保留执行入口，明确编辑时使用独立规划请求和最新版本', async () => {
+    const fixture = setup()
+    await fixture.bridge.insertWorkflow('session-a', fixture.flow)
+    const text = await fixture.source.codec!.serialize(fixture.input().occurrences[0]!.ref, new AbortController().signal)
+    const payload = JSON.parse(text.split('\n').find(line => line.startsWith('{'))!)
+    expect(payload).toMatchObject({ workflowId: fixture.flow.id, revision: fixture.flow.revision })
+    expect(text.indexOf('visible_workflow_nodes')).toBeLessThan(text.indexOf('visible_workflow_get'))
+    expect(text).not.toContain('请先用 visible_workflow_get 读取最新定义。')
+    expect(payload.requestId).toMatch(/^[A-Za-z0-9_-]+$/)
+    expect(text).toContain('visible_workflow_run')
+    expect(text).toContain('visible_workflow_plan')
+    expect(text.indexOf('visible_workflow_edit')).toBeLessThan(text.indexOf('visible_workflow_plan'))
+    expect(text).toContain('画布引用或标记只用于定位，不能作为独立授权')
+    expect(text).toContain('本回合必须用 visible_workflow_plan_wait 对同一 taskId 事件等待并核验')
+    expect(text).toContain('不能在子任务未结束时提前 final')
+    expect(text).toContain('waiting 须继续同任务等待，不能当作成功')
+    expect(text).toContain('核对完整候选才用 visible_workflow_plan_get')
+    expect(text).not.toContain('仅需要实际结果时用 visible_workflow_plan_get')
+    expect(text).not.toContain('queued/authoring/validating/repairing 时用')
+    expect(text).toContain('expectedRevision 使用刚读取的最新 revision')
+    expect(text).toContain('帮我优化这个 workflow')
+    expect(text).toContain('只有用户明确要求执行流程时才使用 visible_workflow_run')
+    expect(text).toContain('visible_workflow_plan_answer')
+    expect(text).not.toContain('visible_workflow_save')
+    expect(text).not.toContain('generation-admission:')
   })
   it('只跟踪准入成功的新建请求，精确目标保存后才打开侧栏', async () => {
     vi.useFakeTimers()
     const fixture = setup()
     await fixture.bridge.insertGenerateRequest('session-a', '生成一个摘要流程')
-    const draft = fixture.input().draft
+    const draft=await fixture.source.codec!.serialize(fixture.input().occurrences[0]!.ref,new AbortController().signal)
     const identity = JSON.parse(draft.split('\n').find(line => line.startsWith('新工作流身份：'))!.slice('新工作流身份：'.length))
     const generated = { ...structuredClone(fixture.flow), id: identity.workflowId, title: '新摘要流程' }
     fixture.getWorkflow.mockImplementation(async id => {
@@ -257,6 +451,7 @@ describe('草稿、引用与准入闭环（SDK 边界模拟）', () => {
     expect(fixture.openWorkflow).not.toHaveBeenCalled()
     fixture.openWorkflow.mockClear()
     expect(fixture.source.openReference!({ sessionId: 'session-a' as never }, ref)).toBe(true)
+    await Promise.resolve()
     expect(fixture.openWorkflow).toHaveBeenCalledExactlyOnceWith(fixture.flow.id, 'session-a', 'reference')
     fixture.openWorkflow.mockClear()
     expect(fixture.source.openReference!({ sessionId: 'unknown' as never }, ref)).toBe(false)
@@ -264,6 +459,34 @@ describe('草稿、引用与准入闭环（SDK 边界模拟）', () => {
     const crossWorkspace = { ...ref, ref: JSON.stringify({ ...JSON.parse(ref.ref), workspaceId: fixture.other.workspaceId }) }
     expect(fixture.source.openReference!({ sessionId: 'session-a' as never }, crossWorkspace)).toBe(false)
     expect(fixture.openWorkflow).not.toHaveBeenCalled()
+  })
+  it('每条注释按自己的画布层级提供候选，旧版无坐标注释按首个引用定位，编号仅显示本层',async()=>{
+    const flow=makeWorkflow('workspace-a','多层流程',true),container=flow.nodes[1]!
+    const inner={...structuredClone(container),id:'scope-inner',number:'a-2:a-1',title:'当前元素'}
+    const deep={...structuredClone(container),id:'scope-deep',number:'a-2:a-2:a-1',title:'深层元素'}
+    const nested={...structuredClone(container),id:'scope-nested',number:'a-2:a-2',title:'内层循环',config:{body:{nodes:[deep],edges:[]}}}
+    container.kind='iteration';container.config={body:{nodes:[inner,nested],edges:[]}}
+    const fixture=setup({flow})
+    await act(async()=>{
+      await fixture.bridge.stageAnnotation('session-a',flow,[container.id],'父层',undefined,{x:1,y:2,scopePath:[]})
+      await fixture.bridge.stageAnnotation('session-a',flow,[inner.id],'子层',undefined,{x:3,y:4,scopePath:[container.id]})
+      await fixture.bridge.stageAnnotation('session-a',flow,[deep.id],'旧版深层')
+    })
+    const props=fixture.renderer.root.findByType('annotation-editor-mock' as never).props,items=props.annotations
+    expect(props.availableNodes(items[0]).map((item:{id:string})=>item.id)).toEqual(flow.nodes.map(node=>node.id))
+    expect(props.availableNodes(items[1]).map((item:{id:string})=>item.id)).toEqual([inner.id,nested.id])
+    expect(props.availableNodes(items[2]).map((item:{id:string})=>item.id)).toEqual([deep.id])
+    expect(items[1].nodes[0]).toMatchObject({id:inner.id,number:'a-1',ancestorIds:[container.id]})
+    expect(items[2].nodes[0]).toMatchObject({id:deep.id,number:'a-1',ancestorIds:[container.id,nested.id]})
+    expect(fixture.bridge.getAnnotations(flow.id)[2]!.position).toBeUndefined()
+  })
+  it('已失效的注释层级不回退到父流程候选，历史稳定引用仍保留',async()=>{
+    const fixture=setup()
+    await act(async()=>fixture.bridge.stageAnnotation('session-a',fixture.flow,[fixture.flow.nodes[1]!.id],'保留历史引用',undefined,{x:1,y:2,scopePath:['removed-container']}))
+    const props=fixture.renderer.root.findByType('annotation-editor-mock' as never).props,item=props.annotations[0]
+    expect(props.availableNodes(item)).toEqual([])
+    expect(item.nodes[0]).toMatchObject({id:fixture.flow.nodes[1]!.id,number:fixture.flow.nodes[1]!.number})
+    expect(fixture.bridge.getAnnotations(fixture.flow.id)[0]!.nodeIds).toEqual([fixture.flow.nodes[1]!.id])
   })
 })
 
@@ -434,5 +657,79 @@ describe('删除聊天注释', () => {
     expect(bridge.getAnnotations(flow.id).map(note => note.text)).toEqual(['刚添加的内容'])
     expect(fixture.input().occurrences).toHaveLength(1)
     expect(fixture.actions.insertText).not.toHaveBeenCalled()
+  })
+})
+
+describe('注释世界坐标与聊天编辑锚点',()=>{
+  const marker:AnnotationPosition={x:-137.5,y:248.25,scopePath:['iteration','loop']}
+  const draftKey='dsh.visibleWorkflows.annotationDrafts.v1'
+  const countButton=(fixture:ReturnType<typeof setup>)=>fixture.renderer.root.findAllByType('button').find(button=>button.props.title==='查看和修改节点注释')!
+  const editor=(fixture:ReturnType<typeof setup>)=>fixture.renderer.root.findByType('annotation-editor-mock' as never)
+  it('一条注释只有一个点，stage与get均深拷贝，编辑文字或节点不丢位置且不发给Agent',async()=>{
+    const fixture=setup(),position=structuredClone(marker)
+    await act(async()=>fixture.bridge.stageAnnotation('session-a',fixture.flow,fixture.flow.nodes.map(node=>node.id),'多节点共享一点',undefined,position))
+    position.x=999;position.scopePath.push('external-change')
+    const staged=fixture.bridge.getAnnotations(fixture.flow.id)[0]!
+    expect(staged.position).toEqual(marker)
+    staged.position!.y=999;staged.position!.scopePath.push('read-change')
+    expect(fixture.bridge.getAnnotations(fixture.flow.id)[0]!.position).toEqual(marker)
+    act(()=>fixture.bridge.editAnnotation('session-a',staged.id,'修改正文'))
+    await act(async()=>fixture.bridge.stageAnnotation('session-a',fixture.flow,[fixture.flow.nodes[2]!.id],'修改引用',staged.id))
+    expect(fixture.bridge.getAnnotations(fixture.flow.id)[0]!.position).toEqual(marker)
+    const text=await fixture.source.codec!.serialize(fixture.input().occurrences[0]!.ref,new AbortController().signal)
+    const payload=JSON.parse(text.split('\n').find(line=>line.startsWith('{'))!)
+    expect(payload.annotations[0]).toEqual({nodeIds:[fixture.flow.nodes[2]!.id],requirement:'修改引用'})
+    expect(text).not.toContain('scopePath');expect(text).not.toContain('"position"')
+  })
+  it('显式保存新点位会更新同一注释，重载恢复相同world坐标与scopePath',async()=>{
+    const first=setup()
+    await act(async()=>first.bridge.stageAnnotation('session-a',first.flow,[first.flow.nodes[1]!.id],'先放置',undefined,marker))
+    const note=first.bridge.getAnnotations(first.flow.id)[0]!,next={x:401,y:-99,scopePath:[]}
+    await act(async()=>first.bridge.stageAnnotation('session-a',first.flow,note.nodeIds,'同一条移动后',note.id,next))
+    const saved=first.bridge.getAnnotations(first.flow.id)[0]!
+    expect(saved.id).toBe(note.id);expect(saved.position).toEqual(next)
+    first.bridge.dispose()
+    const restored=setup({flow:first.flow,input:first.input()})
+    expect(restored.bridge.getAnnotations(first.flow.id)[0]).toEqual(saved)
+    const copy=restored.bridge.getAnnotations(first.flow.id)[0]!
+    copy.position!.scopePath.push('mutated-after-reload')
+    expect(restored.bridge.getAnnotations(first.flow.id)[0]!.position).toEqual(next)
+  })
+  it.each([{x:Infinity,y:0,scopePath:[]},{x:0,y:NaN,scopePath:[]},{x:0,y:0,scopePath:[1]},{x:0,y:0,scopePath:new Array(1)},{x:'0',y:0,scopePath:[]},null])('拒绝stage坏坐标，不生成引用或破坏既有草稿 %s',async position=>{
+    const fixture=setup(),before=fixture.input()
+    await expect(fixture.bridge.stageAnnotation('session-a',fixture.flow,[fixture.flow.nodes[1]!.id],'无效位置',undefined,position as unknown as AnnotationPosition)).rejects.toThrow('注释位置无效')
+    expect(fixture.input()).toBe(before);expect(fixture.bridge.getAnnotations(fixture.flow.id)).toEqual([])
+  })
+  it('恢复旧版无位置草稿和坏位置时保留注释，只丢弃损坏的可选位置',async()=>{
+    const first=setup()
+    await act(async()=>{
+      await first.bridge.stageAnnotation('session-a',first.flow,[first.flow.nodes[1]!.id],'旧版没有位置')
+      await first.bridge.stageAnnotation('session-a',first.flow,[first.flow.nodes[2]!.id],'坏位置仍保留正文',undefined,marker)
+    })
+    const saved=JSON.parse(sessionStorage.getItem(draftKey)!)
+    saved.batches[0].annotations[1].position={x:0,y:null,scopePath:['loop']}
+    sessionStorage.setItem(draftKey,JSON.stringify(saved));first.bridge.dispose()
+    const restored=setup({flow:first.flow,input:first.input()}),notes=restored.bridge.getAnnotations(first.flow.id)
+    expect(notes.map(note=>note.text)).toEqual(['旧版没有位置','坏位置仍保留正文'])
+    expect(notes.every(note=>note.position===undefined)).toBe(true)
+  })
+  it('聊天入口优先当前workflow对应可见pin，切换注释重找锚点且不自动导航；没有pin回退聊天按钮',async()=>{
+    const fallback={left:10,right:110,top:600,bottom:628},fixture=setup({controlRect:fallback})
+    await act(async()=>{
+      await fixture.bridge.stageAnnotation('session-a',fixture.flow,[fixture.flow.nodes[1]!.id],'第一条',undefined,marker)
+      await fixture.bridge.stageAnnotation('session-a',fixture.flow,[fixture.flow.nodes[2]!.id],'第二条',undefined,{...marker,x:300})
+    })
+    const notes=fixture.bridge.getAnnotations(fixture.flow.id),firstRect={left:320,right:344,top:220,bottom:244},secondRect={left:480,right:504,top:330,bottom:354}
+    const pin=(annotationId:string,workflowId:string,rect:typeof firstRect)=>({getAttribute:(key:string)=>key==='data-annotation-id'?annotationId:workflowId,getBoundingClientRect:()=>rect})
+    let pins=[pin(notes[0]!.id,'other-workflow',secondRect),pin(notes[0]!.id,fixture.flow.id,firstRect),pin(notes[1]!.id,fixture.flow.id,secondRect)]
+    vi.stubGlobal('document',{querySelectorAll:()=>pins})
+    await act(async()=>countButton(fixture).props.onClick())
+    expect(editor(fixture).props.anchorRect).toEqual(firstRect)
+    act(()=>editor(fixture).props.onSelectedChange(notes[1]!.id))
+    expect(editor(fixture).props.anchorRect).toEqual(secondRect)
+    pins=[]
+    act(()=>editor(fixture).props.onSelectedChange(notes[0]!.id))
+    expect(editor(fixture).props.anchorRect).toEqual(fallback)
+    expect(fixture.openWorkflow).not.toHaveBeenCalled()
   })
 })

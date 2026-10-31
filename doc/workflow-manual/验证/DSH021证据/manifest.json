@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "date": "2026-10-17",
+  "scope": "DSH 0.2.1 compatibility, historical per-use CRUD, current persistent authorization and real JSON roundtrip; non-sensitive selected evidence only.",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 5477,
+      "sha256": "d1354694229dae94582696ee36effd43acf591ef0e357c30df4dcb7699de96f3"
+    },
+    {
+      "file": "delete-acceptance.json",
+      "bytes": 692,
+      "sha256": "913af59620f9ef43dc9e4d6575f17f10c0d74b3ff722f4a8b10702c5e597cc94"
+    },
+    {
+      "file": "desktop-crud-progress.json",
+      "bytes": 1525,
+      "sha256": "7310607add5f83b628cf8afe3735fba38f324e548d6e5ab8bcc9a2e6ff6e5de4"
+    },
+    {
+      "file": "desktop-stage-observation.json",
+      "bytes": 1003,
+      "sha256": "ccda8ceb2bf2e5460d2a6d3ab73b39a9c76a6739d5db2d472c981b1e4fe76204"
+    },
+    {
+      "file": "final-authorization-regression-summary.json",
+      "bytes": 357,
+      "sha256": "ef75fa272cfdc96b6349f821f7576d129ff5fe2c4969c8cb77da716d7789afd8"
+    },
+    {
+      "file": "first-installation.json",
+      "bytes": 860,
+      "sha256": "64057ef10884b3dc91388fde2aeba568eb234568c081200270073bb54a7a4fd7"
+    },
+    {
+      "file": "full-regression-initial-summary.json",
+      "bytes": 673,
+      "sha256": "f21f9087264180c84742595019863a8af55121c7f193b77fdf2dbfeee1734dbf"
+    },
+    {
+      "file": "http-401-run.json",
+      "bytes": 825,
+      "sha256": "87f1c2c7b0b2d4a050c99bec29b714e95f02a0f12fa5f65ceedc142c2e03c867"
+    },
+    {
+      "file": "localhost-regression-rerun-summary.json",
+      "bytes": 522,
+      "sha256": "ddf3bd2c92053d3775552c46f500353134c28af7308e0b85d642779ac35b5553"
+    },
+    {
+      "file": "persistent-authorization-acceptance.json",
+      "bytes": 1188,
+      "sha256": "34913af9026e939bad235b9a578a93915a71f876271a9076235ec219515b618b"
+    },
+    {
+      "file": "persistent-authorization-decision.json",
+      "bytes": 1992,
+      "sha256": "d3a98b2fe27717c796fe952847885bad4f40cf90bcb01d32f58fe90171047408"
+    },
+    {
+      "file": "persistent-build-verification.json",
+      "bytes": 216,
+      "sha256": "29f88c7e7413ccc6a4f934c6c3aaaa8fd4e2c04860a32b5bcf87ffb50f924989"
+    },
+    {
+      "file": "persistent-data-preserved.json",
+      "bytes": 205,
+      "sha256": "25e6f727a01d46e67d4d8552eaa9440872971defa6a0e21338e00f166580c6ba"
+    },
+    {
+      "file": "persistent-desktop-before-authorization.json",
+      "bytes": 893,
+      "sha256": "09e76719d57d73ee8d61681019b6334c1313efdc28e928e96cc35efcb013be47"
+    },
+    {
+      "file": "persistent-http-first-run.json",
+      "bytes": 731,
+      "sha256": "45fb2fa9b586ba1d7034d91c158efab401dd883938339489d178aed6472152f0"
+    },
+    {
+      "file": "persistent-http-second-run.json",
+      "bytes": 731,
+      "sha256": "c0f5c9c77ab84c4fcf60d568cc59b50a0d45ac1401f27cd0e433483a7df0e0a9"
+    },
+    {
+      "file": "persistent-installation.json",
+      "bytes": 805,
+      "sha256": "e59e497b8bdbfadc73c2d50dd99d37e750547f102e24b11502e8a2fadadd288a"
+    },
+    {
+      "file": "persistent-json-roundtrip.json",
+      "bytes": 762,
+      "sha256": "a5dad147929c2c0f64e292f4922cd7e65ef4aaf25acac2aca1751da42a8c4233"
+    },
+    {
+      "file": "persistent-native-verification.json",
+      "bytes": 1817,
+      "sha256": "170b3e9a794fb14252210ca09bd79baaf8c8c412bd3cfd0345b9ccfd9a11dc7e"
+    },
+    {
+      "file": "persistent-package-verification.json",
+      "bytes": 421,
+      "sha256": "39d04dac5c7217ef7cb9a6506eb3e60d316cb190fbb832bef2ca271e3736a5bb"
+    },
+    {
+      "file": "persistent-profile-metadata-sync.json",
+      "bytes": 1144,
+      "sha256": "f5d1464254ea8ce0cf1d0790b1a6163b2766c339600e587ea8510618c57fc13b"
+    },
+    {
+      "file": "preflight-fix-installation.json",
+      "bytes": 860,
+      "sha256": "321ff56093f08cc73ff556fe6f9612afc2e952e3d9604baa5073863508439ee3"
+    },
+    {
+      "file": "profile-metadata-sync.json",
+      "bytes": 1627,
+      "sha256": "3e7aba107d9e4e1613ece23ad12e4d55a5d43c4601833eefeb0999cc24ebd6c7"
+    },
+    {
+      "file": "regression-summary.json",
+      "bytes": 688,
+      "sha256": "9dc07ceea6e6f44f828df5e3a395ab9da99b789991f8612be20f4f81bb5268ca"
+    },
+    {
+      "file": "retired-source-cleanup-summary.json",
+      "bytes": 4038,
+      "sha256": "f8b9e5412a06572fa1f7955d2973a0823f5c100bb7332c70bd2cf694b94a95e6"
+    },
+    {
+      "file": "typert-build-verification.json",
+      "bytes": 972,
+      "sha256": "3d8ef5b040f293525e72f3a7b9aa49fa0a7a6ac47c37b936dd37e8251b971a48"
+    }
+  ]
+}

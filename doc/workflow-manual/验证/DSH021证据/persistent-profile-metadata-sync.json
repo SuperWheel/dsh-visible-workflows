@@ -1,0 +1,29 @@
+{
+  "state": "applied",
+  "at": "2026-10-17T08:18:07.604Z",
+  "finishedAt": "2026-10-17T08:18:07.675Z",
+  "profile": "$DSH_HOME/profiles/desktop",
+  "beforeHashes": {
+    "package.json": "ab9eb8c35aa678f87f26bdff7d23171947af11de0d0204537bf593db781d8548",
+    "pnpm-lock.yaml": "3f2b977cbccdba78c3107d677ed6876c76405fb48a9201764fecf2bf66b48a2d"
+  },
+  "afterHashes": {
+    "package.json": "aadd4f6a75d39a2547e1d6dc94df598e61ee1b6995f5cc1ea91fef2498b98e67",
+    "pnpm-lock.yaml": "3f998146629710d239062aaae8ef0e09e5c0149440b7b75eaaf1719dbfc50c62"
+  },
+  "permissions": {
+    "package.json": 384,
+    "pnpm-lock.yaml": 384
+  },
+  "plugin": "dsh-visible-dynamic-workflows",
+  "sourceFrom": "dsh-visible-dynamic-workflows-0.0.1-dsh021-macos-arm64.tgz",
+  "sourceTo": "dsh-visible-dynamic-workflows-0.0.1-dsh021-os-authorization-macos-arm64.tgz",
+  "archiveSha256": "b12b90a7d9022e5805ea758d7649cc784e63b12a12ed10a865fbfccf3cf59a9e",
+  "addedPackages": [],
+  "removedPackages": [],
+  "peerSdkUnchanged": true,
+  "dependenciesUnchanged": true,
+  "otherManifestFieldsUnchanged": true,
+  "otherLockBytesUnchanged": true,
+  "rawProfileIncluded": false
+}

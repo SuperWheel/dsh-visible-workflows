@@ -1,0 +1,33 @@
+{
+  "installedHarness": "/Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "archiveSha256": "dd7940400a98253be02aec0b26bf75e188dc3f2fe925baf18cce510630aef4f0",
+  "archiveFileCount": 2626,
+  "sourceHashes": {
+    "src/host/graphon-environment.ts": "485a9362f49e39b8d347d5b3832996bc06fe433af73ffa3093ebb67adc250eb1",
+    "src/host/graphon.ts": "6d39400db94f3229c78b436a7ec03934475e3deaa92ec38e1522d9457c84f7b1",
+    "src/host/runtime.ts": "e27afd6a158852545f14dcb2d5a639af3a07b6e89f6c1d06ba8e5292a6baaab7",
+    "tests/fixtures/harness-graphon-integrity-probe.mjs": "015611fa068c9b67702da2587cc27c6f7a649940b5fc1435b26059a90717edf4"
+  },
+  "results": [
+    {
+      "name": "real_archive_and_strict_workflow_execute_successfully",
+      "pass": true
+    },
+    {
+      "name": "next_child_rejects_existing_python_content_tampering",
+      "pass": true
+    },
+    {
+      "name": "next_child_rejects_additional_pth_before_python_start",
+      "pass": true
+    }
+  ],
+  "modelRequests": 0,
+  "observedChildCount": 1,
+  "residualCount": 0,
+  "residualInspection": true,
+  "fixtureRemoved": true,
+  "productionActivated": false
+}

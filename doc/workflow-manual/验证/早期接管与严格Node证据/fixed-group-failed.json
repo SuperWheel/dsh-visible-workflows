@@ -1,0 +1,1301 @@
+{
+  "passed": false,
+  "failures": [
+    "race:survived",
+    "race:survived"
+  ],
+  "scope": "Experimental fork-compatible fixed PGID, same session/spawn denials; no production integration/Secret claim",
+  "at": "2026-10-17T04:48:43.289Z",
+  "host": {
+    "node": "24.18.1",
+    "electron": "44.0.0"
+  },
+  "reports": [
+    {
+      "mode": "syscalls",
+      "done": {
+        "exitCode": 99,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [],
+      "out": "LEAF:{\"pid\":92163,\"ppid\":92162,\"mode\":\"syscalls\",\"token\":\"8cc9d0ba-33b2-4240-919e-214be88a37ce\"}\nCHECK:{\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"fork\",\"result\":92164,\"errno\":0}\nCHECK:{\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nCHECK:{\"name\":\"signal-self\",\"result\":0,\"errno\":0}\nCHECK:{\"name\":\"signal-guardian\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"signal-watchdog\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"signal-runner\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"ptrace-guardian\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"ptrace-watchdog\",\"result\":-1,\"errno\":1}\nCHECK:{\"name\":\"pthread-create\",\"result\":0,\"errno\":0}\nCHECK:{\"name\":\"fork-after-exec\",\"result\":92165,\"errno\":0}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92157,\"watchdog\":92161,\"runner\":92162,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92157,\"watchdog\":92161,\"runner\":92162,\"code\":99,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "parent-exit",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92177,
+          "ppid": 92176,
+          "pgid": 92174,
+          "role": "child"
+        },
+        {
+          "pid": 92178,
+          "ppid": 92177,
+          "pgid": 92174,
+          "role": "grandchild"
+        },
+        {
+          "pid": 92176,
+          "ppid": 92175,
+          "pgid": 92174,
+          "role": "root"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92176,\"ppid\":92175,\"token\":\"057c8c24-734f-473f-89e4-fe04f2598713\"}\nMEMBER:{\"pid\":92177,\"ppid\":92176,\"pgid\":92174,\"role\":\"child\"}\nATTEMPT:{\"pid\":92177,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92177,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92177,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92178,\"ppid\":92177,\"pgid\":92174,\"role\":\"grandchild\"}\nATTEMPT:{\"pid\":92178,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92178,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92178,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92176,\"ppid\":92175,\"pgid\":92174,\"role\":\"root\"}\nREADY\n",
+      "status": "{\"event\":\"started\",\"guardian\":92173,\"watchdog\":92174,\"runner\":92175,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92173,\"watchdog\":92174,\"runner\":92175,\"code\":0,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "cancel",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92192,
+          "ppid": 92191,
+          "pgid": 92189,
+          "role": "child"
+        },
+        {
+          "pid": 92193,
+          "ppid": 92192,
+          "pgid": 92189,
+          "role": "grandchild"
+        },
+        {
+          "pid": 92191,
+          "ppid": 92190,
+          "pgid": 92189,
+          "role": "root"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92191,\"ppid\":92190,\"token\":\"19d8ab40-a466-4d40-8dc9-d2164c8279fb\"}\nMEMBER:{\"pid\":92192,\"ppid\":92191,\"pgid\":92189,\"role\":\"child\"}\nATTEMPT:{\"pid\":92192,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92192,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92192,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92193,\"ppid\":92192,\"pgid\":92189,\"role\":\"grandchild\"}\nATTEMPT:{\"pid\":92193,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92193,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92193,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92191,\"ppid\":92190,\"pgid\":92189,\"role\":\"root\"}\nREADY\n",
+      "status": "{\"event\":\"started\",\"guardian\":92188,\"watchdog\":92189,\"runner\":92190,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92188,\"watchdog\":92189,\"runner\":92190,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "guardian-crash",
+      "done": {
+        "exitCode": null,
+        "signal": "SIGKILL"
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92207,
+          "ppid": 92206,
+          "pgid": 92204,
+          "role": "child"
+        },
+        {
+          "pid": 92208,
+          "ppid": 92207,
+          "pgid": 92204,
+          "role": "grandchild"
+        },
+        {
+          "pid": 92206,
+          "ppid": 92205,
+          "pgid": 92204,
+          "role": "root"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92206,\"ppid\":92205,\"token\":\"e4f8a4ad-97bf-4362-a018-0184feeb6753\"}\nMEMBER:{\"pid\":92207,\"ppid\":92206,\"pgid\":92204,\"role\":\"child\"}\nATTEMPT:{\"pid\":92207,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92207,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92207,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92208,\"ppid\":92207,\"pgid\":92204,\"role\":\"grandchild\"}\nATTEMPT:{\"pid\":92208,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92208,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92208,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92206,\"ppid\":92205,\"pgid\":92204,\"role\":\"root\"}\nREADY\n",
+      "status": "{\"event\":\"started\",\"guardian\":92203,\"watchdog\":92204,\"runner\":92205,\"code\":0,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "watchdog-crash",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92222,
+          "ppid": 92221,
+          "pgid": 92219,
+          "role": "child"
+        },
+        {
+          "pid": 92223,
+          "ppid": 92222,
+          "pgid": 92219,
+          "role": "grandchild"
+        },
+        {
+          "pid": 92221,
+          "ppid": 92220,
+          "pgid": 92219,
+          "role": "root"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92221,\"ppid\":92220,\"token\":\"7f6f8574-c9d3-4803-80ed-fdec4c950bb5\"}\nMEMBER:{\"pid\":92222,\"ppid\":92221,\"pgid\":92219,\"role\":\"child\"}\nATTEMPT:{\"pid\":92222,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92222,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92222,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92223,\"ppid\":92222,\"pgid\":92219,\"role\":\"grandchild\"}\nATTEMPT:{\"pid\":92223,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92223,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92223,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92221,\"ppid\":92220,\"pgid\":92219,\"role\":\"root\"}\nREADY\n",
+      "status": "{\"event\":\"started\",\"guardian\":92218,\"watchdog\":92219,\"runner\":92220,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92218,\"watchdog\":92219,\"runner\":92220,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "timeout",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92239,
+          "ppid": 92238,
+          "pgid": 92236,
+          "role": "child"
+        },
+        {
+          "pid": 92240,
+          "ppid": 92239,
+          "pgid": 92236,
+          "role": "grandchild"
+        },
+        {
+          "pid": 92238,
+          "ppid": 92237,
+          "pgid": 92236,
+          "role": "root"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92238,\"ppid\":92237,\"token\":\"24836b83-b11b-40cb-9766-0b0bef63c4ba\"}\nMEMBER:{\"pid\":92239,\"ppid\":92238,\"pgid\":92236,\"role\":\"child\"}\nATTEMPT:{\"pid\":92239,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92239,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92239,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92240,\"ppid\":92239,\"pgid\":92236,\"role\":\"grandchild\"}\nATTEMPT:{\"pid\":92240,\"name\":\"setsid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92240,\"name\":\"setpgid\",\"result\":-1,\"errno\":1}\nATTEMPT:{\"pid\":92240,\"name\":\"posix_spawn-setexec-setsid\",\"result\":1,\"errno\":0}\nMEMBER:{\"pid\":92238,\"ppid\":92237,\"pgid\":92236,\"role\":\"root\"}\nREADY\n",
+      "status": "{\"event\":\"started\",\"guardian\":92235,\"watchdog\":92236,\"runner\":92237,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92235,\"watchdog\":92236,\"runner\":92237,\"code\":124,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "shell-parent-exit",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92256,
+          "role": "shell-background"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92253,\"ppid\":92252,\"token\":\"81f92c00-3f15-4c3b-90b7-25df5a3bdb8b\"}\nbeta\nMEMBER:{\"pid\":92256,\"role\":\"shell-background\"}\nREADY\n",
+      "status": "{\"event\":\"started\",\"guardian\":92250,\"watchdog\":92251,\"runner\":92252,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92250,\"watchdog\":92251,\"runner\":92252,\"code\":0,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "shell-cancel",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92271,
+          "role": "shell-background"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92268,\"ppid\":92267,\"token\":\"8424a1be-7800-4af7-b435-f14db337ffd2\"}\nbeta\nMEMBER:{\"pid\":92271,\"role\":\"shell-background\"}\nREADY\n",
+      "status": "{\"event\":\"started\",\"guardian\":92265,\"watchdog\":92266,\"runner\":92267,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92265,\"watchdog\":92266,\"runner\":92267,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92283,
+          "ppid": 92282,
+          "pgid": 92281,
+          "role": "root"
+        },
+        {
+          "pid": 92284,
+          "ppid": 92283,
+          "pgid": 92281,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92285,
+          "ppid": 92284,
+          "pgid": 92281,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92286,
+          "ppid": 92283,
+          "pgid": 92281,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92287,
+          "ppid": 92286,
+          "pgid": 92281,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92288,
+          "ppid": 92283,
+          "pgid": 92281,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92289,
+          "ppid": 92288,
+          "pgid": 92281,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92290,
+          "ppid": 92283,
+          "pgid": 92281,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92291,
+          "ppid": 92290,
+          "pgid": 92281,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92292,
+          "ppid": 92283,
+          "pgid": 92281,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92293,
+          "ppid": 92292,
+          "pgid": 92281,
+          "role": "racing-grandchild"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92283,\"ppid\":92282,\"token\":\"3eaa269c-1c55-4992-90c5-98c1628832dc\"}\nMEMBER:{\"pid\":92283,\"ppid\":92282,\"pgid\":92281,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92284,\"ppid\":92283,\"pgid\":92281,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92285,\"ppid\":92284,\"pgid\":92281,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92286,\"ppid\":92283,\"pgid\":92281,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92287,\"ppid\":92286,\"pgid\":92281,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92288,\"ppid\":92283,\"pgid\":92281,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92289,\"ppid\":92288,\"pgid\":92281,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92290,\"ppid\":92283,\"pgid\":92281,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92291,\"ppid\":92290,\"pgid\":92281,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92292,\"ppid\":92283,\"pgid\":92281,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92293,\"ppid\":92292,\"pgid\":92281,\"role\":\"racing-grandchild\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92280,\"watchdog\":92281,\"runner\":92282,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92280,\"watchdog\":92281,\"runner\":92282,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92317,
+          "ppid": 92315,
+          "pgid": 92314,
+          "role": "root"
+        },
+        {
+          "pid": 92318,
+          "ppid": 92317,
+          "pgid": 92314,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92319,
+          "ppid": 92318,
+          "pgid": 92314,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92320,
+          "ppid": 92317,
+          "pgid": 92314,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92321,
+          "ppid": 92320,
+          "pgid": 92314,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92322,
+          "ppid": 92317,
+          "pgid": 92314,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92323,
+          "ppid": 92322,
+          "pgid": 92314,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92324,
+          "ppid": 92317,
+          "pgid": 92314,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92325,
+          "ppid": 92324,
+          "pgid": 92314,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92326,
+          "ppid": 92317,
+          "pgid": 92314,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92327,
+          "ppid": 92326,
+          "pgid": 92314,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92328,
+          "ppid": 92317,
+          "pgid": 92314,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92329,
+          "ppid": 92328,
+          "pgid": 92314,
+          "role": "racing-grandchild"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92317,\"ppid\":92315,\"token\":\"39d025af-0ff6-476c-a21d-e0ecd70de02d\"}\nMEMBER:{\"pid\":92317,\"ppid\":92315,\"pgid\":92314,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92318,\"ppid\":92317,\"pgid\":92314,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92319,\"ppid\":92318,\"pgid\":92314,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92320,\"ppid\":92317,\"pgid\":92314,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92321,\"ppid\":92320,\"pgid\":92314,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92322,\"ppid\":92317,\"pgid\":92314,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92323,\"ppid\":92322,\"pgid\":92314,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92324,\"ppid\":92317,\"pgid\":92314,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92325,\"ppid\":92324,\"pgid\":92314,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92326,\"ppid\":92317,\"pgid\":92314,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92327,\"ppid\":92326,\"pgid\":92314,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92328,\"ppid\":92317,\"pgid\":92314,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92329,\"ppid\":92328,\"pgid\":92314,\"role\":\"racing-grandchild\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92313,\"watchdog\":92314,\"runner\":92315,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92313,\"watchdog\":92314,\"runner\":92315,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [
+        {
+          "pid": 92369,
+          "state": "92369     1 92351 S"
+        }
+      ],
+      "groupRemaining": [
+        {
+          "pid": 92369,
+          "state": "92369     1 92351 S"
+        }
+      ],
+      "members": [
+        {
+          "pid": 92353,
+          "ppid": 92352,
+          "pgid": 92351,
+          "role": "root"
+        },
+        {
+          "pid": 92354,
+          "ppid": 92353,
+          "pgid": 92351,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92355,
+          "ppid": 92354,
+          "pgid": 92351,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92356,
+          "ppid": 92353,
+          "pgid": 92351,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92357,
+          "ppid": 92356,
+          "pgid": 92351,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92358,
+          "ppid": 92353,
+          "pgid": 92351,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92359,
+          "ppid": 92358,
+          "pgid": 92351,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92360,
+          "ppid": 92353,
+          "pgid": 92351,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92361,
+          "ppid": 92360,
+          "pgid": 92351,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92362,
+          "ppid": 92353,
+          "pgid": 92351,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92363,
+          "ppid": 92362,
+          "pgid": 92351,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92364,
+          "ppid": 92353,
+          "pgid": 92351,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92365,
+          "ppid": 92364,
+          "pgid": 92351,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92366,
+          "ppid": 92353,
+          "pgid": 92351,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92367,
+          "ppid": 92366,
+          "pgid": 92351,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92368,
+          "ppid": 92353,
+          "pgid": 92351,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92369,
+          "ppid": 1,
+          "pgid": 92351,
+          "role": "racing-grandchild"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92353,\"ppid\":92352,\"token\":\"164d8641-e792-410f-8462-cbf639c4d5b3\"}\nMEMBER:{\"pid\":92353,\"ppid\":92352,\"pgid\":92351,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92354,\"ppid\":92353,\"pgid\":92351,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92355,\"ppid\":92354,\"pgid\":92351,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92356,\"ppid\":92353,\"pgid\":92351,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92357,\"ppid\":92356,\"pgid\":92351,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92358,\"ppid\":92353,\"pgid\":92351,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92359,\"ppid\":92358,\"pgid\":92351,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92360,\"ppid\":92353,\"pgid\":92351,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92361,\"ppid\":92360,\"pgid\":92351,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92362,\"ppid\":92353,\"pgid\":92351,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92363,\"ppid\":92362,\"pgid\":92351,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92364,\"ppid\":92353,\"pgid\":92351,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92365,\"ppid\":92364,\"pgid\":92351,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92366,\"ppid\":92353,\"pgid\":92351,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92367,\"ppid\":92366,\"pgid\":92351,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92368,\"ppid\":92353,\"pgid\":92351,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92369,\"ppid\":1,\"pgid\":92351,\"role\":\"racing-grandchild\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92350,\"watchdog\":92351,\"runner\":92352,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92350,\"watchdog\":92351,\"runner\":92352,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92399,
+          "ppid": 92398,
+          "pgid": 92397,
+          "role": "root"
+        },
+        {
+          "pid": 92400,
+          "ppid": 92399,
+          "pgid": 92397,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92401,
+          "ppid": 92400,
+          "pgid": 92397,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92402,
+          "ppid": 92399,
+          "pgid": 92397,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92403,
+          "ppid": 92402,
+          "pgid": 92397,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92404,
+          "ppid": 92399,
+          "pgid": 92397,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92405,
+          "ppid": 92404,
+          "pgid": 92397,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92406,
+          "ppid": 92399,
+          "pgid": 92397,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92407,
+          "ppid": 92406,
+          "pgid": 92397,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92408,
+          "ppid": 92399,
+          "pgid": 92397,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92409,
+          "ppid": 92408,
+          "pgid": 92397,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92410,
+          "ppid": 92399,
+          "pgid": 92397,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92411,
+          "ppid": 92410,
+          "pgid": 92397,
+          "role": "racing-grandchild"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92399,\"ppid\":92398,\"token\":\"7de97c41-bb77-4411-a141-8e9baddb0090\"}\nMEMBER:{\"pid\":92399,\"ppid\":92398,\"pgid\":92397,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92400,\"ppid\":92399,\"pgid\":92397,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92401,\"ppid\":92400,\"pgid\":92397,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92402,\"ppid\":92399,\"pgid\":92397,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92403,\"ppid\":92402,\"pgid\":92397,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92404,\"ppid\":92399,\"pgid\":92397,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92405,\"ppid\":92404,\"pgid\":92397,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92406,\"ppid\":92399,\"pgid\":92397,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92407,\"ppid\":92406,\"pgid\":92397,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92408,\"ppid\":92399,\"pgid\":92397,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92409,\"ppid\":92408,\"pgid\":92397,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92410,\"ppid\":92399,\"pgid\":92397,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92411,\"ppid\":92410,\"pgid\":92397,\"role\":\"racing-grandchild\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92396,\"watchdog\":92397,\"runner\":92398,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92396,\"watchdog\":92397,\"runner\":92398,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92435,
+          "ppid": 92434,
+          "pgid": 92433,
+          "role": "root"
+        },
+        {
+          "pid": 92436,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92437,
+          "ppid": 92436,
+          "pgid": 92433,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92438,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92439,
+          "ppid": 92438,
+          "pgid": 92433,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92440,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92441,
+          "ppid": 92440,
+          "pgid": 92433,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92442,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92443,
+          "ppid": 92442,
+          "pgid": 92433,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92444,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92445,
+          "ppid": 92444,
+          "pgid": 92433,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92446,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92447,
+          "ppid": 92446,
+          "pgid": 92433,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92448,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92449,
+          "ppid": 92448,
+          "pgid": 92433,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92450,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92451,
+          "ppid": 92450,
+          "pgid": 92433,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92452,
+          "ppid": 92435,
+          "pgid": 92433,
+          "role": "racing-child"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92435,\"ppid\":92434,\"token\":\"97830673-0881-4459-a9a2-9f4e118d67fd\"}\nMEMBER:{\"pid\":92435,\"ppid\":92434,\"pgid\":92433,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92436,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92437,\"ppid\":92436,\"pgid\":92433,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92438,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92439,\"ppid\":92438,\"pgid\":92433,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92440,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92441,\"ppid\":92440,\"pgid\":92433,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92442,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92443,\"ppid\":92442,\"pgid\":92433,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92444,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92445,\"ppid\":92444,\"pgid\":92433,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92446,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92447,\"ppid\":92446,\"pgid\":92433,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92448,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92449,\"ppid\":92448,\"pgid\":92433,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92450,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92451,\"ppid\":92450,\"pgid\":92433,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92452,\"ppid\":92435,\"pgid\":92433,\"role\":\"racing-child\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92432,\"watchdog\":92433,\"runner\":92434,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92432,\"watchdog\":92433,\"runner\":92434,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92481,
+          "ppid": 92480,
+          "pgid": 92479,
+          "role": "root"
+        },
+        {
+          "pid": 92482,
+          "ppid": 92481,
+          "pgid": 92479,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92483,
+          "ppid": 92482,
+          "pgid": 92479,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92484,
+          "ppid": 92481,
+          "pgid": 92479,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92485,
+          "ppid": 92484,
+          "pgid": 92479,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92486,
+          "ppid": 92481,
+          "pgid": 92479,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92487,
+          "ppid": 92486,
+          "pgid": 92479,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92488,
+          "ppid": 92481,
+          "pgid": 92479,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92489,
+          "ppid": 92488,
+          "pgid": 92479,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92490,
+          "ppid": 92481,
+          "pgid": 92479,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92491,
+          "ppid": 92490,
+          "pgid": 92479,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92492,
+          "ppid": 92481,
+          "pgid": 92479,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92493,
+          "ppid": 92492,
+          "pgid": 92479,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92494,
+          "ppid": 92481,
+          "pgid": 92479,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92495,
+          "ppid": 92494,
+          "pgid": 92479,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92496,
+          "ppid": 92481,
+          "pgid": 92479,
+          "role": "racing-child"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92481,\"ppid\":92480,\"token\":\"284f900c-378a-493c-b9b5-4c063ffd3f9e\"}\nMEMBER:{\"pid\":92481,\"ppid\":92480,\"pgid\":92479,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92482,\"ppid\":92481,\"pgid\":92479,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92483,\"ppid\":92482,\"pgid\":92479,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92484,\"ppid\":92481,\"pgid\":92479,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92485,\"ppid\":92484,\"pgid\":92479,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92486,\"ppid\":92481,\"pgid\":92479,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92487,\"ppid\":92486,\"pgid\":92479,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92488,\"ppid\":92481,\"pgid\":92479,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92489,\"ppid\":92488,\"pgid\":92479,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92490,\"ppid\":92481,\"pgid\":92479,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92491,\"ppid\":92490,\"pgid\":92479,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92492,\"ppid\":92481,\"pgid\":92479,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92493,\"ppid\":92492,\"pgid\":92479,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92494,\"ppid\":92481,\"pgid\":92479,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92495,\"ppid\":92494,\"pgid\":92479,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92496,\"ppid\":92481,\"pgid\":92479,\"role\":\"racing-child\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92478,\"watchdog\":92479,\"runner\":92480,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92478,\"watchdog\":92479,\"runner\":92480,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92523,
+          "ppid": 92522,
+          "pgid": 92521,
+          "role": "root"
+        },
+        {
+          "pid": 92524,
+          "ppid": 92523,
+          "pgid": 92521,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92525,
+          "ppid": 92524,
+          "pgid": 92521,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92526,
+          "ppid": 92523,
+          "pgid": 92521,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92527,
+          "ppid": 92526,
+          "pgid": 92521,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92528,
+          "ppid": 92523,
+          "pgid": 92521,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92529,
+          "ppid": 92528,
+          "pgid": 92521,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92530,
+          "ppid": 92523,
+          "pgid": 92521,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92531,
+          "ppid": 92530,
+          "pgid": 92521,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92532,
+          "ppid": 92523,
+          "pgid": 92521,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92533,
+          "ppid": 92532,
+          "pgid": 92521,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92534,
+          "ppid": 92523,
+          "pgid": 92521,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92535,
+          "ppid": 92534,
+          "pgid": 92521,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92536,
+          "ppid": 92523,
+          "pgid": 92521,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92537,
+          "ppid": 92536,
+          "pgid": 92521,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92538,
+          "ppid": 92523,
+          "pgid": 92521,
+          "role": "racing-child"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92523,\"ppid\":92522,\"token\":\"48ebb7e7-8525-4e30-a868-d3e8545af305\"}\nMEMBER:{\"pid\":92523,\"ppid\":92522,\"pgid\":92521,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92524,\"ppid\":92523,\"pgid\":92521,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92525,\"ppid\":92524,\"pgid\":92521,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92526,\"ppid\":92523,\"pgid\":92521,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92527,\"ppid\":92526,\"pgid\":92521,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92528,\"ppid\":92523,\"pgid\":92521,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92529,\"ppid\":92528,\"pgid\":92521,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92530,\"ppid\":92523,\"pgid\":92521,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92531,\"ppid\":92530,\"pgid\":92521,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92532,\"ppid\":92523,\"pgid\":92521,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92533,\"ppid\":92532,\"pgid\":92521,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92534,\"ppid\":92523,\"pgid\":92521,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92535,\"ppid\":92534,\"pgid\":92521,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92536,\"ppid\":92523,\"pgid\":92521,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92537,\"ppid\":92536,\"pgid\":92521,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92538,\"ppid\":92523,\"pgid\":92521,\"role\":\"racing-child\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92520,\"watchdog\":92521,\"runner\":92522,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92520,\"watchdog\":92521,\"runner\":92522,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92565,
+          "ppid": 92564,
+          "pgid": 92563,
+          "role": "root"
+        },
+        {
+          "pid": 92566,
+          "ppid": 92565,
+          "pgid": 92563,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92567,
+          "ppid": 92566,
+          "pgid": 92563,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92568,
+          "ppid": 92565,
+          "pgid": 92563,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92569,
+          "ppid": 92568,
+          "pgid": 92563,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92570,
+          "ppid": 92565,
+          "pgid": 92563,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92571,
+          "ppid": 92570,
+          "pgid": 92563,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92572,
+          "ppid": 92565,
+          "pgid": 92563,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92573,
+          "ppid": 92572,
+          "pgid": 92563,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92574,
+          "ppid": 92565,
+          "pgid": 92563,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92575,
+          "ppid": 92574,
+          "pgid": 92563,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92576,
+          "ppid": 92565,
+          "pgid": 92563,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92577,
+          "ppid": 92576,
+          "pgid": 92563,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92578,
+          "ppid": 92565,
+          "pgid": 92563,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92579,
+          "ppid": 92578,
+          "pgid": 92563,
+          "role": "racing-grandchild"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92565,\"ppid\":92564,\"token\":\"35bc1c13-f6bc-449d-8f28-32996648d764\"}\nMEMBER:{\"pid\":92565,\"ppid\":92564,\"pgid\":92563,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92566,\"ppid\":92565,\"pgid\":92563,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92567,\"ppid\":92566,\"pgid\":92563,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92568,\"ppid\":92565,\"pgid\":92563,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92569,\"ppid\":92568,\"pgid\":92563,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92570,\"ppid\":92565,\"pgid\":92563,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92571,\"ppid\":92570,\"pgid\":92563,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92572,\"ppid\":92565,\"pgid\":92563,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92573,\"ppid\":92572,\"pgid\":92563,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92574,\"ppid\":92565,\"pgid\":92563,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92575,\"ppid\":92574,\"pgid\":92563,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92576,\"ppid\":92565,\"pgid\":92563,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92577,\"ppid\":92576,\"pgid\":92563,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92578,\"ppid\":92565,\"pgid\":92563,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92579,\"ppid\":92578,\"pgid\":92563,\"role\":\"racing-grandchild\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92562,\"watchdog\":92563,\"runner\":92564,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92562,\"watchdog\":92563,\"runner\":92564,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [
+        {
+          "pid": 92620,
+          "state": "92620     1 92602 S"
+        }
+      ],
+      "groupRemaining": [
+        {
+          "pid": 92620,
+          "state": "92620     1 92602 S"
+        }
+      ],
+      "members": [
+        {
+          "pid": 92604,
+          "ppid": 92603,
+          "pgid": 92602,
+          "role": "root"
+        },
+        {
+          "pid": 92605,
+          "ppid": 92604,
+          "pgid": 92602,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92606,
+          "ppid": 92605,
+          "pgid": 92602,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92607,
+          "ppid": 92604,
+          "pgid": 92602,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92608,
+          "ppid": 92607,
+          "pgid": 92602,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92609,
+          "ppid": 92604,
+          "pgid": 92602,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92610,
+          "ppid": 92609,
+          "pgid": 92602,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92611,
+          "ppid": 92604,
+          "pgid": 92602,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92612,
+          "ppid": 92611,
+          "pgid": 92602,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92613,
+          "ppid": 92604,
+          "pgid": 92602,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92614,
+          "ppid": 92613,
+          "pgid": 92602,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92615,
+          "ppid": 92604,
+          "pgid": 92602,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92616,
+          "ppid": 92615,
+          "pgid": 92602,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92617,
+          "ppid": 92604,
+          "pgid": 92602,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92618,
+          "ppid": 92617,
+          "pgid": 92602,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92619,
+          "ppid": 92604,
+          "pgid": 92602,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92620,
+          "ppid": 92619,
+          "pgid": 92602,
+          "role": "racing-grandchild"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92604,\"ppid\":92603,\"token\":\"1d7e26ac-c6c5-44b7-b05c-cb2e60ef0d5b\"}\nMEMBER:{\"pid\":92604,\"ppid\":92603,\"pgid\":92602,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92605,\"ppid\":92604,\"pgid\":92602,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92606,\"ppid\":92605,\"pgid\":92602,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92607,\"ppid\":92604,\"pgid\":92602,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92608,\"ppid\":92607,\"pgid\":92602,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92609,\"ppid\":92604,\"pgid\":92602,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92610,\"ppid\":92609,\"pgid\":92602,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92611,\"ppid\":92604,\"pgid\":92602,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92612,\"ppid\":92611,\"pgid\":92602,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92613,\"ppid\":92604,\"pgid\":92602,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92614,\"ppid\":92613,\"pgid\":92602,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92615,\"ppid\":92604,\"pgid\":92602,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92616,\"ppid\":92615,\"pgid\":92602,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92617,\"ppid\":92604,\"pgid\":92602,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92618,\"ppid\":92617,\"pgid\":92602,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92619,\"ppid\":92604,\"pgid\":92602,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92620,\"ppid\":92619,\"pgid\":92602,\"role\":\"racing-grandchild\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92601,\"watchdog\":92602,\"runner\":92603,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92601,\"watchdog\":92602,\"runner\":92603,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "race",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": [],
+      "groupRemaining": [],
+      "members": [
+        {
+          "pid": 92663,
+          "ppid": 92662,
+          "pgid": 92661,
+          "role": "root"
+        },
+        {
+          "pid": 92664,
+          "ppid": 92663,
+          "pgid": 92661,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92665,
+          "ppid": 92664,
+          "pgid": 92661,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92666,
+          "ppid": 92663,
+          "pgid": 92661,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92667,
+          "ppid": 92666,
+          "pgid": 92661,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92668,
+          "ppid": 92663,
+          "pgid": 92661,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92669,
+          "ppid": 92668,
+          "pgid": 92661,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92670,
+          "ppid": 92663,
+          "pgid": 92661,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92671,
+          "ppid": 92670,
+          "pgid": 92661,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92672,
+          "ppid": 92663,
+          "pgid": 92661,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92673,
+          "ppid": 92672,
+          "pgid": 92661,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92674,
+          "ppid": 92663,
+          "pgid": 92661,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92675,
+          "ppid": 92674,
+          "pgid": 92661,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92676,
+          "ppid": 92663,
+          "pgid": 92661,
+          "role": "racing-child"
+        },
+        {
+          "pid": 92677,
+          "ppid": 92676,
+          "pgid": 92661,
+          "role": "racing-grandchild"
+        },
+        {
+          "pid": 92678,
+          "ppid": 92663,
+          "pgid": 92661,
+          "role": "racing-child"
+        }
+      ],
+      "out": "LEAF:{\"pid\":92663,\"ppid\":92662,\"token\":\"e4cdf5fb-4580-431d-96c2-94356aac8ddc\"}\nMEMBER:{\"pid\":92663,\"ppid\":92662,\"pgid\":92661,\"role\":\"root\"}\nREADY\nMEMBER:{\"pid\":92664,\"ppid\":92663,\"pgid\":92661,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92665,\"ppid\":92664,\"pgid\":92661,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92666,\"ppid\":92663,\"pgid\":92661,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92667,\"ppid\":92666,\"pgid\":92661,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92668,\"ppid\":92663,\"pgid\":92661,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92669,\"ppid\":92668,\"pgid\":92661,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92670,\"ppid\":92663,\"pgid\":92661,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92671,\"ppid\":92670,\"pgid\":92661,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92672,\"ppid\":92663,\"pgid\":92661,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92673,\"ppid\":92672,\"pgid\":92661,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92674,\"ppid\":92663,\"pgid\":92661,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92675,\"ppid\":92674,\"pgid\":92661,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92676,\"ppid\":92663,\"pgid\":92661,\"role\":\"racing-child\"}\nMEMBER:{\"pid\":92677,\"ppid\":92676,\"pgid\":92661,\"role\":\"racing-grandchild\"}\nMEMBER:{\"pid\":92678,\"ppid\":92663,\"pgid\":92661,\"role\":\"racing-child\"}\n",
+      "status": "{\"event\":\"started\",\"guardian\":92660,\"watchdog\":92661,\"runner\":92662,\"code\":0,\"signal\":0}\n{\"event\":\"finished\",\"guardian\":92660,\"watchdog\":92661,\"runner\":92662,\"code\":125,\"signal\":0}\n",
+      "stderrBytes": 0
+    },
+    {
+      "mode": "host-crash",
+      "remaining": [],
+      "groupRemaining": []
+    }
+  ]
+}

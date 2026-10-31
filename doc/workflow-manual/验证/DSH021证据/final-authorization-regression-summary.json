@@ -1,0 +1,12 @@
+{
+  "sourceFile": "final-authorization-regression.log",
+  "sourceSha256": "335051a8d8fed571295581b8508dd0bd0a184a2e9b1263702b512e6c110250b5",
+  "passedFiles": 5,
+  "totalFiles": 5,
+  "passedTests": 84,
+  "totalTests": 84,
+  "rawLogIncluded": false,
+  "includesAddedImportForgeryCases": 6,
+  "countsOverlapOtherRuns": true,
+  "nativeRealAcceptance": false
+}

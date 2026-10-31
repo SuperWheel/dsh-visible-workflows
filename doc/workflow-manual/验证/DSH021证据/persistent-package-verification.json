@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-17T08:16:54.406Z",
+  "archive": "artifacts/dsh-visible-dynamic-workflows-0.0.1-dsh021-os-authorization-macos-arm64.tgz",
+  "sha256": "b12b90a7d9022e5805ea758d7649cc784e63b12a12ed10a865fbfccf3cf59a9e",
+  "integrity": "sha512-tRRCkRT1S92R94Y76bBay7qp4FFKo6fA3wEam0iHTtq7mL7gPoIBCSqawV2IM/mrMkUwbvczI6LfrbjQHjCfdQ==",
+  "files": 363,
+  "bytes": 32653722,
+  "legacyAssets": [],
+  "osSecretPresent": true
+}

@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-17",
+  "timeZone": "Asia/Shanghai",
+  "source": "Explicit user decision relayed by the coordinating agent.",
+  "state": "installed-and-verified-save-authorize-two-automatic-runs-json-roundtrip",
+  "decision": "One native authorization remains valid until manually revoked; changing the credential or target requires authorization again.",
+  "requirements": {
+    "approvalInNativeManagement": true,
+    "binding": [
+      "credential-epoch",
+      "workspace-workflow-variable-scope",
+      "fixed-target"
+    ],
+    "notIncludedInWorkflowExport": true,
+    "unapprovedBackgroundExecution": "missing-configuration-without-prompt-or-network"
+  },
+  "realAcceptanceCompleted": true,
+  "prior401RunIsNotEvidenceOfPersistentAuthorization": true,
+  "windows": "source-candidate-unverified",
+  "nativeManagement": {
+    "authentication": "once-per-native-management-window",
+    "buttons": [
+      "仅保存",
+      "保存并授权自动使用",
+      "撤销自动使用",
+      "删除",
+      "关闭"
+    ],
+    "saveOnlyRevokesPriorAuthorization": true,
+    "saveOnlyRotatesEpochEvenIfValueUnchanged": true,
+    "saveAndAuthorizeUsesSameAuthenticatedWindow": true
+  },
+  "nativeManifestSha256": "d045aacdf64cd3947c42a1b8b8661d093b99867590fcb81a8b49ce647c9c3ef4",
+  "nativeBinarySha256": "c8851634b17c6eee3e73ad8572cec17fa6f924dccaae07ad4cc67ffe9b63c073",
+  "pluginArchiveSha256": "b12b90a7d9022e5805ea758d7649cc784e63b12a12ed10a865fbfccf3cf59a9e",
+  "realAcceptanceScope": [
+    "one-native-management-authentication",
+    "save-and-authorize",
+    "two-fixed-target-requests-without-reauthentication",
+    "real-json-export-import-preserves-canvas-and-does-not-transfer-credential-or-grant",
+    "missing-import-click-execute-dialog-with-no-run"
+  ],
+  "notRepeatedManuallyOnFinalPackage": [
+    "revoke",
+    "credential-edit-and-regrant",
+    "delete",
+    "restart",
+    "real-main-or-child-agent-model-calls"
+  ],
+  "testCredentialAndGrantRetainedOnSource": true
+}

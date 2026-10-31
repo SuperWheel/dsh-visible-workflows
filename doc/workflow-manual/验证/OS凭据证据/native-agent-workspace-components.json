@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-17T07:03:18.640Z",
+  "passed": true,
+  "results": [
+    {
+      "name": "registered_main_uses_real_tool_runtime",
+      "passed": true
+    },
+    {
+      "name": "forged_durable_parent_without_runtime_owner_denied",
+      "passed": true
+    },
+    {
+      "name": "real_owned_child_with_forged_parent_header_denied",
+      "passed": true
+    },
+    {
+      "name": "owned_child_cannot_switch_to_other_workspace_by_cwd",
+      "passed": true
+    },
+    {
+      "name": "official_spawn_child_inherits_registered_parent_workspace",
+      "passed": true
+    },
+    {
+      "name": "same_id_object_substitution_denied",
+      "passed": true
+    },
+    {
+      "name": "workspace_registration_removal_revokes_child_authority",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "modelRequests": 0,
+  "remainingAgents": 0,
+  "temporaryFilesRemoved": true,
+  "productionModified": false,
+  "scope": "Installed SDK component acceptance with official native spawn held before its model turn; not a Desktop user-session retry",
+  "helperSha256": "f79e3a23f071c4368c10607bebf5185a78095e57cbe8e2ae7df21934ed39009b",
+  "installedAgentSha256": "7b9aa39474de83115cf890dd7f8904cf0d59df0811cb335ab85565a04f1aac93",
+  "installedDriverSha256": "a169b6dac8f9fd0ef6e8db4ec0d2c009580c5c10b6d561e6d214cbe9b89521d1"
+}

@@ -1,0 +1,40 @@
+{
+  "mode": "review",
+  "profile": "~/.dsh/profiles/desktop",
+  "baseline": {
+    "packageSha256": "abf8ec7f128cca6146ade95f3b92c07cc84289cac9bb2026a56dc1e74bd849d8",
+    "patchSha256": "9e7669b8dca3a5bf78500b7e9ce309f29a0c2050b2bbf5ea84035b23cf60c752"
+  },
+  "candidate": {
+    "packageSha256": "c4a3b2946764c754ed890e5b92424dde4b5ea256516df79cc666a62a943402ef",
+    "rootPatchSha256": "666b0ad549f926349ad6910a326d206da819cd481e925a7b7636e2cea6b1cf40",
+    "packageBytes": 493,
+    "rootPatchBytes": 166
+  },
+  "backups": {
+    "packagePath": "~/.dsh/profiles/desktop/package.before-isolation-abf8ec7f128cca61.json",
+    "patchPath": "~/.dsh/profiles/desktop/cordis.before-isolation-9e7669b8dca3a5bf.patch.yml"
+  },
+  "deploymentFiles": 8,
+  "runtimeFiles": 6896,
+  "workflowBuildInstalled": true,
+  "pending": [],
+  "desktopMustBeStopped": true,
+  "restrictedEntryIds": [
+    "plugin-manager",
+    "tool-plugin-manager",
+    "hmr",
+    "client-hmr",
+    "config-editor",
+    "cordis-host-runner",
+    "workspace-changes",
+    "cordis-inspect-providers",
+    "ui-deliverables",
+    "terminal-controller",
+    "directory-picker",
+    "office-to-pdf",
+    "cliworker-now",
+    "dsh-external-workflow"
+  ],
+  "secretReady": false
+}

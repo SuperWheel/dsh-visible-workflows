@@ -1,0 +1,287 @@
+{
+  "version": 1,
+  "capturedAt": "2026-10-17T06:39:43.826798+00:00",
+  "scope": "Historical global-isolation experiment stopped at user request. Original component results, three failed-or-partial production attempts and confirmed rollbacks are retained, not release prerequisites. Current normal Desktop restored; no Secret readiness claim.",
+  "files": [
+    {
+      "file": "root-entry.json",
+      "source": ".cache/secret-bootstrap-20261017/root-entry.json",
+      "bytes": 1034,
+      "sha256": "2b2359b93e8185d1ac8d17954b6b87b73e4584a71e0ae6e407162eceac053b55"
+    },
+    {
+      "file": "desktop-main.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-main.json",
+      "bytes": 3592,
+      "sha256": "712a49b9d3c3dabd6ea4774b8987ba710796ed8c98b962a11be5e9304e43eb28"
+    },
+    {
+      "file": "strict-node-launcher.json",
+      "source": ".cache/strict-node-launcher-probe/result.json",
+      "bytes": 4329,
+      "sha256": "b2a599a2aca01123f9556e08e68bfb6d3c3b6494abd87c1f19f827c3d9f3359b"
+    },
+    {
+      "file": "node-compat.json",
+      "source": ".cache/process-supervisor-probe/node-compat-result.json",
+      "bytes": 33871,
+      "sha256": "d8bf32dc4b1af2b53a1b5774ff262b3bf8a2071f103ee73def212a1d75627351"
+    },
+    {
+      "file": "fixed-group-failed.json",
+      "source": ".cache/process-supervisor-probe/fixed-group-result.json",
+      "bytes": 49124,
+      "sha256": "9b13ff872cf9c81d5b80c1fa5b738fa3685a27f6780955f7392578e5963216b8"
+    },
+    {
+      "file": "fixed-group-post-cleanup.json",
+      "source": ".cache/process-supervisor-probe/post-cleanup-check.json",
+      "bytes": 168,
+      "sha256": "db84dcbad5d22bf46f678c6bc446a3d8baab4354ecf119cf151575431a6e8925"
+    },
+    {
+      "file": "workflow-files.json",
+      "source": ".cache/confined-workflow-files/results.json",
+      "bytes": 840,
+      "sha256": "fc8f4534e101ca45ac61e97be28bdcbbe357e6d14789dbc293b6f59f121ebf8a"
+    },
+    {
+      "file": "workspace-policy.json",
+      "source": ".cache/workspace-policy-regression/results.json",
+      "bytes": 710,
+      "sha256": "d972514dfd756d199af30879616e85de0b72fd8d7b781d98d71b7f518f9ca668"
+    },
+    {
+      "file": "automatic-files.json",
+      "source": ".cache/confined-automatic-files/results.json",
+      "bytes": 1369,
+      "sha256": "0952a57b2456e2cbf8d8151cc793e23cd6340188aa4e808a51ef4217409de193"
+    },
+    {
+      "file": "public-http.json",
+      "source": ".cache/confined-public-http/results-public.json",
+      "bytes": 1696,
+      "sha256": "afd67683b3c627c3b748ec0e3477d70ff90906c7139e265aae6f36d3ef08598e"
+    },
+    {
+      "file": "workflow-archive.json",
+      "source": ".cache/confined-archive/results.json",
+      "bytes": 1619,
+      "sha256": "85d0dd676b94ade67791d934581eeacbb9c0f13d56b460deb775b681ee976120"
+    },
+    {
+      "file": "graphon-integrity.json",
+      "source": ".cache/graphon-strict-integrity/results.json",
+      "bytes": 1188,
+      "sha256": "b9a476d0f4857da7334f809a472c52b4b87266af155c7c2303e3406157c2bbd6"
+    },
+    {
+      "file": "ipc-gui.json",
+      "source": ".cache/strict-ipc-gui/results.json",
+      "bytes": 5492,
+      "sha256": "6089b895ee8d4e0111e126d3dd11b126cfbd529767eba67a446de00ee19aee99"
+    },
+    {
+      "file": "desktop-state-before.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-state-before.json",
+      "bytes": 5638,
+      "sha256": "c827b852f9676e78a8d7138f7174be3a178087971587ad7ad58921e86f08ee8e"
+    },
+    {
+      "file": "agent-inheritance.json",
+      "source": ".cache/workflow-agent-isolation/results.json",
+      "bytes": 2364,
+      "sha256": "00448cb887c2ee73b0b4ff7d2594c34a6942d73d2b7936c0be75443448789c6d"
+    },
+    {
+      "file": "agent-files-isolation.json",
+      "source": ".cache/workflow-agent-files-isolation/results.json",
+      "bytes": 2631,
+      "sha256": "f855967efe66dda00547673a07b6ced0f4f4a6a6f19805064d6ecd5347c46a18"
+    },
+    {
+      "file": "existing-graphon-cache.json",
+      "source": ".cache/existing-graphon-cache/results.json",
+      "bytes": 1004,
+      "sha256": "190ed0373ffe7f3f7645fc6baecfba9f37805497f6990f5dfb6eb2a139736fc3"
+    },
+    {
+      "file": "desktop-full-graph.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-full-graph.json",
+      "bytes": 8211,
+      "sha256": "c333447699ab31a09e2a299ac05febd804fa7a345dac991c785336b896a8be63"
+    },
+    {
+      "file": "plugin-installation.json",
+      "source": ".cache/secret-bootstrap-20261017/plugin-installation.json",
+      "bytes": 820,
+      "sha256": "2f8d4f9d6df7efe84d6171a56a15053cf17e91c2cd3e9e797b4b789823e020d2"
+    },
+    {
+      "file": "helper-installation.json",
+      "source": ".cache/secret-bootstrap-20261017/helper-stage-install.json",
+      "bytes": 531,
+      "sha256": "8c7ee1f3f7e92366c164d0c60e6a0ceb533f6ec4e32bbafec00c489548a9938d"
+    },
+    {
+      "file": "desktop-state-after-first-rollback.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-state-after-first-rollback.json",
+      "bytes": 3185,
+      "sha256": "dccc062d52dd2ddab6eb23190065b7d654380ad0393966c37fb3d0d52f024dac"
+    },
+    {
+      "file": "first-profile-cutover-rollback.json",
+      "source": ".cache/secret-bootstrap-20261017/production-candidate/profile-cutover.json",
+      "bytes": 3240,
+      "sha256": "1d8ddb73f65a4bd9d7e7cbc10b4c732ea7f7337c3ba85ce5127f69cd213a3ca1",
+      "capturedStage": "first production attempt, before later candidate replacement"
+    },
+    {
+      "file": "first-desktop-welcome-failure.log",
+      "source": "~/Library/Logs/DeepSeek Harness/crash-2026-10-17T06-10-48-873Z-main.log",
+      "bytes": 1018,
+      "sha256": "cca6a74b50b365285f825fc62b09111ffd9822b91e397460eb2a5b703e9bf5a9",
+      "contentReview": "Stack and runtime versions only; no request, credential or configuration values. Copied without rewriting."
+    },
+    {
+      "file": "desktop-full-graph-with-welcome.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-full-graph-with-welcome.json",
+      "bytes": 8540,
+      "sha256": "0863bf67143a44278ee05c1ddc652a002d84b5b678324e3c482c2b2da5a3cbaa",
+      "capturedStage": "before second actual Desktop UI acceptance"
+    },
+    {
+      "file": "review-with-settings.json",
+      "source": ".cache/secret-bootstrap-20261017/production-candidate/final-review-with-settings.json",
+      "bytes": 1264,
+      "sha256": "d33a376f45bd02c4d387674046f969a9f43fcad7cb38d6bf1602010b80bf9d03",
+      "capturedStage": "before second actual Desktop UI acceptance"
+    },
+    {
+      "file": "second-profile-cutover-rollback.json",
+      "source": ".cache/secret-bootstrap-20261017/production-candidate/profile-cutover.json",
+      "bytes": 3480,
+      "sha256": "d123a155068cf207c675499eeae5dd866ca8a6abb2d4ca7e8df68e30b4b0d5bd",
+      "capturedStage": "second production attempt, confirmed rollback before next candidate"
+    },
+    {
+      "file": "second-desktop-client-boot-failure.log",
+      "source": "~/Library/Logs/DeepSeek Harness/crash-2026-10-17T06-18-52-273Z-web-boot.log",
+      "bytes": 774,
+      "sha256": "0b922c3be8af4686364835f770ceb54e85f65246ad391fea2ea6e83560c03c1b",
+      "capturedStage": "second production attempt, confirmed rollback before next candidate"
+    },
+    {
+      "file": "desktop-state-after-second-rollback.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-state-after-second-rollback.json",
+      "bytes": 3196,
+      "sha256": "f857210390093a484d955ae2612a5a8e4f02bc8c77ae7fa0ebf422932c6e57bb"
+    },
+    {
+      "file": "desktop-client-dependencies-before.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-full-graph-client-regression.json",
+      "bytes": 9037,
+      "sha256": "50ebf2e5c176f798f61573c3079cf5984d60bf72c2d3a3d3cf5ba42977e0843e"
+    },
+    {
+      "file": "desktop-client-dependencies-fixed.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-full-graph-client-fixed.json",
+      "bytes": 8660,
+      "sha256": "773ca603623d359978bd419d72b6381c4bf32b24d5ac1e6301e3568dfd45531a"
+    },
+    {
+      "file": "review-client-fixed.json",
+      "source": ".cache/secret-bootstrap-20261017/production-candidate/final-review-client-fixed.json",
+      "bytes": 1291,
+      "sha256": "48bfdd3818ece6b0a48ddf42329d7617e4b7342985e3fba75a52a3eb35d1bc55"
+    },
+    {
+      "file": "readonly-settings-tests.tap",
+      "source": ".cache/secret-bootstrap-20261017/readonly-settings-tests.tap",
+      "bytes": 806,
+      "sha256": "ad03a22f2a69a27f1e168878ae1826fe99c186dfe1daebb6ea78b7ffcfa7d9df"
+    },
+    {
+      "file": "third-profile-cutover-rollback.json",
+      "source": ".cache/secret-bootstrap-20261017/production-candidate/profile-cutover.json",
+      "bytes": 3480,
+      "sha256": "1767dea8a45b3c268fae0e0f493711069e1bf5ed5d0a8974ace7d2496520bae7",
+      "capturedStage": "third protected Desktop attempt rolled back; global route stopped by user"
+    },
+    {
+      "file": "desktop-protected-export.workflow.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-protected-export.workflow.json",
+      "bytes": 3173,
+      "sha256": "d58645b3434f4cde2a207009627e45c9e8fac01705f1a69804a774bf85676b57",
+      "capturedStage": "third protected Desktop attempt rolled back; global route stopped by user"
+    },
+    {
+      "file": "desktop-protected-export-validation.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-protected-export-validation.json",
+      "bytes": 2022,
+      "sha256": "0adfaffd9db200d6d3228488f896645fa6ecc9483d52d22ed7f64b7e44f6a66b",
+      "capturedStage": "third protected Desktop attempt rolled back; global route stopped by user"
+    },
+    {
+      "file": "desktop-state-after-third-rollback.json",
+      "source": ".cache/secret-bootstrap-20261017/desktop-state-after-third-rollback.json",
+      "bytes": 3205,
+      "sha256": "6056fc3cf09977db7cf896d3d2de678e004ab5acf9998fe3bc16564fb23505c9",
+      "capturedStage": "third protected Desktop attempt rolled back; global route stopped by user"
+    }
+  ],
+  "derivedFiles": [
+    {
+      "file": "verification-summary.json",
+      "kind": "derived-regression-and-build-summary",
+      "sources": [
+        ".cache/secret-bootstrap-20261017/build-final-graphon.log",
+        ".cache/secret-bootstrap-20261017/build-final.log",
+        ".cache/secret-bootstrap-20261017/desktop-full-graph-client-fixed.json",
+        ".cache/secret-bootstrap-20261017/desktop-full-graph-client-regression.json",
+        ".cache/secret-bootstrap-20261017/desktop-full-graph.json",
+        ".cache/secret-bootstrap-20261017/desktop-protected-export-validation.json",
+        ".cache/secret-bootstrap-20261017/desktop-protected-export.workflow.json",
+        ".cache/secret-bootstrap-20261017/desktop-state-after-first-rollback.json",
+        ".cache/secret-bootstrap-20261017/desktop-state-after-second-rollback.json",
+        ".cache/secret-bootstrap-20261017/desktop-state-after-third-rollback.json",
+        ".cache/secret-bootstrap-20261017/desktop-state-before.json",
+        ".cache/secret-bootstrap-20261017/full-tests-final.json",
+        ".cache/secret-bootstrap-20261017/full-tests.json",
+        ".cache/secret-bootstrap-20261017/helper-stage-install.json",
+        ".cache/secret-bootstrap-20261017/helper-stage-tests.tap",
+        ".cache/secret-bootstrap-20261017/installation-script-review.json",
+        ".cache/secret-bootstrap-20261017/installation-script-tests.tap",
+        ".cache/secret-bootstrap-20261017/loopback-final.json",
+        ".cache/secret-bootstrap-20261017/loopback-rerun.json",
+        ".cache/secret-bootstrap-20261017/plugin-install-review.json",
+        ".cache/secret-bootstrap-20261017/plugin-installation.json",
+        ".cache/secret-bootstrap-20261017/production-candidate/final-review-client-fixed.json",
+        ".cache/secret-bootstrap-20261017/production-candidate/profile-cutover.json",
+        ".cache/secret-bootstrap-20261017/profile-cutover-script-tests.tap",
+        ".cache/secret-bootstrap-20261017/readonly-settings-tests.tap",
+        ".cache/secret-bootstrap-20261017/transfer-secret-final.json",
+        "desktop-full-graph-with-welcome.json",
+        "first-desktop-welcome-failure.log",
+        "first-profile-cutover-rollback.json",
+        "review-with-settings.json",
+        "second-desktop-client-boot-failure.log",
+        "second-profile-cutover-rollback.json",
+        "third-desktop-ui-observation.json"
+      ],
+      "bytes": 36134,
+      "sha256": "1bbf2ccbfe63150e8a2758b7f90d4e3c5331c0f6b76308c182f6138fe18b65da"
+    },
+    {
+      "file": "third-desktop-ui-observation.json",
+      "kind": "derived-coordinating-agent-ui-observations",
+      "sources": [
+        "coordinating-agent actual CUA observations in this task",
+        "desktop-protected-export.workflow.json",
+        "third-profile-cutover-rollback.json"
+      ],
+      "bytes": 1193,
+      "sha256": "be2f257c3418c7fa99383aab3b17f9919c9e3ef0cac5965bf4cd736b046b384b"
+    }
+  ]
+}

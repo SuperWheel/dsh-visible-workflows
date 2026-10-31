@@ -1,0 +1,117 @@
+{
+  "at": "2026-10-17T04:34:21.314Z",
+  "scope": "Source iteration and installed Harness component probes; production Desktop unchanged",
+  "desktopActivated": false,
+  "secretReady": false,
+  "regression": {
+    "files": 106,
+    "total": 1112,
+    "passed": 1112,
+    "skipped": 0,
+    "initial": {
+      "passed": 1110,
+      "failed": 2,
+      "reason": "Two tests could not listen on 127.0.0.1 in the execution sandbox"
+    },
+    "loopbackRerun": {
+      "files": 2,
+      "passed": 11,
+      "failed": 0
+    },
+    "canvasAndTransferSelection": [
+      {
+        "file": "annotation-editor.test.ts",
+        "cases": 19,
+        "status": "passed"
+      },
+      {
+        "file": "annotation-fallback.test.ts",
+        "cases": 5,
+        "status": "passed"
+      },
+      {
+        "file": "annotation-nodes.test.ts",
+        "cases": 7,
+        "status": "passed"
+      },
+      {
+        "file": "annotation-placement.test.ts",
+        "cases": 6,
+        "status": "passed"
+      },
+      {
+        "file": "canvas-top-actions.test.tsx",
+        "cases": 7,
+        "status": "passed"
+      },
+      {
+        "file": "portable-annotations-app.test.tsx",
+        "cases": 5,
+        "status": "passed"
+      },
+      {
+        "file": "portable-annotations.test.ts",
+        "cases": 3,
+        "status": "passed"
+      },
+      {
+        "file": "workflow-import-client.test.tsx",
+        "cases": 6,
+        "status": "passed"
+      },
+      {
+        "file": "workflow-json-roundtrip.test.ts",
+        "cases": 9,
+        "status": "passed"
+      },
+      {
+        "file": "workflow-package-archive.test.ts",
+        "cases": 13,
+        "status": "passed"
+      },
+      {
+        "file": "workflow-readiness-client.test.tsx",
+        "cases": 13,
+        "status": "passed"
+      },
+      {
+        "file": "workflow-secret-transfer.test.ts",
+        "cases": 7,
+        "status": "passed"
+      }
+    ]
+  },
+  "build": {
+    "passed": true,
+    "host": true,
+    "client": true,
+    "isolationExtensionTypecheck": true,
+    "experimentalSupervisorBundled": false
+  },
+  "sourceSha256": {
+    "host-extensions/dsh-secret-isolation/bootstrap.ts": "b37928433e66133002832808a5cb45632989353467f43bc0b4ec241ba21cddad",
+    "host-extensions/dsh-secret-isolation/mxc-host.ts": "a26e5348df4e84383b680062a9aba3b4188cc5a85028a3dc0264ba043b670127",
+    "host-extensions/dsh-secret-isolation/mcp-adapter.ts": "62e7ef0069ebb1f8375b235764a58df364a7e9a4e899035c84f17565379b7726",
+    "host-extensions/dsh-secret-isolation/mcp-transport.ts": "3dab24a0c6fe630b70d14e1137abb4ed359028025fed8c3df91fc5ef8f41c6f9",
+    "host-extensions/dsh-secret-isolation/entry.ts": "7b55e46fc680436f47c636073110480100a75a913650b03c628a8783696013fc",
+    "src/host/isolation/mxc-executor.ts": "f0cecd12d594340ea2bb49c8f15b2c0bbbdaeec00ceccb7b8a0da8dba90dba0d",
+    "src/host/graphon-environment.ts": "623c82e69820a6fef184eddb85809587454bab9e25bfb99a67982c2079c4322e",
+    "scripts/build.mjs": "66b3916936135f6d2968579b7aba3d2224b13ad0aded65765e5e8f61607db383",
+    "scripts/verify-native-control.mjs": "bbb1da9cfe9801b0733171a1524b45d80379dd4f0f5c15b44777281df92eec9c",
+    "tests/fixtures/harness-confined-mcp-probe.mjs": "6d50844ae6c93772a0b0aa65d038f7aa8c385e7b1288f314e147c4a860247013",
+    "native/process-supervisor/supervisor.c": "bb361029977c74567d901ed76f1c437e722fd6b39b880f7cbd2249026043bb83",
+    "lib/isolation-host.js": "a676a9a156c73a2b2df5d9ef060c0aa96f069fe378908e72c56b58ae47529e8c",
+    "lib/index.js": "5ed4dafb146bc386689ddbd1cbcc38231d654169fe1d07daea37b58bb42a4cfe",
+    "lib/client.js": "5b43c91f8572546177021054c2ee13135790cd5788901a3543e464055a90d56f"
+  },
+  "documentation": {
+    "passed": true,
+    "markdownPages": 71,
+    "indexedPages": 71,
+    "nodeKinds": 20,
+    "nodePages": 20
+  },
+  "diffCheck": {
+    "passed": true
+  }
+}

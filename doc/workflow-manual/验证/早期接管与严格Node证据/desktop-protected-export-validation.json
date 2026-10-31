@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "at": "2026-10-17T06:29:45.364Z",
+  "scope": "Read-only validation of a real Desktop SavePanel JSON export against the unchanged existing workflow. In-memory schema/import checks do not import, save or execute in Desktop.",
+  "sourceWorkflowId": "d509d971-a850-4a8c-895b-c01069b87094",
+  "export": {
+    "path": ".cache/secret-bootstrap-20261017/desktop-protected-export.workflow.json",
+    "bytes": 3173,
+    "sha256": "d58645b3434f4cde2a207009627e45c9e8fac01705f1a69804a774bf85676b57",
+    "format": "dsh-visible-workflow",
+    "formatVersion": 2
+  },
+  "library": {
+    "path": "~/.dsh/visible-dynamic-workflows/library.json",
+    "bytes": 13910,
+    "sha256": "33e189930c3a68b4192ba3bc7b995860a91a1ec43e09bfe9127b4649b4c11de0",
+    "matchesBaseline": true
+  },
+  "structure": {
+    "nodes": 3,
+    "edges": 2,
+    "notes": 1,
+    "annotations": 1,
+    "viewport": {
+      "x": 40,
+      "y": 30,
+      "scale": 0.75
+    },
+    "secretDeclarations": 1,
+    "credentialOperations": 1
+  },
+  "checks": {
+    "parsedByCurrentProductionSchema": true,
+    "libraryUnchangedFromPreCutoverBaseline": true,
+    "sourceWorkflowFound": true,
+    "nodeIdentityKindPositionAndConfigExact": true,
+    "edgeIdentityAndBindingExact": true,
+    "notesExact": true,
+    "editorViewportAnnotationsExact": true,
+    "environmentDeclarationsExact": true,
+    "onlyPortableWorkspaceAndRevisionDiffer": true,
+    "oneSecretDeclarationWithoutValuesOrBinding": true,
+    "sourceOperationReferencesDeclaredSecret": true,
+    "importFreshIdentities": true,
+    "importNodeKindCoordinatesPreserved": true,
+    "importEdgesReferenceRemappedNodes": true,
+    "importViewportPreserved": true,
+    "importNotesPreserved": true,
+    "importAnnotationsPreserved": true,
+    "importSecretFreshDeclaration": true,
+    "importOperationReferencesFreshSecret": true,
+    "importSecretReconfigurationWarning": true
+  },
+  "passed": true,
+  "productionModified": false,
+  "credentialValuesRead": false,
+  "secretReady": false
+}

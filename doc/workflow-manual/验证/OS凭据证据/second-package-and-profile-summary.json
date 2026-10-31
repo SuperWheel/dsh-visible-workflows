@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-17T07:09:45.717Z",
+  "package": {
+    "name": "dsh-visible-dynamic-workflows",
+    "version": "0.0.1",
+    "bytes": 34307863,
+    "files": 430,
+    "sha256": "36db6374ed26c74ac2275b702430343fe807dfb7c548b557e674b473c853125d"
+  },
+  "profileFiles": [
+    {
+      "file": "package.json",
+      "expectedSha256": "abf8ec7f128cca6146ade95f3b92c07cc84289cac9bb2026a56dc1e74bd849d8",
+      "actualSha256": "abf8ec7f128cca6146ade95f3b92c07cc84289cac9bb2026a56dc1e74bd849d8"
+    },
+    {
+      "file": "cordis.patch.yml",
+      "expectedSha256": "9e7669b8dca3a5bf78500b7e9ce309f29a0c2050b2bbf5ea84035b23cf60c752",
+      "actualSha256": "9e7669b8dca3a5bf78500b7e9ce309f29a0c2050b2bbf5ea84035b23cf60c752"
+    },
+    {
+      "file": "cordis.yml",
+      "expectedSha256": "c300dcf2ebc5f02062d6591268d29d3db6fe45e0cb138f5467276fe2ba06076e",
+      "actualSha256": "c300dcf2ebc5f02062d6591268d29d3db6fe45e0cb138f5467276fe2ba06076e"
+    }
+  ],
+  "profileUnchanged": true,
+  "oldGlobalGateEnabled": false
+}

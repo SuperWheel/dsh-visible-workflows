@@ -1,0 +1,318 @@
+{
+  "scope": "installed-desktop-host-main and runProfile; original 190-row profile composed only in memory, fixed restricted modules and current workflow build replacement; scratch HOME/data and TCP port, no model call or production activation",
+  "productionProfileChanged": false,
+  "realDesktopMainExecuted": true,
+  "bootActive": true,
+  "readyIpcReceived": true,
+  "fatal": false,
+  "timedOut": false,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "office": {
+    "available": false,
+    "reason": "OFFICE_UNADAPTED_TO_SECRET_ISOLATION"
+  },
+  "stages": [
+    {
+      "stage": "pinned-inputs-verified"
+    },
+    {
+      "stage": "original-profile-loaded"
+    },
+    {
+      "stage": "runtime-matched"
+    },
+    {
+      "stage": "runtime-replaced",
+      "resolutionChecks": {
+        "@deepseek-ai/dsh-commands": "/Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-commands/package.json",
+        "@deepseek-ai/dsh-goal": "/Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-goal/package.json",
+        "@deepseek-ai/dsh-message-feedback": "/Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-message-feedback/package.json",
+        "@deepseek-ai/dsh-host-plugin-inventory": "/Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-host-plugin-inventory/package.json"
+      }
+    },
+    {
+      "stage": "full-original-graph-composed",
+      "count": 190
+    },
+    {
+      "stage": "pinned-inputs-verified"
+    },
+    {
+      "stage": "after-sync-mount-SystemPrompt",
+      "contextChecks": {
+        "loader": true,
+        "scopeChanged": false,
+        "rootFiberState": 2
+      }
+    },
+    {
+      "stage": "after-sync-mount-ToolRuntime",
+      "contextChecks": {
+        "loader": true,
+        "scopeChanged": false,
+        "rootFiberState": 2
+      }
+    },
+    {
+      "stage": "after-sync-mount-LocalSubprocessRuntime",
+      "contextChecks": {
+        "loader": true,
+        "scopeChanged": false,
+        "rootFiberState": 2
+      }
+    },
+    {
+      "stage": "before-composition-loader-true"
+    },
+    {
+      "stage": "full-runtime-verified",
+      "durationMs": 1959
+    },
+    {
+      "stage": "after-composition-loader-true"
+    },
+    {
+      "stage": "after-office-loader-true"
+    },
+    {
+      "stage": "before-isolation-loader-true"
+    },
+    {
+      "stage": "service-subprocess",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 2,
+        "providerRoot": true
+      }
+    },
+    {
+      "stage": "service-sandbox",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 2,
+        "providerRoot": true
+      }
+    },
+    {
+      "stage": "service-fs",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 2,
+        "providerRoot": true
+      }
+    },
+    {
+      "stage": "service-workflowIsolation",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 2,
+        "providerRoot": true
+      }
+    },
+    {
+      "stage": "service-secretIsolationBoundary",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 2,
+        "providerRoot": true,
+        "boundary": "assembling"
+      }
+    },
+    {
+      "stage": "after-isolation-loader-true"
+    },
+    {
+      "stage": "after-seal-loader-true"
+    },
+    {
+      "stage": "before-mount-loader-true"
+    },
+    {
+      "stage": "after-sync-mount-PinnedConsumerInclude",
+      "contextChecks": {
+        "loader": true,
+        "scopeChanged": false,
+        "rootFiberState": 2
+      }
+    },
+    {
+      "stage": "service-loader",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "Loader",
+        "providerState": 2,
+        "providerRoot": false,
+        "boundary": "active"
+      }
+    },
+    {
+      "stage": "service-subprocess",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 5,
+        "providerRoot": true,
+        "boundary": "active"
+      }
+    },
+    {
+      "stage": "service-sandbox",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 5,
+        "providerRoot": true,
+        "boundary": "revoked"
+      }
+    },
+    {
+      "stage": "service-fs",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 5,
+        "providerRoot": true,
+        "boundary": "revoked"
+      }
+    },
+    {
+      "stage": "service-workflowIsolation",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 5,
+        "providerRoot": true,
+        "boundary": "revoked"
+      }
+    },
+    {
+      "stage": "service-secretIsolationBoundary",
+      "contextChecks": {
+        "loader": true,
+        "providerName": "root",
+        "providerState": 5,
+        "providerRoot": true,
+        "boundary": "revoked"
+      }
+    },
+    {
+      "stage": "service-secretIsolationBoundary",
+      "contextChecks": {
+        "loader": true,
+        "providerRoot": false
+      }
+    },
+    {
+      "stage": "service-workflowIsolation",
+      "contextChecks": {
+        "loader": true,
+        "providerRoot": false
+      }
+    },
+    {
+      "stage": "service-fs",
+      "contextChecks": {
+        "loader": true,
+        "providerRoot": false
+      }
+    },
+    {
+      "stage": "service-sandbox",
+      "contextChecks": {
+        "loader": true,
+        "providerRoot": false
+      }
+    },
+    {
+      "stage": "service-subprocess",
+      "contextChecks": {
+        "loader": true,
+        "providerRoot": false
+      }
+    }
+  ],
+  "errorKinds": [],
+  "diagnosticKinds": [],
+  "sourceFrames": [
+    "    at root.fiber.dispose (file:///private/tmp/dsh-full-graph-20261017/home/profiles/desktop/bootstrap.mjs:19:138)",
+    "    at file:///Applications/DeepSeek%20Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh/lib/profile-boot-BZ2ZjNWi.js:232:51",
+    "    at file:///Applications/DeepSeek%20Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh/lib/profile-boot-BZ2ZjNWi.js:233:10",
+    "    at dispose (file:///Applications/DeepSeek%20Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh/lib/profile-boot-BZ2ZjNWi.js:239:4)",
+    "    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+    "    at async file:///Applications/DeepSeek%20Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-desktop-host/lib/index.js:259:3"
+  ],
+  "unreadyAtFailure": [],
+  "inactiveConsumers": [
+    {
+      "id": "agent-preset-registry",
+      "name": "@deepseek-ai/dsh-agent-preset-registry",
+      "state": 2
+    },
+    {
+      "id": "tool-goal",
+      "name": "@deepseek-ai/dsh-tool-goal",
+      "state": 4
+    },
+    {
+      "id": "command-goal",
+      "name": "@deepseek-ai/dsh-command-goal",
+      "state": 4
+    },
+    {
+      "id": "tool-todo",
+      "name": "@deepseek-ai/dsh-tool-todo",
+      "state": 4
+    },
+    {
+      "id": "agent-instructions",
+      "name": "@deepseek-ai/dsh-agent-instructions",
+      "state": 4
+    },
+    {
+      "id": "tool-web",
+      "name": "@deepseek-ai/dsh-tool-web",
+      "state": 4
+    },
+    {
+      "id": "tool-skill",
+      "name": "@deepseek-ai/dsh-tool-skill",
+      "state": 4
+    },
+    {
+      "id": "tool-jobs",
+      "name": "@deepseek-ai/dsh-tool-jobs",
+      "state": 4
+    },
+    {
+      "id": "tool-fs-search",
+      "name": "@deepseek-ai/dsh-tool-fs-search",
+      "state": 4
+    },
+    {
+      "id": "tool-fs",
+      "name": "@deepseek-ai/dsh-tool-fs",
+      "state": 4
+    },
+    {
+      "id": "tool-bash",
+      "name": "@deepseek-ai/dsh-tool-bash",
+      "state": 4
+    },
+    {
+      "id": "skill-filesystem",
+      "name": "@deepseek-ai/dsh-skill-filesystem",
+      "state": 4
+    }
+  ],
+  "sanitizedCodes": [],
+  "rawOutputBytesSuppressed": 249,
+  "secretReady": false
+}

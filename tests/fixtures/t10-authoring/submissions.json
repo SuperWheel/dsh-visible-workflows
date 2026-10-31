@@ -1,0 +1,2804 @@
+[
+  {
+    "journal": ".test-data/t09-par/shard-3/events.jsonl",
+    "journalSha256": "602648155dff2d40d238aae068876351ace44a622eee7f5fdba5db8f5f19699b",
+    "line": 40,
+    "caseId": "container",
+    "arm": "template-fill",
+    "repeat": 0,
+    "status": "failed",
+    "submissionsLog": [
+      {
+        "submission": {
+          "chains": [
+            {
+              "key": "root-flow",
+              "nodes": [
+                "start",
+                "iterateItems",
+                "result"
+              ]
+            },
+            {
+              "key": "inner-line",
+              "nodes": [
+                "generateItemLine"
+              ]
+            }
+          ],
+          "coverage": {
+            "R1": [
+              "start",
+              "iterateItems",
+              "generateItemLine",
+              "result"
+            ]
+          },
+          "forms": [
+            {
+              "key": "start",
+              "template": "input",
+              "title": "用户输入",
+              "values": {
+                "cache": "never",
+                "fields": [
+                  {
+                    "label": "items（字符串数组）",
+                    "name": "items",
+                    "required": true,
+                    "type": "json"
+                  }
+                ]
+              }
+            },
+            {
+              "key": "iterateItems",
+              "template": "iteration",
+              "title": "遍历 items",
+              "values": {
+                "errorMode": "terminate",
+                "iterator": "input.items",
+                "outputVariable": "generateItemLine.text",
+                "parallel": false
+              }
+            },
+            {
+              "key": "generateItemLine",
+              "scope": [
+                "iterateItems"
+              ],
+              "template": "template",
+              "title": "生成项文本",
+              "values": {
+                "cache": "never",
+                "inputs": {
+                  "item": "{{item}}"
+                },
+                "text": "项：{{item}}"
+              }
+            },
+            {
+              "key": "result",
+              "template": "output",
+              "title": "输出结果",
+              "values": {
+                "outputName": "result",
+                "text": "{{iterateItems.text}}"
+              }
+            }
+          ],
+          "summary": "输入 items（json 字符串数组）经 iteration 容器逐项遍历：子图内 template 节点用当前项 item 生成「项：{item}」，outputVariable 收集其 text 且迭代按输入顺序汇集；最终引用容器的紧凑 JSON 文本输出，outputName=result。空数组时容器输出 []。未使用 template 循环、代码、模型或工具替代 iteration。",
+          "title": "逐项生成「项：{item}」并汇总为数组 JSON"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 1,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "remove",
+              "path": "/chainsByKey/inner-line/nodes"
+            }
+          ],
+          "summary": "移除单节点内层链条：子图仅 generateItemLine 一个节点，容器的内部入口与 outputVariable 出口唯一，无需显式 chain。其余设计保持不变。"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 2,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "remove",
+              "path": "/chainsByKey/inner-line"
+            }
+          ],
+          "summary": "彻底删除 inner-line 链条：容器子图仅 generateItemLine 一个节点，内部入口与 outputVariable 出口唯一，无需 chain；根层链 start→iterateItems→result 保持不变。"
+        }
+      }
+    ],
+    "feedback": [
+      {
+        "status": "repairable",
+        "draftRevision": 1,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Too small: expected array to have >=2 items",
+            "path": "/chainsByKey/inner-line/nodes",
+            "allowedPaths": [
+              "/chainsByKey/inner-line/nodes"
+            ],
+            "actualType": "array"
+          }
+        ],
+        "fragments": {
+          "/chainsByKey/inner-line/nodes": [
+            "generateItemLine"
+          ]
+        },
+        "allowedPaths": [
+          "/chainsByKey/inner-line/nodes"
+        ],
+        "remainingSubmissions": 2
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 2,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Invalid input: expected array, received undefined",
+            "path": "/chainsByKey/inner-line/nodes",
+            "allowedPaths": [
+              "/chainsByKey/inner-line/nodes"
+            ],
+            "actualType": "undefined"
+          }
+        ],
+        "fragments": {},
+        "allowedPaths": [
+          "/chainsByKey/inner-line/nodes"
+        ],
+        "remainingSubmissions": 1
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 2,
+        "issues": [
+          {
+            "code": "PATCH_SCOPE",
+            "message": "补丁不在本轮错误及依赖修复范围",
+            "path": "/chainsByKey/inner-line",
+            "allowedPaths": [
+              "/chainsByKey/inner-line"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {},
+        "allowedPaths": [
+          "/chainsByKey/inner-line/nodes"
+        ],
+        "remainingSubmissions": 0
+      }
+    ]
+  },
+  {
+    "journal": ".test-data/t09-par/shard-3/events.jsonl",
+    "journalSha256": "602648155dff2d40d238aae068876351ace44a622eee7f5fdba5db8f5f19699b",
+    "line": 58,
+    "caseId": "container",
+    "arm": "compact-repair",
+    "repeat": 0,
+    "status": "failed",
+    "submissionsLog": [
+      {
+        "submission": {
+          "assumptions": [
+            "iteration 输出未明确声明紧凑格式，因此用根层 template 的 tojson 过滤器保证紧凑 JSON 文本；该 template 不含 for/if，不替代 iteration。",
+            "内部子图按目录 containers 示例包含唯一 input 与 output 节点，outputVariable 直接取内部 template 的 text。",
+            "items 超 1000 项时受 iteration 上限限制（最多 1000 项）。"
+          ],
+          "chains": [
+            {
+              "key": "flow",
+              "nodes": [
+                "start",
+                "iterate",
+                "toJson",
+                "result"
+              ]
+            }
+          ],
+          "coverage": {
+            "R1": [
+              "start",
+              "iterate",
+              "makeItem",
+              "toJson",
+              "result"
+            ]
+          },
+          "description": "R1：输入 items（json，字符串数组）；iteration 以裸路径 input.items 逐项执行内部子图，内部 template 按 item 生成“项：{item}”，outputVariable 取其 text 按输入顺序汇集；根层 template 用 tojson 过滤器把收集数组渲染为紧凑 JSON 文本（空数组为 []），由 result 展示。未用模板循环/代码/模型/工具替代 iteration。",
+          "nodes": [
+            {
+              "config": {
+                "fields": [
+                  {
+                    "label": "items（字符串数组）",
+                    "name": "items",
+                    "required": true,
+                    "type": "json"
+                  }
+                ]
+              },
+              "key": "start",
+              "kind": "input",
+              "title": "工作流输入"
+            },
+            {
+              "config": {
+                "body": {
+                  "edges": [
+                    {
+                      "source": "innerIn",
+                      "target": "makeItem"
+                    },
+                    {
+                      "source": "makeItem",
+                      "target": "innerOut"
+                    }
+                  ],
+                  "nodes": [
+                    {
+                      "config": {
+                        "fields": []
+                      },
+                      "id": "innerIn",
+                      "kind": "input",
+                      "title": "内部入口"
+                    },
+                    {
+                      "config": {
+                        "text": "项：{{item}}"
+                      },
+                      "id": "makeItem",
+                      "kind": "template",
+                      "title": "生成项文本"
+                    },
+                    {
+                      "config": {
+                        "outputName": "result",
+                        "text": "{{makeItem.text}}"
+                      },
+                      "id": "innerOut",
+                      "kind": "output",
+                      "title": "内部出口"
+                    }
+                  ]
+                },
+                "concurrency": 3,
+                "errorMode": "terminate",
+                "iterator": "input.items",
+                "outputVariable": "makeItem.text",
+                "parallel": false
+              },
+              "key": "iterate",
+              "kind": "iteration",
+              "title": "遍历 items"
+            },
+            {
+              "config": {
+                "inputs": {
+                  "rows": "{{iterate.result}}"
+                },
+                "text": "{{rows | tojson}}"
+              },
+              "key": "toJson",
+              "kind": "template",
+              "title": "紧凑 JSON 化"
+            },
+            {
+              "config": {
+                "outputName": "result",
+                "text": "{{toJson.text}}"
+              },
+              "key": "result",
+              "kind": "output",
+              "title": "输出"
+            }
+          ],
+          "summary": "start 声明 json 输入 items → iterate 容器逐项执行内部子图（innerIn → makeItem 生成“项：{{item}}” → innerOut），按输入顺序收集 makeItem.text → toJson 将结果数组渲染为紧凑 JSON 文本 → result 输出；空数组时迭代收集为 []，输出 []。",
+          "title": "迭代遍历 items 生成项文本并输出紧凑 JSON"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 1,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "replace",
+              "path": "/nodesByKey/iterate/config",
+              "value": {
+                "concurrency": 3,
+                "errorMode": "terminate",
+                "iterator": "input.items",
+                "outputVariable": "makeItem.text",
+                "parallel": false
+              }
+            }
+          ],
+          "summary": "按反馈移除规划投影中不允许的 config.body；内部子图（innerIn → makeItem 生成“项：{{item}}” → innerOut）由 Host 根据 scope 组装，其余迭代配置保持不变。"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 2,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "remove",
+              "path": "/coverage/R1/2"
+            }
+          ],
+          "summary": "从 R1 覆盖中移除视图不存在的 makeItem（内部模板由 iteration 容器 body 承载，不可单独寻址）；R1 改由 start、iterate、toJson、result 真实节点逐项覆盖。"
+        }
+      }
+    ],
+    "feedback": [
+      {
+        "status": "repairable",
+        "draftRevision": 1,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "config.body 由 Host 根据 scope 组装",
+            "path": "/nodesByKey/iterate/config",
+            "allowedPaths": [
+              "/nodesByKey/iterate/config"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {
+          "/nodesByKey/iterate/config": {
+            "body": {
+              "edges": [
+                {
+                  "source": "innerIn",
+                  "target": "makeItem"
+                },
+                {
+                  "source": "makeItem",
+                  "target": "innerOut"
+                }
+              ],
+              "nodes": [
+                {
+                  "config": {
+                    "fields": []
+                  },
+                  "id": "innerIn",
+                  "kind": "input",
+                  "title": "内部入口"
+                },
+                {
+                  "config": {
+                    "text": "项：{{item}}"
+                  },
+                  "id": "makeItem",
+                  "kind": "template",
+                  "title": "生成项文本"
+                },
+                {
+                  "config": {
+                    "outputName": "result",
+                    "text": "{{makeItem.text}}"
+                  },
+                  "id": "innerOut",
+                  "kind": "output",
+                  "title": "内部出口"
+                }
+              ]
+            },
+            "concurrency": 3,
+            "errorMode": "terminate",
+            "iterator": "input.items",
+            "outputVariable": "makeItem.text",
+            "parallel": false
+          }
+        },
+        "allowedPaths": [
+          "/nodesByKey/iterate/config"
+        ],
+        "remainingSubmissions": 2
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 2,
+        "issues": [
+          {
+            "code": "UNKNOWN_REFERENCE",
+            "message": "不存在的创作引用 makeItem",
+            "path": "/coverage/R1/2",
+            "expected": {
+              "type": "string",
+              "enum": [
+                "start",
+                "iterate",
+                "toJson",
+                "result",
+                "n1",
+                "n2"
+              ]
+            },
+            "candidates": [
+              "start",
+              "iterate",
+              "toJson",
+              "result",
+              "n1",
+              "n2"
+            ],
+            "allowedPaths": [
+              "/coverage/R1/2"
+            ],
+            "actualType": "string"
+          }
+        ],
+        "fragments": {
+          "/coverage/R1/2": "makeItem"
+        },
+        "allowedPaths": [
+          "/coverage/R1/2"
+        ],
+        "remainingSubmissions": 1
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 3,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Too small: expected array to have >=1 items",
+            "path": "/nodes",
+            "allowedPaths": [],
+            "actualType": "undefined"
+          }
+        ],
+        "fragments": {},
+        "allowedPaths": [],
+        "remainingSubmissions": 0
+      }
+    ]
+  },
+  {
+    "journal": ".test-data/t09-par/shard-3/events.jsonl",
+    "journalSha256": "602648155dff2d40d238aae068876351ace44a622eee7f5fdba5db8f5f19699b",
+    "line": 102,
+    "caseId": "container",
+    "arm": "compact-repair",
+    "repeat": 1,
+    "status": "failed",
+    "submissionsLog": [
+      {
+        "submission": {
+          "assumptions": [
+            "iteration 输出 text 即收集结果的紧凑 JSON 文本，空数组渲染为 \"[]\"，满足最终 result 要求。",
+            "迭代体模板直接使用容器提供的 item 局部变量（{{item}}），与目录示例一致，无需额外 inputs 绑定。",
+            "items 为 json 输入，运行时按字符串数组提供；每次运行遍历一次，不做并行以严格保持输入顺序。"
+          ],
+          "chains": [
+            {
+              "key": "main_flow",
+              "nodes": [
+                "start",
+                "item_iter",
+                "result"
+              ]
+            }
+          ],
+          "coverage": {
+            "R1": [
+              "start",
+              "item_iter",
+              "result"
+            ]
+          },
+          "description": "用户输入 items（json 字符串数组），iteration 容器逐项执行子图：模板生成“项：{item}”文本，outputVariable 按输入顺序收集各模板 text；容器输出 text 即结果数组紧凑 JSON 文本（空数组为 []），由 result 节点展示。未用 template 循环/代码/模型/工具替代 iteration。",
+          "nodes": [
+            {
+              "config": {
+                "fields": [
+                  {
+                    "label": "items（字符串数组）",
+                    "name": "items",
+                    "required": true,
+                    "type": "json"
+                  }
+                ]
+              },
+              "key": "start",
+              "kind": "input",
+              "title": "工作流输入 items"
+            },
+            {
+              "config": {
+                "body": {
+                  "edges": [
+                    {
+                      "source": "inner_start",
+                      "target": "inner_tpl"
+                    },
+                    {
+                      "source": "inner_tpl",
+                      "target": "inner_out"
+                    }
+                  ],
+                  "nodes": [
+                    {
+                      "config": {
+                        "fields": []
+                      },
+                      "id": "inner_start",
+                      "kind": "input",
+                      "title": "内部入口"
+                    },
+                    {
+                      "config": {
+                        "text": "项：{{item}}"
+                      },
+                      "id": "inner_tpl",
+                      "kind": "template",
+                      "title": "项文本生成"
+                    },
+                    {
+                      "config": {
+                        "outputName": "result",
+                        "text": "{{inner_tpl.text}}"
+                      },
+                      "id": "inner_out",
+                      "kind": "output",
+                      "title": "内部出口"
+                    }
+                  ]
+                },
+                "errorMode": "terminate",
+                "iterator": "start.items",
+                "outputVariable": "inner_tpl.text",
+                "parallel": false
+              },
+              "key": "item_iter",
+              "kind": "iteration",
+              "title": "遍历 items"
+            },
+            {
+              "config": {
+                "outputName": "result",
+                "text": "{{item_iter.text}}"
+              },
+              "key": "result",
+              "kind": "output",
+              "title": "输出结果数组 JSON"
+            }
+          ],
+          "summary": "创建含 iteration 容器的工作流：input items → iteration（子图模板“项：{{item}}”逐项收集 text）→ 输出结果数组紧凑 JSON。",
+          "title": "迭代生成“项：{item}”并收集为数组 JSON"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 1,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "replace",
+              "path": "/nodesByKey/item_iter/config",
+              "value": {
+                "errorMode": "terminate",
+                "iterator": "start.items",
+                "outputVariable": "inner_tpl.text",
+                "parallel": false
+              }
+            }
+          ],
+          "summary": "移除 item_iter.config.body（由 Host 按 scope 组装），保留 iterator/outputVariable/errorMode/parallel；内部子图 inner_start→inner_tpl→inner_out 及 outputVariable 不变。"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 2,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "add",
+              "path": "/title",
+              "value": "迭代生成“项：{item}”并收集为数组 JSON"
+            },
+            {
+              "op": "add",
+              "path": "/description",
+              "value": "用户输入 items（json 字符串数组），iteration 容器逐项执行子图：模板生成“项：{item}”，outputVariable 按输入顺序收集各模板 text；容器 text 输出即结果数组紧凑 JSON 文本（空数组为 []），由 result 节点展示。内部子图节点以 scope=[item_iter] 声明，body 由 Host 组装。"
+            },
+            {
+              "op": "add",
+              "path": "/nodes",
+              "value": [
+                {
+                  "config": {
+                    "fields": [
+                      {
+                        "label": "items（字符串数组）",
+                        "name": "items",
+                        "required": true,
+                        "type": "json"
+                      }
+                    ]
+                  },
+                  "key": "start",
+                  "kind": "input",
+                  "title": "工作流输入 items"
+                },
+                {
+                  "config": {
+                    "errorMode": "terminate",
+                    "iterator": "start.items",
+                    "outputVariable": "inner_tpl.text",
+                    "parallel": false
+                  },
+                  "key": "item_iter",
+                  "kind": "iteration",
+                  "title": "遍历 items"
+                },
+                {
+                  "config": {
+                    "fields": []
+                  },
+                  "key": "inner_start",
+                  "kind": "input",
+                  "scope": [
+                    "item_iter"
+                  ],
+                  "title": "内部入口"
+                },
+                {
+                  "config": {
+                    "text": "项：{{item}}"
+                  },
+                  "key": "inner_tpl",
+                  "kind": "template",
+                  "scope": [
+                    "item_iter"
+                  ],
+                  "title": "项文本生成"
+                },
+                {
+                  "config": {
+                    "outputName": "result",
+                    "text": "{{inner_tpl.text}}"
+                  },
+                  "key": "inner_out",
+                  "kind": "output",
+                  "scope": [
+                    "item_iter"
+                  ],
+                  "title": "内部出口"
+                },
+                {
+                  "config": {
+                    "outputName": "result",
+                    "text": "{{item_iter.text}}"
+                  },
+                  "key": "result",
+                  "kind": "output",
+                  "title": "输出结果数组 JSON"
+                }
+              ]
+            },
+            {
+              "op": "add",
+              "path": "/chains",
+              "value": [
+                {
+                  "key": "main_flow",
+                  "nodes": [
+                    "start",
+                    "item_iter",
+                    "result"
+                  ]
+                },
+                {
+                  "key": "inner_flow",
+                  "nodes": [
+                    "inner_start",
+                    "inner_tpl",
+                    "inner_out"
+                  ],
+                  "scope": [
+                    "item_iter"
+                  ]
+                }
+              ]
+            },
+            {
+              "op": "add",
+              "path": "/coverage",
+              "value": {
+                "R1": [
+                  "start",
+                  "item_iter",
+                  "inner_start",
+                  "inner_tpl",
+                  "inner_out",
+                  "result"
+                ]
+              }
+            }
+          ],
+          "summary": "恢复完整声明并修正：item_iter 配置不含 body（由 Host 按 scope 组装），内部子图 inner_start→inner_tpl→inner_out 以 scope=[item_iter] 声明，iterator=start.items、outputVariable=inner_tpl.text；根链 start→item_iter→result 输出 {{item_iter.text}}。"
+        }
+      }
+    ],
+    "feedback": [
+      {
+        "status": "repairable",
+        "draftRevision": 1,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "config.body 由 Host 根据 scope 组装",
+            "path": "/nodesByKey/item_iter/config",
+            "allowedPaths": [
+              "/nodesByKey/item_iter/config"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {
+          "/nodesByKey/item_iter/config": {
+            "body": {
+              "edges": [
+                {
+                  "source": "inner_start",
+                  "target": "inner_tpl"
+                },
+                {
+                  "source": "inner_tpl",
+                  "target": "inner_out"
+                }
+              ],
+              "nodes": [
+                {
+                  "config": {
+                    "fields": []
+                  },
+                  "id": "inner_start",
+                  "kind": "input",
+                  "title": "内部入口"
+                },
+                {
+                  "config": {
+                    "text": "项：{{item}}"
+                  },
+                  "id": "inner_tpl",
+                  "kind": "template",
+                  "title": "项文本生成"
+                },
+                {
+                  "config": {
+                    "outputName": "result",
+                    "text": "{{inner_tpl.text}}"
+                  },
+                  "id": "inner_out",
+                  "kind": "output",
+                  "title": "内部出口"
+                }
+              ]
+            },
+            "errorMode": "terminate",
+            "iterator": "start.items",
+            "outputVariable": "inner_tpl.text",
+            "parallel": false
+          }
+        },
+        "allowedPaths": [
+          "/nodesByKey/item_iter/config"
+        ],
+        "remainingSubmissions": 2
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 2,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Too small: expected array to have >=1 items",
+            "path": "/nodes",
+            "allowedPaths": [],
+            "actualType": "undefined"
+          }
+        ],
+        "fragments": {},
+        "allowedPaths": [],
+        "remainingSubmissions": 1
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 2,
+        "issues": [
+          {
+            "code": "PATCH_SCOPE",
+            "message": "补丁不在本轮错误及依赖修复范围",
+            "path": "/title",
+            "allowedPaths": [
+              "/title"
+            ],
+            "actualType": "string"
+          }
+        ],
+        "fragments": {},
+        "allowedPaths": [],
+        "remainingSubmissions": 0
+      }
+    ]
+  },
+  {
+    "journal": ".test-data/t09-par/shard-3/events.jsonl",
+    "journalSha256": "602648155dff2d40d238aae068876351ace44a622eee7f5fdba5db8f5f19699b",
+    "line": 121,
+    "caseId": "container",
+    "arm": "template-fill",
+    "repeat": 1,
+    "status": "success",
+    "submissionsLog": [
+      {
+        "submission": {
+          "chains": [
+            {
+              "description": "根层顺序段：输入 → 迭代容器 → 紧凑打包 → 输出",
+              "key": "main",
+              "nodes": [
+                "start",
+                "iter_items",
+                "pack",
+                "result"
+              ]
+            }
+          ],
+          "coverage": {
+            "R1": [
+              "start",
+              "iter_items",
+              "gen_item",
+              "pack",
+              "result"
+            ]
+          },
+          "description": "输入 JSON 字符串数组 items，用 iteration 容器逐项执行内部 template 生成“项：{item}”，按输入顺序收集 text，最终输出结果数组的紧凑 JSON 文本（空数组为 []）。",
+          "forms": [
+            {
+              "key": "start",
+              "template": "input",
+              "title": "用户输入",
+              "values": {
+                "fields": [
+                  {
+                    "label": "items（JSON 字符串数组）",
+                    "name": "items",
+                    "required": true,
+                    "type": "json"
+                  }
+                ]
+              }
+            },
+            {
+              "key": "iter_items",
+              "template": "iteration",
+              "title": "遍历 items",
+              "values": {
+                "errorMode": "terminate",
+                "iterator": "start.items",
+                "outputVariable": "gen_item.text",
+                "parallel": false
+              }
+            },
+            {
+              "key": "gen_item",
+              "scope": [
+                "iter_items"
+              ],
+              "template": "template",
+              "title": "生成项文本",
+              "values": {
+                "text": "项：{{item}}"
+              }
+            },
+            {
+              "key": "pack",
+              "template": "template",
+              "title": "紧凑 JSON 打包",
+              "values": {
+                "inputs": {
+                  "results": "{{iter_items.result}}"
+                },
+                "text": "{{results | tojson}}"
+              }
+            },
+            {
+              "key": "result",
+              "template": "output",
+              "title": "输出结果",
+              "values": {
+                "text": "{{pack.text}}"
+              }
+            }
+          ],
+          "summary": "start 声明 json 字段 items；iter_items 以裸路径 start.items 为迭代数组，outputVariable=gen_item.text 按输入顺序收集内部模板输出；gen_item 位于容器内，用子图变量 {{item}} 渲染“项：{item}”；pack 用 tojson 过滤器把 iter_items.result 序列化为紧凑 JSON（空数组自然得 []）；result 输出 pack.text。未用模板循环/代码/模型/工具替代 iteration。",
+          "title": "迭代生成“项：{item}”并输出紧凑 JSON 数组"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 1,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "replace",
+              "path": "/chainsByKey/main",
+              "value": {
+                "nodes": [
+                  "start",
+                  "iter_items",
+                  "pack",
+                  "result"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 2,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "replace",
+              "path": "/formsByKey",
+              "value": {
+                "gen_item": {
+                  "scope": [
+                    "iter_items"
+                  ],
+                  "template": "template",
+                  "title": "生成项文本",
+                  "values": {
+                    "text": "项：{{item}}"
+                  }
+                },
+                "inner_in": {
+                  "scope": [
+                    "iter_items"
+                  ],
+                  "template": "input",
+                  "title": "子图入口",
+                  "values": {
+                    "fields": []
+                  }
+                },
+                "iter_items": {
+                  "template": "iteration",
+                  "title": "遍历 items",
+                  "values": {
+                    "errorMode": "terminate",
+                    "iterator": "start.items",
+                    "outputVariable": "gen_item.text",
+                    "parallel": false
+                  }
+                },
+                "pack": {
+                  "template": "template",
+                  "title": "紧凑 JSON 打包",
+                  "values": {
+                    "inputs": {
+                      "results": "{{iter_items.result}}"
+                    },
+                    "text": "{{results | tojson}}"
+                  }
+                },
+                "result": {
+                  "template": "output",
+                  "title": "输出结果",
+                  "values": {
+                    "text": "{{pack.text}}"
+                  }
+                },
+                "start": {
+                  "template": "input",
+                  "title": "用户输入",
+                  "values": {
+                    "fields": [
+                      {
+                        "label": "items（JSON 字符串数组）",
+                        "name": "items",
+                        "required": true,
+                        "type": "json"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/chainsByKey",
+              "value": {
+                "iter_body": {
+                  "nodes": [
+                    "inner_in",
+                    "gen_item"
+                  ]
+                },
+                "main": {
+                  "nodes": [
+                    "start",
+                    "iter_items",
+                    "pack",
+                    "result"
+                  ]
+                }
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/summary",
+              "value": "start 声明 json 字段 items；iter_items 以裸路径 start.items 为迭代数组，outputVariable=gen_item.text 按输入顺序收集内部模板输出；inner_in 为迭代内层唯一入口（fields:[]），经 iter_body 链连接 gen_item，gen_item 用子图变量 {{item}} 渲染“项：{item}”；pack 用 tojson 过滤器把 iter_items.result 序列化为紧凑 JSON（空数组自然得 []）；result 输出 pack.text。未用模板循环/代码/模型/工具替代 iteration。"
+            }
+          ]
+        }
+      }
+    ],
+    "feedback": [
+      {
+        "status": "repairable",
+        "draftRevision": 1,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/chainsByKey/main",
+            "allowedPaths": [
+              "/chainsByKey/main"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {
+          "/chainsByKey/main": {
+            "description": "根层顺序段：输入 → 迭代容器 → 紧凑打包 → 输出",
+            "nodes": [
+              "start",
+              "iter_items",
+              "pack",
+              "result"
+            ]
+          }
+        },
+        "allowedPaths": [
+          "/chainsByKey/main"
+        ],
+        "remainingSubmissions": 2
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 2,
+        "issues": [
+          {
+            "code": "REFERENCE_OUT_OF_SCOPE",
+            "message": "引用 allocated-1.text 在某些分支下不可用；请改用聚合节点/变量，或在两个分支上都产出所需值",
+            "path": "/formsByKey/iter_items/values",
+            "allowedPaths": [
+              "/formsByKey/iter_items/values"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_ENTRY",
+            "message": "每层规划图必须有且只有一个用户输入节点",
+            "allowedPaths": [
+              "/title",
+              "/description",
+              "/formsByKey",
+              "/chainsByKey",
+              "/linksByKey",
+              "/rolesByKey",
+              "/environmentByKey",
+              "/summary",
+              "/assumptions",
+              "/coverage"
+            ]
+          },
+          {
+            "code": "UNREACHABLE_NODE",
+            "message": "节点未连接到用户输入入口",
+            "path": "/formsByKey/gen_item/values",
+            "allowedPaths": [
+              "/formsByKey/gen_item/values"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {
+          "/formsByKey/iter_items/values": {
+            "errorMode": "terminate",
+            "iterator": "start.items",
+            "outputVariable": "gen_item.text",
+            "parallel": false
+          },
+          "/title": "迭代生成“项：{item}”并输出紧凑 JSON 数组",
+          "/description": "输入 JSON 字符串数组 items，用 iteration 容器逐项执行内部 template 生成“项：{item}”，按输入顺序收集 text，最终输出结果数组的紧凑 JSON 文本（空数组为 []）。",
+          "/formsByKey": {
+            "start": {
+              "template": "input",
+              "title": "用户输入",
+              "values": {
+                "fields": [
+                  {
+                    "label": "items（JSON 字符串数组）",
+                    "name": "items",
+                    "required": true,
+                    "type": "json"
+                  }
+                ]
+              }
+            },
+            "iter_items": {
+              "template": "iteration",
+              "title": "遍历 items",
+              "values": {
+                "errorMode": "terminate",
+                "iterator": "start.items",
+                "outputVariable": "gen_item.text",
+                "parallel": false
+              }
+            },
+            "gen_item": {
+              "scope": [
+                "iter_items"
+              ],
+              "template": "template",
+              "title": "生成项文本",
+              "values": {
+                "text": "项：{{item}}"
+              }
+            },
+            "pack": {
+              "template": "template",
+              "title": "紧凑 JSON 打包",
+              "values": {
+                "inputs": {
+                  "results": "{{iter_items.result}}"
+                },
+                "text": "{{results | tojson}}"
+              }
+            },
+            "result": {
+              "template": "output",
+              "title": "输出结果",
+              "values": {
+                "text": "{{pack.text}}"
+              }
+            }
+          },
+          "/chainsByKey": {
+            "main": {
+              "nodes": [
+                "start",
+                "iter_items",
+                "pack",
+                "result"
+              ]
+            }
+          },
+          "/summary": "start 声明 json 字段 items；iter_items 以裸路径 start.items 为迭代数组，outputVariable=gen_item.text 按输入顺序收集内部模板输出；gen_item 位于容器内，用子图变量 {{item}} 渲染“项：{item}”；pack 用 tojson 过滤器把 iter_items.result 序列化为紧凑 JSON（空数组自然得 []）；result 输出 pack.text。未用模板循环/代码/模型/工具替代 iteration。",
+          "/coverage": {
+            "R1": [
+              "start",
+              "iter_items",
+              "gen_item",
+              "pack",
+              "result"
+            ]
+          },
+          "/formsByKey/gen_item/values": {
+            "text": "项：{{item}}"
+          }
+        },
+        "allowedPaths": [
+          "/formsByKey/iter_items/values",
+          "/title",
+          "/description",
+          "/formsByKey",
+          "/chainsByKey",
+          "/linksByKey",
+          "/rolesByKey",
+          "/environmentByKey",
+          "/summary",
+          "/assumptions",
+          "/coverage",
+          "/formsByKey/gen_item/values"
+        ],
+        "remainingSubmissions": 1
+      }
+    ]
+  },
+  {
+    "journal": ".test-data/t09-par/shard-3/events.jsonl",
+    "journalSha256": "602648155dff2d40d238aae068876351ace44a622eee7f5fdba5db8f5f19699b",
+    "line": 161,
+    "caseId": "container",
+    "arm": "template-fill",
+    "repeat": 2,
+    "status": "failed",
+    "submissionsLog": [
+      {
+        "submission": {
+          "assumptions": [
+            "iterator 使用裸路径 start.items 指向输入节点 items（json 字符串数组，默认 \"[]\"，便于空数组场景演示输出 \"[]\"）",
+            "迭代容器按输入顺序收集 outputVariable=fmt.text（parallel=false）；子图当前项引用固定为 {{item}}，不是 {{input.item}}",
+            "最终紧凑 JSON 通过 template 的 tojson 过滤器保证（空数组渲染为 []），输出节点 outputName=result；未使用 code/llm/工具替代 iteration"
+          ],
+          "chains": [
+            {
+              "description": "根层顺序连线：输入表单 → 迭代容器 → 紧凑 JSON 化 → 输出",
+              "key": "main",
+              "nodes": [
+                "start",
+                "iter",
+                "compact",
+                "result"
+              ]
+            }
+          ],
+          "coverage": {
+            "R1": [
+              "start",
+              "iter",
+              "fmt",
+              "compact",
+              "result"
+            ]
+          },
+          "description": "每次运行用 iteration 容器遍历输入 items（json 字符串数组），容器内子图用 template 对每项生成“项：{item}”，按输入顺序收集 fmt.text；再经 template(tojson) 得到结果数组的紧凑 JSON 文本，最终 result 输出；空数组输出 []。未用 template 循环、code、模型或工具替代迭代。",
+          "forms": [
+            {
+              "key": "start",
+              "template": "input",
+              "title": "用户输入",
+              "values": {
+                "fields": [
+                  {
+                    "defaultValue": "[]",
+                    "label": "items",
+                    "name": "items",
+                    "required": true,
+                    "type": "json"
+                  }
+                ]
+              }
+            },
+            {
+              "key": "iter",
+              "template": "iteration",
+              "title": "遍历 items",
+              "values": {
+                "errorMode": "terminate",
+                "iterator": "start.items",
+                "outputVariable": "fmt.text",
+                "parallel": false
+              }
+            },
+            {
+              "key": "fmt",
+              "scope": [
+                "iter"
+              ],
+              "template": "template",
+              "title": "项格式化",
+              "values": {
+                "inputs": {
+                  "item": "{{item}}"
+                },
+                "text": "项：{{item}}"
+              }
+            },
+            {
+              "key": "compact",
+              "template": "template",
+              "title": "结果数组紧凑 JSON",
+              "values": {
+                "inputs": {
+                  "arr": "{{iter.result}}"
+                },
+                "text": "{{arr | tojson}}"
+              }
+            },
+            {
+              "key": "result",
+              "template": "output",
+              "title": "输出结果",
+              "values": {
+                "outputName": "result",
+                "text": "{{compact.text}}"
+              }
+            }
+          ],
+          "summary": "input(items) → iteration 遍历 start.items，容器内 template(fmt, scope=[iter]) 每项生成“项：{{item}}”，outputVariable=fmt.text 按序收集 → template(compact) 用 {{iter.result}} | tojson 渲染紧凑 JSON（空数组为 []）→ output(result) 展示。",
+          "title": "遍历 items 生成「项：{item}」并输出紧凑 JSON"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 1,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "replace",
+              "path": "/chainsByKey/main",
+              "value": {
+                "nodes": [
+                  "start",
+                  "iter",
+                  "compact",
+                  "result"
+                ]
+              }
+            }
+          ],
+          "summary": "移除 chain 的 description 字段（该 schema 仅允许 nodes），保留节点顺序 start → iter → compact → result；forms 与 coverage 保持不变。"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 2,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "add",
+              "path": "/formsByKey",
+              "value": {
+                "item_in": {
+                  "scope": [
+                    "iter"
+                  ],
+                  "template": "input",
+                  "title": "迭代项入口",
+                  "values": {
+                    "fields": []
+                  }
+                }
+              }
+            },
+            {
+              "op": "add",
+              "path": "/chainsByKey",
+              "value": {
+                "inner": {
+                  "nodes": [
+                    "item_in",
+                    "fmt"
+                  ]
+                }
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/summary",
+              "value": "input(items) → iteration 遍历 start.items：容器内子图以 input(item_in, fields:[]) 为入口，template(fmt) 对每项生成「项：{{item}}」，outputVariable=fmt.text 按输入顺序收集；template(compact) 将 {{iter.result}} 经 tojson 渲染为紧凑 JSON（空数组为 []），output(result) 输出。"
+            },
+            {
+              "op": "replace",
+              "path": "/description",
+              "value": "每次运行用 iteration 容器遍历输入 items（json 字符串数组）。容器内子图按层规则以 input 节点 item_in（fields:[]）为唯一入口，template(fmt) 对每项生成「项：{item}」（当前项用 {{item}} 引用），outputVariable=fmt.text 按输入顺序收集；再经 template(tojson) 得到结果数组的紧凑 JSON 文本，最终 result 输出；空数组输出 []。未用 template 循环、code、模型或工具替代迭代。"
+            },
+            {
+              "op": "replace",
+              "path": "/assumptions",
+              "value": [
+                "iterator 使用裸路径 start.items 指向输入节点 items（json 字符串数组，默认 \"[]\"，便于空数组场景演示输出 \"[]\"）",
+                "按「每层图有且只有一个用户输入节点」规则，iteration 内层子图增加 fields:[] 的 input 节点 item_in 作为入口，经 chain inner 连接 fmt",
+                "迭代容器按输入顺序收集 outputVariable=fmt.text（parallel=false）；子图当前项引用固定为 {{item}}，不是 input.item",
+                "最终紧凑 JSON 通过 template 的 tojson 过滤器保证（空数组渲染为 []），输出节点 outputName=result；未使用 code/llm/工具替代 iteration"
+              ]
+            }
+          ],
+          "summary": "为 iteration 内层子图补充唯一的 input 入口节点 item_in（fields:[]，scope=[iter]），并用 chain inner 连接 item_in → fmt，使 fmt 可达且 outputVariable=fmt.text 引用在所有分支可用；根层链 start → iter → compact → result 保持不变。"
+        }
+      }
+    ],
+    "feedback": [
+      {
+        "status": "repairable",
+        "draftRevision": 1,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/chainsByKey/main",
+            "allowedPaths": [
+              "/chainsByKey/main"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {
+          "/chainsByKey/main": {
+            "description": "根层顺序连线：输入表单 → 迭代容器 → 紧凑 JSON 化 → 输出",
+            "nodes": [
+              "start",
+              "iter",
+              "compact",
+              "result"
+            ]
+          }
+        },
+        "allowedPaths": [
+          "/chainsByKey/main"
+        ],
+        "remainingSubmissions": 2
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 2,
+        "issues": [
+          {
+            "code": "REFERENCE_OUT_OF_SCOPE",
+            "message": "引用 allocated-1.text 在某些分支下不可用；请改用聚合节点/变量，或在两个分支上都产出所需值",
+            "path": "/formsByKey/iter/values",
+            "allowedPaths": [
+              "/formsByKey/iter/values"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_ENTRY",
+            "message": "每层规划图必须有且只有一个用户输入节点",
+            "allowedPaths": [
+              "/title",
+              "/description",
+              "/formsByKey",
+              "/chainsByKey",
+              "/linksByKey",
+              "/rolesByKey",
+              "/environmentByKey",
+              "/summary",
+              "/assumptions",
+              "/coverage"
+            ]
+          },
+          {
+            "code": "UNREACHABLE_NODE",
+            "message": "节点未连接到用户输入入口",
+            "path": "/formsByKey/fmt/values",
+            "allowedPaths": [
+              "/formsByKey/fmt/values"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {
+          "/formsByKey/iter/values": {
+            "errorMode": "terminate",
+            "iterator": "start.items",
+            "outputVariable": "fmt.text",
+            "parallel": false
+          },
+          "/title": "遍历 items 生成「项：{item}」并输出紧凑 JSON",
+          "/description": "每次运行用 iteration 容器遍历输入 items（json 字符串数组），容器内子图用 template 对每项生成“项：{item}”，按输入顺序收集 fmt.text；再经 template(tojson) 得到结果数组的紧凑 JSON 文本，最终 result 输出；空数组输出 []。未用 template 循环、code、模型或工具替代迭代。",
+          "/formsByKey": {
+            "start": {
+              "template": "input",
+              "title": "用户输入",
+              "values": {
+                "fields": [
+                  {
+                    "defaultValue": "[]",
+                    "label": "items",
+                    "name": "items",
+                    "required": true,
+                    "type": "json"
+                  }
+                ]
+              }
+            },
+            "iter": {
+              "template": "iteration",
+              "title": "遍历 items",
+              "values": {
+                "errorMode": "terminate",
+                "iterator": "start.items",
+                "outputVariable": "fmt.text",
+                "parallel": false
+              }
+            },
+            "fmt": {
+              "scope": [
+                "iter"
+              ],
+              "template": "template",
+              "title": "项格式化",
+              "values": {
+                "inputs": {
+                  "item": "{{item}}"
+                },
+                "text": "项：{{item}}"
+              }
+            },
+            "compact": {
+              "template": "template",
+              "title": "结果数组紧凑 JSON",
+              "values": {
+                "inputs": {
+                  "arr": "{{iter.result}}"
+                },
+                "text": "{{arr | tojson}}"
+              }
+            },
+            "result": {
+              "template": "output",
+              "title": "输出结果",
+              "values": {
+                "outputName": "result",
+                "text": "{{compact.text}}"
+              }
+            }
+          },
+          "/chainsByKey": {
+            "main": {
+              "nodes": [
+                "start",
+                "iter",
+                "compact",
+                "result"
+              ]
+            }
+          },
+          "/summary": "input(items) → iteration 遍历 start.items，容器内 template(fmt, scope=[iter]) 每项生成“项：{{item}}”，outputVariable=fmt.text 按序收集 → template(compact) 用 {{iter.result}} | tojson 渲染紧凑 JSON（空数组为 []）→ output(result) 展示。",
+          "/assumptions": [
+            "iterator 使用裸路径 start.items 指向输入节点 items（json 字符串数组，默认 \"[]\"，便于空数组场景演示输出 \"[]\"）",
+            "迭代容器按输入顺序收集 outputVariable=fmt.text（parallel=false）；子图当前项引用固定为 {{item}}，不是 {{input.item}}",
+            "最终紧凑 JSON 通过 template 的 tojson 过滤器保证（空数组渲染为 []），输出节点 outputName=result；未使用 code/llm/工具替代 iteration"
+          ],
+          "/coverage": {
+            "R1": [
+              "start",
+              "iter",
+              "fmt",
+              "compact",
+              "result"
+            ]
+          },
+          "/formsByKey/fmt/values": {
+            "inputs": {
+              "item": "{{item}}"
+            },
+            "text": "项：{{item}}"
+          }
+        },
+        "allowedPaths": [
+          "/formsByKey/iter/values",
+          "/title",
+          "/description",
+          "/formsByKey",
+          "/chainsByKey",
+          "/linksByKey",
+          "/rolesByKey",
+          "/environmentByKey",
+          "/summary",
+          "/assumptions",
+          "/coverage",
+          "/formsByKey/fmt/values"
+        ],
+        "remainingSubmissions": 1
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 3,
+        "issues": [
+          {
+            "code": "UNKNOWN_REFERENCE",
+            "message": "不存在的创作引用 fmt",
+            "path": "/chainsByKey/inner/nodes/1",
+            "expected": {
+              "type": "string",
+              "enum": [
+                "item_in",
+                "n1",
+                "n2",
+                "start",
+                "result"
+              ]
+            },
+            "candidates": [
+              "item_in",
+              "n1",
+              "n2",
+              "start",
+              "result"
+            ],
+            "allowedPaths": [
+              "/chainsByKey/inner/nodes/1"
+            ],
+            "actualType": "string"
+          },
+          {
+            "code": "UNKNOWN_REFERENCE",
+            "message": "不存在的创作引用 iter",
+            "path": "/coverage/R1/1",
+            "expected": {
+              "type": "string",
+              "enum": [
+                "item_in",
+                "n1",
+                "n2",
+                "start",
+                "result"
+              ]
+            },
+            "candidates": [
+              "item_in",
+              "n1",
+              "n2",
+              "start",
+              "result"
+            ],
+            "allowedPaths": [
+              "/coverage/R1/1"
+            ],
+            "actualType": "string"
+          },
+          {
+            "code": "UNKNOWN_REFERENCE",
+            "message": "不存在的创作引用 fmt",
+            "path": "/coverage/R1/2",
+            "expected": {
+              "type": "string",
+              "enum": [
+                "item_in",
+                "n1",
+                "n2",
+                "start",
+                "result"
+              ]
+            },
+            "candidates": [
+              "item_in",
+              "n1",
+              "n2",
+              "start",
+              "result"
+            ],
+            "allowedPaths": [
+              "/coverage/R1/2"
+            ],
+            "actualType": "string"
+          },
+          {
+            "code": "UNKNOWN_REFERENCE",
+            "message": "不存在的创作引用 compact",
+            "path": "/coverage/R1/3",
+            "expected": {
+              "type": "string",
+              "enum": [
+                "item_in",
+                "n1",
+                "n2",
+                "start",
+                "result"
+              ]
+            },
+            "candidates": [
+              "item_in",
+              "n1",
+              "n2",
+              "start",
+              "result"
+            ],
+            "allowedPaths": [
+              "/coverage/R1/3"
+            ],
+            "actualType": "string"
+          },
+          {
+            "code": "UNKNOWN_REFERENCE",
+            "message": "scope 中不存在容器节点 iter；请使用祖先 loop/iteration 节点 key，根层省略或用 []。",
+            "path": "/formsByKey/item_in/scope/0",
+            "contracts": {
+              "/formsByKey/item_in/scope": {
+                "type": "array",
+                "maxItems": 0
+              }
+            },
+            "allowedPaths": [
+              "/formsByKey/item_in/scope"
+            ],
+            "actualType": "string"
+          }
+        ],
+        "fragments": {
+          "/chainsByKey/inner/nodes/1": "fmt",
+          "/coverage/R1/1": "iter",
+          "/coverage/R1/2": "fmt",
+          "/coverage/R1/3": "compact",
+          "/formsByKey/item_in/scope": [
+            "iter"
+          ]
+        },
+        "allowedPaths": [
+          "/chainsByKey/inner/nodes/1",
+          "/coverage/R1/1",
+          "/coverage/R1/2",
+          "/coverage/R1/3",
+          "/formsByKey/item_in/scope"
+        ],
+        "remainingSubmissions": 0
+      }
+    ]
+  },
+  {
+    "journal": ".test-data/t09-par/shard-3/events.jsonl",
+    "journalSha256": "602648155dff2d40d238aae068876351ace44a622eee7f5fdba5db8f5f19699b",
+    "line": 176,
+    "caseId": "container",
+    "arm": "compact-repair",
+    "repeat": 2,
+    "status": "success",
+    "submissionsLog": [
+      {
+        "submission": {
+          "assumptions": [
+            "iteration 结果按输入顺序汇集，parallel=false 保持逐项顺序执行。",
+            "serialize 模板仅做紧凑 JSON 序列化（tojson），不替代 iteration；核心遍历由 iteration 完成。",
+            "空数组时 iter.result 为 []，tojson 渲染为 []，满足空数组要求。"
+          ],
+          "chains": [
+            {
+              "key": "main-flow",
+              "nodes": [
+                "start",
+                "iter",
+                "serialize",
+                "result"
+              ]
+            },
+            {
+              "key": "inner-flow",
+              "nodes": [
+                "iter-start",
+                "item-text",
+                "iter-end"
+              ],
+              "scope": [
+                "iter"
+              ]
+            }
+          ],
+          "coverage": {
+            "R1": [
+              "start",
+              "iter",
+              "item-text",
+              "serialize",
+              "result"
+            ]
+          },
+          "description": "输入 items（json 字符串数组），iteration 容器逐项执行内部子图，内部 template 生成“项：{item}”，以 item-text.text 作为 outputVariable 按输入顺序收集为字符串数组；最后用模板 tojson 序列化为紧凑 JSON 文本（空数组为 []）经 result 输出。",
+          "nodes": [
+            {
+              "config": {
+                "fields": [
+                  {
+                    "label": "字符串数组",
+                    "name": "items",
+                    "required": true,
+                    "type": "json"
+                  }
+                ]
+              },
+              "description": "工作流入口，声明 json 类型数组输入 items。",
+              "key": "start",
+              "kind": "input",
+              "title": "工作流输入"
+            },
+            {
+              "config": {
+                "errorMode": "terminate",
+                "iterator": "start.items",
+                "outputVariable": "item-text.text",
+                "parallel": false
+              },
+              "description": "对 start.items 逐项运行内部子图，收集 item-text.text 为字符串数组。",
+              "key": "iter",
+              "kind": "iteration",
+              "title": "遍历 items"
+            },
+            {
+              "config": {
+                "fields": []
+              },
+              "description": "iteration 内部唯一入口。",
+              "key": "iter-start",
+              "kind": "input",
+              "scope": [
+                "iter"
+              ],
+              "title": "内部入口"
+            },
+            {
+              "config": {
+                "text": "项：{{item}}"
+              },
+              "description": "使用当前项变量 item 生成“项：{item}”文本。",
+              "key": "item-text",
+              "kind": "template",
+              "scope": [
+                "iter"
+              ],
+              "title": "生成项文本"
+            },
+            {
+              "config": {
+                "outputName": "result",
+                "text": "{{item-text.text}}"
+              },
+              "description": "内部出口，输出当前项模板 text，供 outputVariable 收集。",
+              "key": "iter-end",
+              "kind": "output",
+              "scope": [
+                "iter"
+              ],
+              "title": "内部出口"
+            },
+            {
+              "config": {
+                "inputs": {
+                  "arr": "{{iter.result}}"
+                },
+                "text": "{{arr | tojson}}"
+              },
+              "description": "把收集到的字符串数组渲染为紧凑 JSON 文本，空数组输出 []。",
+              "key": "serialize",
+              "kind": "template",
+              "title": "紧凑JSON序列化"
+            },
+            {
+              "config": {
+                "text": "{{serialize.text}}"
+              },
+              "description": "工作流默认输出，展示结果数组紧凑 JSON 文本。",
+              "key": "result",
+              "kind": "output",
+              "title": "输出结果"
+            }
+          ],
+          "summary": "R1 全覆盖：start 声明 json 输入 items；iteration 节点 iter 以裸路径 start.items 遍历，内部子图（iter-start→item-text→iter-end）用模板“项：{{item}}”生成每项文本，outputVariable=item-text.text 按输入顺序收集为类型化数组 iter.result；serialize 模板用 tojson 过滤器输出紧凑 JSON 文本（空数组为 []）；result 输出展示该文本。未用 template 循环/代码/模型/工具替代 iteration。",
+          "title": "迭代项文本并输出JSON数组"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 1,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "replace",
+              "path": "/nodesByKey/start",
+              "value": {
+                "config": {
+                  "fields": [
+                    {
+                      "label": "字符串数组",
+                      "name": "items",
+                      "required": true,
+                      "type": "json"
+                    }
+                  ]
+                },
+                "kind": "input",
+                "title": "工作流输入"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/iter",
+              "value": {
+                "config": {
+                  "errorMode": "terminate",
+                  "iterator": "start.items",
+                  "outputVariable": "item-text.text",
+                  "parallel": false
+                },
+                "kind": "iteration",
+                "title": "遍历 items"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/iter-start",
+              "value": {
+                "config": {
+                  "fields": []
+                },
+                "kind": "input",
+                "scope": [
+                  "iter"
+                ],
+                "title": "内部入口"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/item-text",
+              "value": {
+                "config": {
+                  "text": "项：{{item}}"
+                },
+                "kind": "template",
+                "scope": [
+                  "iter"
+                ],
+                "title": "生成项文本"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/iter-end",
+              "value": {
+                "config": {
+                  "outputName": "result",
+                  "text": "{{item-text.text}}"
+                },
+                "kind": "output",
+                "scope": [
+                  "iter"
+                ],
+                "title": "内部出口"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/serialize",
+              "value": {
+                "config": {
+                  "inputs": {
+                    "arr": "{{iter.result}}"
+                  },
+                  "text": "{{arr | tojson}}"
+                },
+                "kind": "template",
+                "title": "紧凑JSON序列化"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/result",
+              "value": {
+                "config": {
+                  "text": "{{serialize.text}}"
+                },
+                "kind": "output",
+                "title": "输出结果"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/chainsByKey/inner-flow",
+              "value": {
+                "nodes": [
+                  "iter-start",
+                  "item-text",
+                  "iter-end"
+                ]
+              }
+            }
+          ],
+          "summary": "移除节点不支持的字段 description；移除链不支持的字段 scope（内部链作用域由节点 scope=[\"iter\"] 派生）。其余设计不变：start 输入 items，iteration 遍历 start.items，内部模板“项：{{item}}”经 outputVariable 按输入顺序收集，serialize 用 tojson 输出紧凑 JSON，result 展示。"
+        }
+      }
+    ],
+    "feedback": [
+      {
+        "status": "repairable",
+        "draftRevision": 1,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/start",
+            "allowedPaths": [
+              "/nodesByKey/start"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/iter",
+            "allowedPaths": [
+              "/nodesByKey/iter"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/iter-start",
+            "allowedPaths": [
+              "/nodesByKey/iter-start"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/item-text",
+            "allowedPaths": [
+              "/nodesByKey/item-text"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/iter-end",
+            "allowedPaths": [
+              "/nodesByKey/iter-end"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/serialize",
+            "allowedPaths": [
+              "/nodesByKey/serialize"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/result",
+            "allowedPaths": [
+              "/nodesByKey/result"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"scope\"",
+            "path": "/chainsByKey/inner-flow",
+            "allowedPaths": [
+              "/chainsByKey/inner-flow"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {
+          "/nodesByKey/start": {
+            "config": {
+              "fields": [
+                {
+                  "label": "字符串数组",
+                  "name": "items",
+                  "required": true,
+                  "type": "json"
+                }
+              ]
+            },
+            "description": "工作流入口，声明 json 类型数组输入 items。",
+            "kind": "input",
+            "title": "工作流输入"
+          },
+          "/nodesByKey/iter": {
+            "config": {
+              "errorMode": "terminate",
+              "iterator": "start.items",
+              "outputVariable": "item-text.text",
+              "parallel": false
+            },
+            "description": "对 start.items 逐项运行内部子图，收集 item-text.text 为字符串数组。",
+            "kind": "iteration",
+            "title": "遍历 items"
+          },
+          "/nodesByKey/iter-start": {
+            "config": {
+              "fields": []
+            },
+            "description": "iteration 内部唯一入口。",
+            "kind": "input",
+            "scope": [
+              "iter"
+            ],
+            "title": "内部入口"
+          },
+          "/nodesByKey/item-text": {
+            "config": {
+              "text": "项：{{item}}"
+            },
+            "description": "使用当前项变量 item 生成“项：{item}”文本。",
+            "kind": "template",
+            "scope": [
+              "iter"
+            ],
+            "title": "生成项文本"
+          },
+          "/nodesByKey/iter-end": {
+            "config": {
+              "outputName": "result",
+              "text": "{{item-text.text}}"
+            },
+            "description": "内部出口，输出当前项模板 text，供 outputVariable 收集。",
+            "kind": "output",
+            "scope": [
+              "iter"
+            ],
+            "title": "内部出口"
+          },
+          "/nodesByKey/serialize": {
+            "config": {
+              "inputs": {
+                "arr": "{{iter.result}}"
+              },
+              "text": "{{arr | tojson}}"
+            },
+            "description": "把收集到的字符串数组渲染为紧凑 JSON 文本，空数组输出 []。",
+            "kind": "template",
+            "title": "紧凑JSON序列化"
+          },
+          "/nodesByKey/result": {
+            "config": {
+              "text": "{{serialize.text}}"
+            },
+            "description": "工作流默认输出，展示结果数组紧凑 JSON 文本。",
+            "kind": "output",
+            "title": "输出结果"
+          },
+          "/chainsByKey/inner-flow": {
+            "nodes": [
+              "iter-start",
+              "item-text",
+              "iter-end"
+            ],
+            "scope": [
+              "iter"
+            ]
+          }
+        },
+        "allowedPaths": [
+          "/nodesByKey/start",
+          "/nodesByKey/iter",
+          "/nodesByKey/iter-start",
+          "/nodesByKey/item-text",
+          "/nodesByKey/iter-end",
+          "/nodesByKey/serialize",
+          "/nodesByKey/result",
+          "/chainsByKey/inner-flow"
+        ],
+        "remainingSubmissions": 2
+      }
+    ]
+  },
+  {
+    "journal": ".test-data/t09-par/shard-1/events.jsonl",
+    "journalSha256": "b752fc1f2fda134ee7e3c596cc977359513ebfaf1c83769c1f9edb4abfab1792",
+    "line": 81,
+    "caseId": "web-process",
+    "arm": "compact-repair",
+    "repeat": 1,
+    "status": "failed",
+    "submissionsLog": [
+      {
+        "submission": {
+          "assumptions": [
+            "<main> 元素缺失或内容为空时统一输出\"空\"；需求未定义 title 缺失回退，输出空字符串。",
+            "HTTP 节点由 oracle 拦截提供固定离线 HTML，运行时不会真实访问 fixture.invalid。",
+            "标签替换为空格后再合并连续空白并 trim，保证删除标签后相邻文本不粘连。"
+          ],
+          "chains": [
+            {
+              "key": "flow",
+              "nodes": [
+                "start",
+                "n1",
+                "n2",
+                "result"
+              ]
+            }
+          ],
+          "coverage": {
+            "R1": [
+              "start",
+              "n1",
+              "n2",
+              "result"
+            ]
+          },
+          "mode": "create",
+          "nodes": [
+            {
+              "config": {
+                "fields": [
+                  {
+                    "label": "页面",
+                    "name": "page",
+                    "required": true,
+                    "type": "text"
+                  }
+                ]
+              },
+              "description": "唯一入口：用户输入页面标识 page。",
+              "key": "start",
+              "kind": "input",
+              "title": "用户输入"
+            },
+            {
+              "config": {
+                "method": "GET",
+                "url": "https://fixture.invalid/pages/{{input.page}}"
+              },
+              "description": "执行一次 GET，URL 插值 {{input.page}}，由 oracle 拦截返回固定离线 HTML；响应正文经 n1.text 供下游使用。",
+              "key": "n1",
+              "kind": "http",
+              "title": "获取离线 HTML"
+            },
+            {
+              "config": {
+                "code": "function main(inputs) {\n  var html = String(inputs.html == null ? \"\" : inputs.html);\n  var title = \"\";\n  var titleMatch = html.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i);\n  if (titleMatch) {\n    title = titleMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  var mainText = \"\";\n  var mainMatch = html.match(/<main[^>]*>([\\s\\S]*?)<\\/main>/i);\n  if (mainMatch) {\n    mainText = mainMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  if (!mainText) {\n    mainText = \"空\";\n  }\n  return { title: title, main: mainText };\n}",
+                "inputs": {
+                  "html": "{{n1.text}}"
+                },
+                "language": "javascript",
+                "outputSchema": [
+                  {
+                    "description": "页面 <title> 提取的纯文本",
+                    "name": "title",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "description": "<main> 内纯文本：删标签、合并连续空白、去首尾空白；空时为\"空\"",
+                    "name": "main",
+                    "required": true,
+                    "type": "string"
+                  }
+                ],
+                "timeoutMs": 3000
+              },
+              "description": "同步 main(inputs) 纯数据转换：从 HTML 中提取 title 与 main 内纯文本，删除标签、连续空白合并为单空格、去首尾空白，main 为空时返回\"空\"。",
+              "key": "n2",
+              "kind": "code",
+              "title": "提取 title 与 main 纯文本"
+            },
+            {
+              "config": {
+                "outputName": "result",
+                "text": "{{n2.title}}|{{n2.main}}"
+              },
+              "description": "outputName=result，严格输出 \"{title}|{main}\"，半角竖线连接，无字段名、引号或额外空白。",
+              "key": "result",
+              "kind": "output",
+              "title": "输出结果"
+            }
+          ],
+          "summary": "输入 page → HTTP GET 固定离线页面（{{input.page}} 插值，oracle 拦截）→ JavaScript 提取 title 与 main 纯文本（删标签、合并连续空白、去首尾空白，main 空时为\"空\"）→ outputName=result 输出 \"title|main\"。不使用模型，不硬编码样本。",
+          "title": "网页 page 处理：HTTP 获取并提取 title|main"
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 1,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "replace",
+              "path": "/nodesByKey/start",
+              "value": {
+                "config": {
+                  "fields": [
+                    {
+                      "label": "页面",
+                      "name": "page",
+                      "required": true,
+                      "type": "text"
+                    }
+                  ]
+                },
+                "kind": "input",
+                "title": "用户输入"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/n1",
+              "value": {
+                "config": {
+                  "method": "GET",
+                  "url": "https://fixture.invalid/pages/{{input.page}}"
+                },
+                "kind": "http",
+                "title": "获取离线 HTML"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/n2",
+              "value": {
+                "config": {
+                  "code": "function main(inputs) {\n  var html = String(inputs.html == null ? \"\" : inputs.html);\n  var title = \"\";\n  var titleMatch = html.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i);\n  if (titleMatch) {\n    title = titleMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  var mainText = \"\";\n  var mainMatch = html.match(/<main[^>]*>([\\s\\S]*?)<\\/main>/i);\n  if (mainMatch) {\n    mainText = mainMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  if (!mainText) {\n    mainText = \"空\";\n  }\n  return { title: title, main: mainText };\n}",
+                  "inputs": {
+                    "html": "{{n1.text}}"
+                  },
+                  "language": "javascript",
+                  "outputSchema": [
+                    {
+                      "description": "页面 <title> 提取的纯文本",
+                      "name": "title",
+                      "required": true,
+                      "type": "string"
+                    },
+                    {
+                      "description": "<main> 内纯文本：删标签、合并连续空白、去首尾空白；空时为\"空\"",
+                      "name": "main",
+                      "required": true,
+                      "type": "string"
+                    }
+                  ],
+                  "timeoutMs": 3000
+                },
+                "kind": "code",
+                "title": "提取 title 与 main 纯文本"
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/nodesByKey/result",
+              "value": {
+                "config": {
+                  "outputName": "result",
+                  "text": "{{n2.title}}|{{n2.main}}"
+                },
+                "kind": "output",
+                "title": "输出结果"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "submission": {
+          "draftRevision": 2,
+          "mode": "repair",
+          "patches": [
+            {
+              "op": "replace",
+              "path": "/nodesByKey",
+              "value": {
+                "n1": {
+                  "config": {
+                    "method": "GET",
+                    "url": "https://fixture.invalid/pages/{{input.page}}"
+                  },
+                  "kind": "http",
+                  "title": "获取离线 HTML"
+                },
+                "n2": {
+                  "config": {
+                    "code": "function main(inputs) {\n  var html = String(inputs.html == null ? \"\" : inputs.html);\n  var title = \"\";\n  var titleMatch = html.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i);\n  if (titleMatch) {\n    title = titleMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  var mainText = \"\";\n  var mainMatch = html.match(/<main[^>]*>([\\s\\S]*?)<\\/main>/i);\n  if (mainMatch) {\n    mainText = mainMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  if (!mainText) {\n    mainText = \"空\";\n  }\n  return { title: title, main: mainText };\n}",
+                    "inputs": {
+                      "html": "{{n1.text}}"
+                    },
+                    "language": "javascript",
+                    "outputSchema": [
+                      {
+                        "description": "页面 <title> 提取的纯文本",
+                        "name": "title",
+                        "required": true,
+                        "type": "string"
+                      },
+                      {
+                        "description": "<main> 内纯文本：删标签、合并连续空白、去首尾空白；空时为\"空\"",
+                        "name": "main",
+                        "required": true,
+                        "type": "string"
+                      }
+                    ],
+                    "timeoutMs": 3000
+                  },
+                  "kind": "code",
+                  "title": "提取 title 与 main 纯文本"
+                },
+                "result": {
+                  "config": {
+                    "text": "{{n2.title}}|{{n2.main}}"
+                  },
+                  "kind": "output",
+                  "title": "输出结果"
+                },
+                "start": {
+                  "config": {
+                    "fields": [
+                      {
+                        "label": "页面",
+                        "name": "page",
+                        "required": true,
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "kind": "input",
+                  "title": "用户输入"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "feedback": [
+      {
+        "status": "repairable",
+        "draftRevision": 1,
+        "issues": [
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/start",
+            "allowedPaths": [
+              "/nodesByKey/start"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/n1",
+            "allowedPaths": [
+              "/nodesByKey/n1"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/n2",
+            "allowedPaths": [
+              "/nodesByKey/n2"
+            ],
+            "actualType": "object"
+          },
+          {
+            "code": "INVALID_FIELDS",
+            "message": "Unrecognized key: \"description\"",
+            "path": "/nodesByKey/result",
+            "allowedPaths": [
+              "/nodesByKey/result"
+            ],
+            "actualType": "object"
+          }
+        ],
+        "fragments": {
+          "/nodesByKey/start": {
+            "config": {
+              "fields": [
+                {
+                  "label": "页面",
+                  "name": "page",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "description": "唯一入口：用户输入页面标识 page。",
+            "kind": "input",
+            "title": "用户输入"
+          },
+          "/nodesByKey/n1": {
+            "config": {
+              "method": "GET",
+              "url": "https://fixture.invalid/pages/{{input.page}}"
+            },
+            "description": "执行一次 GET，URL 插值 {{input.page}}，由 oracle 拦截返回固定离线 HTML；响应正文经 n1.text 供下游使用。",
+            "kind": "http",
+            "title": "获取离线 HTML"
+          },
+          "/nodesByKey/n2": {
+            "config": {
+              "code": "function main(inputs) {\n  var html = String(inputs.html == null ? \"\" : inputs.html);\n  var title = \"\";\n  var titleMatch = html.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i);\n  if (titleMatch) {\n    title = titleMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  var mainText = \"\";\n  var mainMatch = html.match(/<main[^>]*>([\\s\\S]*?)<\\/main>/i);\n  if (mainMatch) {\n    mainText = mainMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  if (!mainText) {\n    mainText = \"空\";\n  }\n  return { title: title, main: mainText };\n}",
+              "inputs": {
+                "html": "{{n1.text}}"
+              },
+              "language": "javascript",
+              "outputSchema": [
+                {
+                  "description": "页面 <title> 提取的纯文本",
+                  "name": "title",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "description": "<main> 内纯文本：删标签、合并连续空白、去首尾空白；空时为\"空\"",
+                  "name": "main",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "timeoutMs": 3000
+            },
+            "description": "同步 main(inputs) 纯数据转换：从 HTML 中提取 title 与 main 内纯文本，删除标签、连续空白合并为单空格、去首尾空白，main 为空时返回\"空\"。",
+            "kind": "code",
+            "title": "提取 title 与 main 纯文本"
+          },
+          "/nodesByKey/result": {
+            "config": {
+              "outputName": "result",
+              "text": "{{n2.title}}|{{n2.main}}"
+            },
+            "description": "outputName=result，严格输出 \"{title}|{main}\"，半角竖线连接，无字段名、引号或额外空白。",
+            "kind": "output",
+            "title": "输出结果"
+          }
+        },
+        "allowedPaths": [
+          "/nodesByKey/start",
+          "/nodesByKey/n1",
+          "/nodesByKey/n2",
+          "/nodesByKey/result"
+        ],
+        "remainingSubmissions": 2
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 2,
+        "issues": [
+          {
+            "code": "DUPLICATE_KEY",
+            "message": "多个 key 绑定了同一个已有节点",
+            "allowedPaths": [
+              "/title",
+              "/description",
+              "/nodesByKey",
+              "/chainsByKey",
+              "/linksByKey",
+              "/rolesByKey",
+              "/environmentByKey",
+              "/summary",
+              "/assumptions",
+              "/coverage"
+            ]
+          }
+        ],
+        "fragments": {
+          "/title": "网页 page 处理：HTTP 获取并提取 title|main",
+          "/nodesByKey": {
+            "start": {
+              "config": {
+                "fields": [
+                  {
+                    "label": "页面",
+                    "name": "page",
+                    "required": true,
+                    "type": "text"
+                  }
+                ]
+              },
+              "kind": "input",
+              "title": "用户输入"
+            },
+            "n1": {
+              "config": {
+                "method": "GET",
+                "url": "https://fixture.invalid/pages/{{input.page}}"
+              },
+              "kind": "http",
+              "title": "获取离线 HTML"
+            },
+            "n2": {
+              "config": {
+                "code": "function main(inputs) {\n  var html = String(inputs.html == null ? \"\" : inputs.html);\n  var title = \"\";\n  var titleMatch = html.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i);\n  if (titleMatch) {\n    title = titleMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  var mainText = \"\";\n  var mainMatch = html.match(/<main[^>]*>([\\s\\S]*?)<\\/main>/i);\n  if (mainMatch) {\n    mainText = mainMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  if (!mainText) {\n    mainText = \"空\";\n  }\n  return { title: title, main: mainText };\n}",
+                "inputs": {
+                  "html": "{{n1.text}}"
+                },
+                "language": "javascript",
+                "outputSchema": [
+                  {
+                    "description": "页面 <title> 提取的纯文本",
+                    "name": "title",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "description": "<main> 内纯文本：删标签、合并连续空白、去首尾空白；空时为\"空\"",
+                    "name": "main",
+                    "required": true,
+                    "type": "string"
+                  }
+                ],
+                "timeoutMs": 3000
+              },
+              "kind": "code",
+              "title": "提取 title 与 main 纯文本"
+            },
+            "result": {
+              "config": {
+                "outputName": "result",
+                "text": "{{n2.title}}|{{n2.main}}"
+              },
+              "kind": "output",
+              "title": "输出结果"
+            }
+          },
+          "/chainsByKey": {
+            "flow": {
+              "nodes": [
+                "start",
+                "n1",
+                "n2",
+                "result"
+              ]
+            }
+          },
+          "/summary": "输入 page → HTTP GET 固定离线页面（{{input.page}} 插值，oracle 拦截）→ JavaScript 提取 title 与 main 纯文本（删标签、合并连续空白、去首尾空白，main 空时为\"空\"）→ outputName=result 输出 \"title|main\"。不使用模型，不硬编码样本。",
+          "/assumptions": [
+            "<main> 元素缺失或内容为空时统一输出\"空\"；需求未定义 title 缺失回退，输出空字符串。",
+            "HTTP 节点由 oracle 拦截提供固定离线 HTML，运行时不会真实访问 fixture.invalid。",
+            "标签替换为空格后再合并连续空白并 trim，保证删除标签后相邻文本不粘连。"
+          ],
+          "/coverage": {
+            "R1": [
+              "start",
+              "n1",
+              "n2",
+              "result"
+            ]
+          }
+        },
+        "allowedPaths": [
+          "/title",
+          "/description",
+          "/nodesByKey",
+          "/chainsByKey",
+          "/linksByKey",
+          "/rolesByKey",
+          "/environmentByKey",
+          "/summary",
+          "/assumptions",
+          "/coverage"
+        ],
+        "remainingSubmissions": 1
+      },
+      {
+        "status": "repairable",
+        "draftRevision": 3,
+        "issues": [
+          {
+            "code": "DUPLICATE_KEY",
+            "message": "多个 key 绑定了同一个已有节点",
+            "allowedPaths": [
+              "/title",
+              "/description",
+              "/nodesByKey",
+              "/chainsByKey",
+              "/linksByKey",
+              "/rolesByKey",
+              "/environmentByKey",
+              "/summary",
+              "/assumptions",
+              "/coverage"
+            ]
+          }
+        ],
+        "fragments": {
+          "/title": "网页 page 处理：HTTP 获取并提取 title|main",
+          "/nodesByKey": {
+            "n1": {
+              "config": {
+                "method": "GET",
+                "url": "https://fixture.invalid/pages/{{input.page}}"
+              },
+              "kind": "http",
+              "title": "获取离线 HTML"
+            },
+            "n2": {
+              "config": {
+                "code": "function main(inputs) {\n  var html = String(inputs.html == null ? \"\" : inputs.html);\n  var title = \"\";\n  var titleMatch = html.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i);\n  if (titleMatch) {\n    title = titleMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  var mainText = \"\";\n  var mainMatch = html.match(/<main[^>]*>([\\s\\S]*?)<\\/main>/i);\n  if (mainMatch) {\n    mainText = mainMatch[1].replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n  }\n  if (!mainText) {\n    mainText = \"空\";\n  }\n  return { title: title, main: mainText };\n}",
+                "inputs": {
+                  "html": "{{n1.text}}"
+                },
+                "language": "javascript",
+                "outputSchema": [
+                  {
+                    "description": "页面 <title> 提取的纯文本",
+                    "name": "title",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "description": "<main> 内纯文本：删标签、合并连续空白、去首尾空白；空时为\"空\"",
+                    "name": "main",
+                    "required": true,
+                    "type": "string"
+                  }
+                ],
+                "timeoutMs": 3000
+              },
+              "kind": "code",
+              "title": "提取 title 与 main 纯文本"
+            },
+            "result": {
+              "config": {
+                "text": "{{n2.title}}|{{n2.main}}"
+              },
+              "kind": "output",
+              "title": "输出结果"
+            },
+            "start": {
+              "config": {
+                "fields": [
+                  {
+                    "label": "页面",
+                    "name": "page",
+                    "required": true,
+                    "type": "text"
+                  }
+                ]
+              },
+              "kind": "input",
+              "title": "用户输入"
+            }
+          },
+          "/chainsByKey": {
+            "flow": {
+              "nodes": [
+                "start",
+                "n1",
+                "n2",
+                "result"
+              ]
+            }
+          },
+          "/summary": "输入 page → HTTP GET 固定离线页面（{{input.page}} 插值，oracle 拦截）→ JavaScript 提取 title 与 main 纯文本（删标签、合并连续空白、去首尾空白，main 空时为\"空\"）→ outputName=result 输出 \"title|main\"。不使用模型，不硬编码样本。",
+          "/assumptions": [
+            "<main> 元素缺失或内容为空时统一输出\"空\"；需求未定义 title 缺失回退，输出空字符串。",
+            "HTTP 节点由 oracle 拦截提供固定离线 HTML，运行时不会真实访问 fixture.invalid。",
+            "标签替换为空格后再合并连续空白并 trim，保证删除标签后相邻文本不粘连。"
+          ],
+          "/coverage": {
+            "R1": [
+              "start",
+              "n1",
+              "n2",
+              "result"
+            ]
+          }
+        },
+        "allowedPaths": [
+          "/title",
+          "/description",
+          "/nodesByKey",
+          "/chainsByKey",
+          "/linksByKey",
+          "/rolesByKey",
+          "/environmentByKey",
+          "/summary",
+          "/assumptions",
+          "/coverage"
+        ],
+        "remainingSubmissions": 0
+      }
+    ]
+  }
+]

@@ -1,0 +1,79 @@
+{
+  "format": "dsh-visible-workflow",
+  "formatVersion": 2,
+  "runtime": {
+    "engine": "graphon",
+    "protocol": 1
+  },
+  "workflow": {
+    "nodes": [
+      {
+        "id": "host-start",
+        "number": "1",
+        "kind": "input",
+        "title": "用户输入",
+        "x": 0,
+        "y": 0,
+        "fixed": false,
+        "config": {
+          "fields": [
+            {
+              "name": "name",
+              "label": "姓名",
+              "required": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "host-end",
+        "number": "2",
+        "kind": "output",
+        "title": "输出",
+        "x": 200,
+        "y": 0,
+        "fixed": false,
+        "config": {
+          "text": "{{allocated-0.text}}",
+          "outputName": "result"
+        }
+      },
+      {
+        "id": "allocated-0",
+        "number": "a-2",
+        "kind": "template",
+        "title": "模板转换",
+        "x": 720,
+        "y": 120,
+        "fixed": false,
+        "config": {
+          "text": "你好 {{input.name}}"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "planning-edge-1",
+        "source": "host-start",
+        "target": "allocated-0"
+      },
+      {
+        "id": "planning-edge-2",
+        "source": "allocated-0",
+        "target": "host-end"
+      }
+    ],
+    "id": "flow",
+    "workspaceId": "import-required",
+    "title": "问候",
+    "description": "",
+    "revision": 0,
+    "notes": [],
+    "createdAt": "2026-10-18T00:00:00.000Z",
+    "updatedAt": "2026-10-18T00:00:00.000Z",
+    "scope": "workspace"
+  },
+  "workflows": [],
+  "presets": [],
+  "dependencies": []
+}

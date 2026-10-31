@@ -1,0 +1,32 @@
+[
+  {
+    "id": "A1",
+    "status": "paid",
+    "category": "book",
+    "amountCents": 1200
+  },
+  {
+    "id": "A2",
+    "status": "paid",
+    "category": "book",
+    "amountCents": 2500
+  },
+  {
+    "id": "A3",
+    "status": "paid",
+    "category": "food",
+    "amountCents": 300
+  },
+  {
+    "id": "A4",
+    "status": "refunded",
+    "category": "food",
+    "amountCents": 900
+  },
+  {
+    "id": "A5",
+    "status": "cancelled",
+    "category": "book",
+    "amountCents": 700
+  }
+]

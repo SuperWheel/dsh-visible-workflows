@@ -1,0 +1,888 @@
+{
+  "source": ".test-data/t24/library-reference-graphs.json",
+  "sourceSha256": "d3c665c260de676d4a6ad36d64d1d4283ceb714c0fe7a2ad9e35fa0f07f19f71",
+  "sourceNote": "~/.dsh/visible-dynamic-workflows/library.json read-only snapshot 2026-10-24",
+  "workflows": [
+    {
+      "nodes": [
+        {
+          "id": "1c358212-b508-446f-8cba-9013d906bb3b",
+          "number": "a-1",
+          "kind": "input",
+          "title": "运行参数",
+          "x": 64,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "fields": [
+              {
+                "name": "timezone",
+                "label": "报告时区（IANA，如 Asia/Shanghai）",
+                "required": false,
+                "defaultValue": "Asia/Shanghai",
+                "type": "text"
+              }
+            ]
+          }
+        },
+        {
+          "id": "e8971703-1a40-4154-a07f-d1da0a348eed",
+          "number": "a-2",
+          "kind": "tool",
+          "title": "获取当前时间",
+          "x": 400,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "toolId": "builtin:time.now",
+            "inputs": {
+              "timezone": "{{input.timezone}}"
+            }
+          }
+        },
+        {
+          "id": "8faa23a6-eec6-44ba-a614-4514ecba0777",
+          "number": "a-3",
+          "kind": "tool",
+          "title": "抓取 GitHub Trending 页面",
+          "x": 736,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "toolId": "native:web_fetch",
+            "inputs": {
+              "url": "https://github.com/trending"
+            }
+          }
+        },
+        {
+          "id": "e660685d-090e-4c9b-b756-2c333a62ab95",
+          "number": "a-4",
+          "kind": "llm",
+          "title": "提取 Top 10 项目并翻译描述",
+          "x": 1072,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "prompt": "你是数据提取与翻译助手。下面是刚抓取的 GitHub Trending（today）网页文本。请从中提取榜单前 10 个项目，并将每个项目的英文描述翻译成中文。\n\n要求：\n1. 只使用页面中的真实数据，禁止编造；页面上找不到的字段一律填「暂无」。\n2. repo 填 owner/repo 形式；owner 填作者名；url 填 https://github.com/owner/repo。\n3. stars/forks 保留千分位逗号（如 12,345）；todayStars 保留加号（如 +123）。\n4. description 为页面上的英文原文，descriptionZh 为对应中文翻译。\n5. 按页面榜单顺序输出恰好 10 个项目（不足 10 个时输出实际数量）。\n6. 严格只输出一个 JSON 对象，不要解释、不要 Markdown 代码围栏，格式：\n{\"projects\":[{\"rank\":1,\"repo\":\"owner/repo\",\"owner\":\"owner\",\"url\":\"https://github.com/owner/repo\",\"description\":\"英文原文\",\"descriptionZh\":\"中文翻译\",\"language\":\"语言\",\"stars\":\"12,345\",\"forks\":\"1,234\",\"todayStars\":\"+123\"}]}\n\n网页文本：\n{{input.page}}",
+            "model": {
+              "provider": "zai-coding-cn",
+              "model": "glm-5.3-flash"
+            },
+            "effort": "max",
+            "inputs": {
+              "page": "{{8faa23a6-eec6-44ba-a614-4514ecba0777.text}}"
+            },
+            "outputSchema": [
+              {
+                "name": "projects",
+                "type": "array",
+                "description": "Trending 榜前 10 个项目的对象数组，字段含 rank/repo/owner/url/description/descriptionZh/language/stars/forks/todayStars",
+                "required": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "66a417a1-d539-4f4c-9959-2fc0d3786397",
+          "number": "a-5",
+          "kind": "code",
+          "title": "规范化生成 Markdown 报告",
+          "x": 1408,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "language": "javascript",
+            "code": "function main(inputs) {\n  var dt = String(inputs.datetime || \"\");\n  var date = dt.slice(0, 10);\n  var timeHM = dt.slice(0, 16);\n  var raw = inputs.projects;\n  if (typeof raw === \"string\") { try { raw = JSON.parse(raw); } catch (e) { raw = []; } }\n  if (!Array.isArray(raw)) { raw = []; }\n  var items = raw.slice(0, 10);\n\n  function text(v) {\n    if (v === undefined || v === null) { return \"暂无\"; }\n    var s = String(v).trim();\n    return s === \"\" ? \"暂无\" : s;\n  }\n  function num(v) {\n    if (v === undefined || v === null) { return null; }\n    var s = String(v).replace(/[,\\s]/g, \"\");\n    var n = Number(s);\n    return isFinite(n) ? n : null;\n  }\n  function fmt(n) {\n    if (n === null) { return \"暂无\"; }\n    var neg = n < 0;\n    var s = String(Math.abs(Math.round(n))).replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\n    return (neg ? \"-\" : \"\") + s;\n  }\n  function repoLink(p) {\n    var repo = text(p.repo);\n    if (repo === \"暂无\") { return \"暂无\"; }\n    var url = text(p.url);\n    if (url === \"暂无\") { url = \"https://github.com/\" + repo; }\n    return \"[\" + repo + \"](\" + url + \")\";\n  }\n\n  var table = \"\";\n  var details = \"\";\n  for (var i = 0; i < items.length; i++) {\n    var p = items[i];\n    table += \"| \" + (i + 1) + \" | \" + repoLink(p) + \" | \" + text(p.owner) + \" | \" + text(p.language) + \" | \" + fmt(num(p.stars)) + \" | \" + fmt(num(p.forks)) + \" | \" + text(p.todayStars) + \" |\\n\";\n  }\n  for (var j = 0; j < items.length; j++) {\n    var q = items[j];\n    details += \"### \" + (j + 1) + \". \" + repoLink(q) + \"\\n\\n\";\n    details += \"- **作者**：\" + text(q.owner) + \"\\n\";\n    details += \"- **主要语言**：\" + text(q.language) + \"\\n\";\n    details += \"- **Star**：\" + fmt(num(q.stars)) + \"　**Fork**：\" + fmt(num(q.forks)) + \"　**今日新增**：\" + text(q.todayStars) + \"\\n\";\n    details += \"- **描述**：\" + text(q.descriptionZh) + \"\\n\";\n    details += \"- **原文**：\" + text(q.description) + \"\\n\\n\";\n  }\n\n  var report =\n    \"# GitHub 每日热门项目 Top 10\\n\\n\" +\n    \"> 报告日期：\" + date + \"\\n\" +\n    \"> 数据来源：GitHub Trending\\n\" +\n    \"> 生成时间：\" + timeHM + \"\\n\\n\" +\n    \"## 汇总一览\\n\\n\" +\n    \"| 排名 | 项目 | 作者 | 主要语言 | Star | Fork | 今日新增 |\\n\" +\n    \"| ---- | ---- | ---- | ---- | ---- | ---- | ---- |\\n\" +\n    table + \"\\n\" +\n    \"## 项目详情\\n\\n\" +\n    details +\n    \"---\\n\\n\" +\n    \"*本报告由工作流自动生成，数据来自 GitHub Trending。*\\n\";\n\n  var filename = \"github-top10-\" + date + \".md\";\n  return { report: report, filename: filename, filePath: filename };\n}",
+            "inputs": {
+              "projects": "{{e660685d-090e-4c9b-b756-2c333a62ab95.projects}}",
+              "datetime": "{{e8971703-1a40-4154-a07f-d1da0a348eed.datetime}}"
+            },
+            "outputSchema": [
+              {
+                "name": "report",
+                "type": "string",
+                "description": "按固定规范生成的完整 Markdown 报告全文",
+                "required": true
+              },
+              {
+                "name": "filename",
+                "type": "string",
+                "description": "按运行日期命名的文件名 github-top10-YYYY-MM-DD.md",
+                "required": true
+              },
+              {
+                "name": "filePath",
+                "type": "string",
+                "description": "相对工作区根目录的保存路径",
+                "required": true
+              }
+            ],
+            "timeoutMs": 3000
+          }
+        },
+        {
+          "id": "34bd4531-8f7e-4b3a-8441-7b649d4bd896",
+          "number": "a-6",
+          "kind": "tool",
+          "title": "写入报告文件",
+          "x": 1744,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "toolId": "native:write",
+            "inputs": {
+              "file_path": "{{66a417a1-d539-4f4c-9959-2fc0d3786397.filePath}}",
+              "content": "{{66a417a1-d539-4f4c-9959-2fc0d3786397.report}}"
+            }
+          }
+        },
+        {
+          "id": "7c67d9fe-1eaf-4a0d-8b91-368fd81249d1",
+          "number": "a-7",
+          "kind": "output",
+          "title": "输出报告全文与文件路径",
+          "x": 2080,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "text": "{{66a417a1-d539-4f4c-9959-2fc0d3786397.report}}\n\n---\n文件已保存：{{66a417a1-d539-4f4c-9959-2fc0d3786397.filePath}}",
+            "outputName": "result"
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "planning-edge-1",
+          "source": "1c358212-b508-446f-8cba-9013d906bb3b",
+          "target": "e8971703-1a40-4154-a07f-d1da0a348eed"
+        },
+        {
+          "id": "planning-edge-2",
+          "source": "e8971703-1a40-4154-a07f-d1da0a348eed",
+          "target": "8faa23a6-eec6-44ba-a614-4514ecba0777"
+        },
+        {
+          "id": "planning-edge-3",
+          "source": "8faa23a6-eec6-44ba-a614-4514ecba0777",
+          "target": "e660685d-090e-4c9b-b756-2c333a62ab95"
+        },
+        {
+          "id": "planning-edge-4",
+          "source": "e660685d-090e-4c9b-b756-2c333a62ab95",
+          "target": "66a417a1-d539-4f4c-9959-2fc0d3786397"
+        },
+        {
+          "id": "planning-edge-5",
+          "source": "66a417a1-d539-4f4c-9959-2fc0d3786397",
+          "target": "34bd4531-8f7e-4b3a-8441-7b649d4bd896"
+        },
+        {
+          "id": "planning-edge-6",
+          "source": "34bd4531-8f7e-4b3a-8441-7b649d4bd896",
+          "target": "7c67d9fe-1eaf-4a0d-8b91-368fd81249d1"
+        }
+      ],
+      "id": "2b6fbd74-1ea5-4698-932f-8002e6e4a204",
+      "workspaceId": "c45c2bd5-b444-4cde-945a-4e7d15287591",
+      "title": "GitHub Trending 每日 Top 10 报告生成",
+      "description": "抓取 github.com/trending（today）页面，LLM 从真实抓取内容提取前 10 个热门项目并把描述翻译为中文，代码节点按固定规范确定性排版（千分位、汇总表+项目详情、缺失标「暂无」），native:write 按运行日期写入工作区根目录 github-top10-YYYY-MM-DD.md，输出节点返回报告全文与保存路径。",
+      "revision": 7,
+      "notes": [],
+      "createdAt": "2026-10-18T10:35:25.176Z",
+      "updatedAt": "2026-10-18T13:40:34.602Z",
+      "archived": true,
+      "editor": {
+        "viewport": {
+          "x": 70.86879508032803,
+          "y": 244.29443711565062,
+          "scale": 0.7808796907029114
+        },
+        "scopePath": []
+      },
+      "budgetDecision": {
+        "mode": "unlimited",
+        "decidedAt": "2026-10-18T10:29:13.884Z"
+      },
+      "executionPolicy": {}
+    },
+    {
+      "nodes": [
+        {
+          "id": "b4e0e4a4-e8be-4227-9079-d37824510d53",
+          "number": "a-1",
+          "kind": "input",
+          "title": "启动",
+          "x": 64,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "fields": []
+          }
+        },
+        {
+          "id": "8b5542a7-e1da-4af6-8811-c7ea64728215",
+          "number": "a-7",
+          "kind": "output",
+          "title": "输出结果",
+          "x": 2080,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "text": "GitHub Trending Top10 日报已生成并写入工作区：github-trending-top10-{{1cfaedaa-44cc-4416-848f-515c9738fc59.date}}.md（解析到 {{1cfaedaa-44cc-4416-848f-515c9738fc59.count}} 个项目）",
+            "outputName": "result"
+          }
+        },
+        {
+          "id": "6f2b738c-eae8-412b-9838-04f0482a6054",
+          "number": "a-2",
+          "kind": "tool",
+          "title": "获取当前日期",
+          "x": 400,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "toolId": "builtin:time.now",
+            "inputs": {
+              "timezone": "Asia/Shanghai"
+            }
+          }
+        },
+        {
+          "id": "f7ba2693-8c77-4770-987e-39d64381abba",
+          "number": "a-3",
+          "kind": "http",
+          "title": "抓取 GitHub Trending 页面",
+          "x": 736,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "url": "https://github.com/trending",
+            "method": "GET",
+            "headers": {
+              "Accept": "text/html,application/xhtml+xml",
+              "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            },
+            "timeoutMs": 30000
+          }
+        },
+        {
+          "id": "1cfaedaa-44cc-4416-848f-515c9738fc59",
+          "number": "a-4",
+          "kind": "code",
+          "title": "解析 Top10 项目",
+          "x": 1072,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "language": "javascript",
+            "code": "function main(inputs) {\n  var html = String(inputs.html || \"\");\n  var datetime = String(inputs.datetime || \"\");\n  var dm = datetime.match(/^\\d{4}-\\d{2}-\\d{2}/);\n  var date = dm ? dm[0] : datetime.slice(0, 10);\n  function decode(s) {\n    return String(s).replace(/&amp;/g, \"&\").replace(/&lt;/g, \"<\").replace(/&gt;/g, \">\").replace(/&quot;/g, \"\\\"\").replace(/&#39;/g, \"'\").replace(/&nbsp;/g, \" \");\n  }\n  function stripTags(s) {\n    return decode(String(s).replace(/<[^>]*>/g, \"\")).replace(/\\s+/g, \" \").trim();\n  }\n  function grab(re, s) {\n    var m = s.match(re);\n    return m ? m[1] : \"\";\n  }\n  function numText(t) {\n    var m = String(t).match(/[\\d.,]+/);\n    return m ? m[0].replace(/,/g, \"\") : \"0\";\n  }\n  var blocks = html.match(/<article[^>]*class=\"Box-row\"[^>]*>[\\s\\S]*?<\\/article>/g) || [];\n  if (blocks.length === 0) {\n    blocks = html.match(/<article[^>]*>[\\s\\S]*?<\\/article>/g) || [];\n  }\n  var items = [];\n  for (var i = 0; i < blocks.length && items.length < 10; i++) {\n    var a = blocks[i];\n    var repo = stripTags(grab(/<h2[^>]*>[\\s\\S]*?<a[^>]*href=\"\\/([^\"#?]+)\"/, a));\n    if (!repo || repo.indexOf(\"/\") < 0) { continue; }\n    var desc = stripTags(grab(/<p[^>]*class=\"col-9[^\"]*\"[^>]*>([\\s\\S]*?)<\\/p>/, a)) || stripTags(grab(/<p[^>]*>([\\s\\S]*?)<\\/p>/, a));\n    var lang = stripTags(grab(/itemprop=\"programmingLanguage\">([^<]+)</, a)) || \"未知\";\n    var starsText = numText(stripTags(grab(/href=\"\\/[^\"+]+\\/stargazers\"[^>]*>([\\s\\S]*?)<\\/a>/, a)));\n    var forksText = numText(stripTags(grab(/href=\"\\/[^\"+]+\\/forks\"[^>]*>([\\s\\S]*?)<\\/a>/, a)));\n    var tm = stripTags(a).match(/([\\d.,]+)\\s+stars?\\s+today/i);\n    var todayText = tm ? tm[1].replace(/,/g, \"\") : \"0\";\n    items.push({\n      rank: items.length + 1,\n      repo: repo,\n      url: \"https://github.com/\" + repo,\n      description: desc || \"暂无简介\",\n      language: lang,\n      starsText: starsText,\n      stars: parseFloat(starsText) || 0,\n      todayStarsText: todayText,\n      todayStars: parseFloat(todayText) || 0,\n      forksText: forksText,\n      forks: parseFloat(forksText) || 0\n    });\n  }\n  return { date: date, count: items.length, items: items };\n}",
+            "inputs": {
+              "datetime": "{{6f2b738c-eae8-412b-9838-04f0482a6054.datetime}}",
+              "html": "{{f7ba2693-8c77-4770-987e-39d64381abba.body}}"
+            },
+            "outputSchema": [
+              {
+                "name": "date",
+                "type": "string",
+                "description": "抓取日期 YYYY-MM-DD（Asia/Shanghai）",
+                "required": true
+              },
+              {
+                "name": "count",
+                "type": "number",
+                "description": "解析到的项目数量（0-10）"
+              },
+              {
+                "name": "items",
+                "type": "array",
+                "description": "前 10 个项目数组，元素含 rank/repo/url/description/language/starsText/stars/todayStarsText/todayStars/forksText/forks",
+                "required": true
+              }
+            ],
+            "timeoutMs": 3000
+          }
+        },
+        {
+          "id": "2addc2cc-b712-4079-bf99-387e1aba3f87",
+          "number": "a-5",
+          "kind": "template",
+          "title": "生成 Markdown 日报",
+          "x": 1408,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "text": "# GitHub Trending Top10\n\n抓取日期：{{date}}\n\n| 排名 | 项目 | 语言 | Star | 链接 |\n| --- | --- | --- | --- | --- |\n{% for item in items %}| {{item.rank}} | {{item.repo}} | {{item.language}} | {{item.starsText}} | {{item.url}} |\n{% else %}| - | 未解析到项目 | - | - | - |\n{% endfor %}\n{% for item in items %}## {{item.rank}}. {{item.repo}}\n\n- 简介：{{item.description}}\n- 语言：{{item.language}}\n- Star：{{item.starsText}}（今日新增 +{{item.todayStarsText}}）\n- Fork：{{item.forksText}}\n- 链接：{{item.url}}\n\n{% else %}本次运行未解析到项目数据，请检查 GitHub Trending 页面结构。\n{% endfor %}---\n\n数据来源：[GitHub Trending](https://github.com/trending)，抓取日期：{{date}}\n",
+            "inputs": {
+              "count": "{{1cfaedaa-44cc-4416-848f-515c9738fc59.count}}",
+              "date": "{{1cfaedaa-44cc-4416-848f-515c9738fc59.date}}",
+              "items": "{{1cfaedaa-44cc-4416-848f-515c9738fc59.items}}"
+            }
+          }
+        },
+        {
+          "id": "16c8021e-e40f-4f02-b09d-39b8ad502b6d",
+          "number": "a-6",
+          "kind": "tool",
+          "title": "写入日报文件",
+          "x": 1744,
+          "y": 80,
+          "fixed": false,
+          "config": {
+            "toolId": "native:write",
+            "inputs": {
+              "content": "{{2addc2cc-b712-4079-bf99-387e1aba3f87.text}}",
+              "file_path": "github-trending-top10-{{1cfaedaa-44cc-4416-848f-515c9738fc59.date}}.md"
+            }
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "planning-edge-1",
+          "source": "b4e0e4a4-e8be-4227-9079-d37824510d53",
+          "target": "6f2b738c-eae8-412b-9838-04f0482a6054"
+        },
+        {
+          "id": "planning-edge-2",
+          "source": "6f2b738c-eae8-412b-9838-04f0482a6054",
+          "target": "f7ba2693-8c77-4770-987e-39d64381abba"
+        },
+        {
+          "id": "planning-edge-3",
+          "source": "f7ba2693-8c77-4770-987e-39d64381abba",
+          "target": "1cfaedaa-44cc-4416-848f-515c9738fc59"
+        },
+        {
+          "id": "planning-edge-4",
+          "source": "1cfaedaa-44cc-4416-848f-515c9738fc59",
+          "target": "2addc2cc-b712-4079-bf99-387e1aba3f87"
+        },
+        {
+          "id": "planning-edge-5",
+          "source": "2addc2cc-b712-4079-bf99-387e1aba3f87",
+          "target": "16c8021e-e40f-4f02-b09d-39b8ad502b6d"
+        },
+        {
+          "id": "planning-edge-6",
+          "source": "16c8021e-e40f-4f02-b09d-39b8ad502b6d",
+          "target": "8b5542a7-e1da-4af6-8811-c7ea64728215"
+        }
+      ],
+      "id": "2c0fd621-2c3f-4637-b0d9-42d58caaca10",
+      "workspaceId": "c45c2bd5-b444-4cde-945a-4e7d15287591",
+      "title": "GitHub Trending Top10 日报",
+      "description": "每次运行抓取 https://github.com/trending 每日榜，解析前 10 个项目（排名/名称/链接/简介/语言/Star/今日新增/Fork），按固定模板生成 Markdown 日报，写入工作区 github-trending-top10-<当日日期>.md，并在输出中告知文件路径。",
+      "revision": 2,
+      "notes": [],
+      "createdAt": "2026-10-18T14:09:54.065Z",
+      "updatedAt": "2026-10-18T14:12:05.542Z",
+      "editor": {
+        "viewport": {
+          "x": -429.6513164382261,
+          "y": 224.4023755327643,
+          "scale": 0.6765061532849838
+        },
+        "scopePath": []
+      },
+      "budgetDecision": {
+        "mode": "unlimited",
+        "decidedAt": "2026-10-18T14:04:26.433Z"
+      },
+      "executionPolicy": {}
+    },
+    {
+      "nodes": [
+        {
+          "id": "9f442803-6de5-4653-8ac5-4035c13467f6",
+          "number": "a-1",
+          "kind": "input",
+          "title": "运行输入",
+          "x": 90,
+          "y": 180,
+          "fixed": false,
+          "config": {
+            "fields": [
+              {
+                "name": "orderFilePath",
+                "label": "订单 JSON 文件路径（含文件名）",
+                "required": true,
+                "type": "text"
+              },
+              {
+                "name": "outputDir",
+                "label": "汇总产物输出目录",
+                "required": true,
+                "type": "text"
+              }
+            ]
+          }
+        },
+        {
+          "id": "b6f3968f-4e45-4800-af42-3386a1f28d5a",
+          "number": "a-11",
+          "kind": "output",
+          "title": "回读结果展示",
+          "x": 400,
+          "y": 180,
+          "fixed": false,
+          "config": {
+            "text": "已写入并回读 {{9f442803-6de5-4653-8ac5-4035c13467f6.outputDir}} 下两个产物，请人工核对：\n\n【summary.json】\n{{85b4ec7f-4d70-442e-a301-86b94b11e28a.text}}\n\n【report.md】\n{{33309387-4c6e-475e-a28e-fe0308ce2d6a.text}}",
+            "outputName": "result"
+          }
+        },
+        {
+          "id": "c00ed870-68b2-43cd-ab43-5ef7bab9a7da",
+          "number": "a-2",
+          "kind": "tool",
+          "title": "读取订单文件",
+          "x": 720,
+          "y": 120,
+          "fixed": false,
+          "config": {
+            "toolId": "native:read",
+            "inputs": {
+              "file_path": "{{9f442803-6de5-4653-8ac5-4035c13467f6.orderFilePath}}"
+            }
+          }
+        },
+        {
+          "id": "0f519845-f2ec-44b2-bdb7-3a01443321bc",
+          "number": "a-3",
+          "kind": "code",
+          "title": "解析订单 JSON",
+          "x": 1040,
+          "y": 120,
+          "fixed": false,
+          "config": {
+            "language": "javascript",
+            "code": "function parseOrdersText(text) {\n  var s = typeof text === 'string' ? text : '';\n  if (s.trim().length === 0) {\n    throw new Error('订单文件内容为空');\n  }\n  var data;\n  try {\n    data = JSON.parse(s.trim());\n  } catch (e) {\n    throw new Error('订单文件内容不是有效 JSON：' + (e && e.message ? e.message : String(e)));\n  }\n  if (!Array.isArray(data)) {\n    throw new Error('订单文件必须是 JSON 数组，实际顶层为 ' + (data === null ? 'null' : typeof data));\n  }\n  return data;\n}\n\nfunction extractOrders(res) {\n  if (Array.isArray(res)) {\n    return res;\n  }\n  if (!res || typeof res !== 'object') {\n    throw new Error('订单文件读取结果为空或结构异常');\n  }\n  if (!Array.isArray(res.lines)) {\n    throw new Error('read 输出结构异常：缺少 lines 数组，顶层键=' + JSON.stringify(Object.keys(res)));\n  }\n  if (res.offset !== 1) {\n    throw new Error('文件读取发生分页/偏移：offset=' + JSON.stringify(res.offset) + '，仅支持 offset=1 的完整单页读取');\n  }\n  if (typeof res.totalLines !== 'number') {\n    throw new Error('read 输出结构异常：缺少数值 totalLines');\n  }\n  if (res.lines.length !== res.totalLines) {\n    throw new Error('文件读取疑似截断：lines 数量 ' + res.lines.length + ' 与 totalLines ' + res.totalLines + ' 不一致');\n  }\n  var parts = [];\n  for (var i = 0; i < res.lines.length; i++) {\n    var ln = res.lines[i];\n    if (!ln || typeof ln !== 'object' || typeof ln.text !== 'string' || ln.number !== i + 1) {\n      throw new Error('read 输出行结构异常：第 ' + (i + 1) + ' 条记录缺少 text 或行号不连续');\n    }\n    parts.push(ln.text);\n  }\n  return parseOrdersText(parts.join('\\n'));\n}\n\nfunction main(inputs) {\n  var res = inputs.readValue;\n  if (res === undefined || res === null) {\n    var raw = inputs.readText;\n    if (typeof raw !== 'string' || raw.trim().length === 0) {\n      throw new Error('未获得读取订单文件节点的输出（value 与 text 均为空）');\n    }\n    try {\n      res = JSON.parse(raw.trim());\n    } catch (e) {\n      throw new Error('读取输出不是有效 JSON：' + (e && e.message ? e.message : String(e)));\n    }\n  }\n  var orders = extractOrders(res);\n  return { orders: orders };\n}",
+            "inputs": {
+              "readValue": "{{c00ed870-68b2-43cd-ab43-5ef7bab9a7da.value}}",
+              "readText": "{{c00ed870-68b2-43cd-ab43-5ef7bab9a7da.text}}"
+            },
+            "outputSchema": [
+              {
+                "name": "orders",
+                "type": "array",
+                "description": "订单对象数组，每条含 id/status/category/amountCents（整数分）",
+                "required": true
+              }
+            ],
+            "timeoutMs": 5000
+          }
+        },
+        {
+          "id": "b344704f-3974-44c0-95b3-eda07a7e79c6",
+          "number": "a-4",
+          "kind": "code",
+          "title": "筛选已支付并按分类求和",
+          "x": 1360,
+          "y": 120,
+          "fixed": false,
+          "config": {
+            "language": "javascript",
+            "code": "function main(inputs) {\n  var orders = inputs.orders;\n  if (!Array.isArray(orders)) throw new Error('orders 必须是数组');\n  var paid = [];\n  for (var i = 0; i < orders.length; i++) {\n    var o = orders[i];\n    if (o && typeof o === 'object' && o.status === 'paid') paid.push(o);\n  }\n  var totalCents = 0;\n  var byCategory = {};\n  var seen = [];\n  for (var j = 0; j < paid.length; j++) {\n    var p = paid[j];\n    var amt = p.amountCents;\n    if (typeof amt !== 'number' || !isFinite(amt) || Math.floor(amt) !== amt) {\n      throw new Error('amountCents 必须是整数分，订单 id=' + String(p.id));\n    }\n    var cat = String(p.category);\n    if (!Object.prototype.hasOwnProperty.call(byCategory, cat)) {\n      byCategory[cat] = 0;\n      seen.push(cat);\n    }\n    byCategory[cat] += amt;\n    totalCents += amt;\n  }\n  var categories = [];\n  for (var k = 0; k < seen.length; k++) {\n    categories.push({ name: seen[k], cents: byCategory[seen[k]] });\n  }\n  var summary = { paidCount: paid.length, totalCents: totalCents, byCategory: byCategory };\n  return {\n    paidCount: paid.length,\n    totalCents: totalCents,\n    byCategory: byCategory,\n    categories: categories,\n    summaryJson: JSON.stringify(summary, null, 2) + '\\n'\n  };\n}",
+            "inputs": {
+              "orders": "{{0f519845-f2ec-44b2-bdb7-3a01443321bc.orders}}"
+            },
+            "outputSchema": [
+              {
+                "name": "paidCount",
+                "type": "number",
+                "description": "status 严格等于 paid 的订单条数",
+                "required": true
+              },
+              {
+                "name": "totalCents",
+                "type": "number",
+                "description": "已支付订单 amountCents 整数总和",
+                "required": true
+              },
+              {
+                "name": "byCategory",
+                "type": "object",
+                "description": "分类名到整数金额分的映射，仅含输入中出现的已支付分类",
+                "required": true
+              },
+              {
+                "name": "categories",
+                "type": "array",
+                "description": "[{name,cents}] 数组，按分类首次出现顺序，供模板逐行渲染",
+                "required": true
+              },
+              {
+                "name": "summaryJson",
+                "type": "string",
+                "description": "summary.json 文件文本，2 空格缩进 JSON",
+                "required": true
+              }
+            ],
+            "timeoutMs": 5000
+          }
+        },
+        {
+          "id": "4f1448ba-750d-4707-8570-e3a6be60e4d9",
+          "number": "a-5",
+          "kind": "tool",
+          "title": "写入 summary.json",
+          "x": 80,
+          "y": 340,
+          "fixed": false,
+          "config": {
+            "toolId": "native:write",
+            "inputs": {
+              "content": "{{b344704f-3974-44c0-95b3-eda07a7e79c6.summaryJson}}",
+              "file_path": "{{9f442803-6de5-4653-8ac5-4035c13467f6.outputDir}}/summary.json"
+            }
+          }
+        },
+        {
+          "id": "5fb5a110-16b6-4df6-b421-82311340a721",
+          "number": "a-6",
+          "kind": "template",
+          "title": "排版最小格式 report.md",
+          "x": 400,
+          "y": 340,
+          "fixed": false,
+          "config": {
+            "text": "# 已支付订单汇总\n\n笔数：{{count}}\n总额（分）：{{total}}\n{% for c in categories %}{{c.name}}：{{c.cents}}\n{% endfor %}",
+            "inputs": {
+              "categories": "{{b344704f-3974-44c0-95b3-eda07a7e79c6.categories}}",
+              "count": "{{b344704f-3974-44c0-95b3-eda07a7e79c6.paidCount}}",
+              "total": "{{b344704f-3974-44c0-95b3-eda07a7e79c6.totalCents}}"
+            }
+          }
+        },
+        {
+          "id": "2fef4ecb-b690-46c1-9cf1-abe1b9cee7e1",
+          "number": "a-7",
+          "kind": "tool",
+          "title": "写入 report.md",
+          "x": 720,
+          "y": 340,
+          "fixed": false,
+          "config": {
+            "toolId": "native:write",
+            "inputs": {
+              "content": "{{5fb5a110-16b6-4df6-b421-82311340a721.text}}",
+              "file_path": "{{9f442803-6de5-4653-8ac5-4035c13467f6.outputDir}}/report.md"
+            }
+          }
+        },
+        {
+          "id": "85b4ec7f-4d70-442e-a301-86b94b11e28a",
+          "number": "a-8",
+          "kind": "tool",
+          "title": "回读 summary.json",
+          "x": 1040,
+          "y": 340,
+          "fixed": false,
+          "config": {
+            "toolId": "native:read",
+            "inputs": {
+              "file_path": "{{9f442803-6de5-4653-8ac5-4035c13467f6.outputDir}}/summary.json"
+            }
+          }
+        },
+        {
+          "id": "33309387-4c6e-475e-a28e-fe0308ce2d6a",
+          "number": "a-9",
+          "kind": "tool",
+          "title": "回读 report.md",
+          "x": 1360,
+          "y": 340,
+          "fixed": false,
+          "config": {
+            "toolId": "native:read",
+            "inputs": {
+              "file_path": "{{9f442803-6de5-4653-8ac5-4035c13467f6.outputDir}}/report.md"
+            }
+          }
+        },
+        {
+          "id": "e43ba72e-9fdb-4233-bad7-eb8c14fcc9d8",
+          "number": "a-10",
+          "kind": "human",
+          "title": "人工核对验收结果",
+          "x": 80,
+          "y": 560,
+          "fixed": false,
+          "config": {
+            "prompt": "请对照冻结验收检查逐项人工核对：① summary.json 顶层仅含 paidCount/totalCents/byCategory 三个字段；② report.md 除固定标题“# 已支付订单汇总”与统计行外无评价、结论或额外文案；③ 统计逻辑为严格 status==='paid'（区分大小写、不宽松匹配）且 amountCents 按整数求和；④ 统计值与分类名单均由输入实时计算、未硬编码。回读内容如下：\n\n【summary.json】\n{{85b4ec7f-4d70-442e-a301-86b94b11e28a.text}}\n\n【report.md】\n{{33309387-4c6e-475e-a28e-fe0308ce2d6a.text}}",
+            "fields": [],
+            "actions": [
+              {
+                "id": "approve",
+                "label": "确认核对通过"
+              }
+            ]
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "planning-edge-1",
+          "source": "9f442803-6de5-4653-8ac5-4035c13467f6",
+          "target": "c00ed870-68b2-43cd-ab43-5ef7bab9a7da"
+        },
+        {
+          "id": "planning-edge-2",
+          "source": "c00ed870-68b2-43cd-ab43-5ef7bab9a7da",
+          "target": "0f519845-f2ec-44b2-bdb7-3a01443321bc"
+        },
+        {
+          "id": "planning-edge-3",
+          "source": "0f519845-f2ec-44b2-bdb7-3a01443321bc",
+          "target": "b344704f-3974-44c0-95b3-eda07a7e79c6"
+        },
+        {
+          "id": "planning-edge-4",
+          "source": "b344704f-3974-44c0-95b3-eda07a7e79c6",
+          "target": "4f1448ba-750d-4707-8570-e3a6be60e4d9"
+        },
+        {
+          "id": "planning-edge-5",
+          "source": "4f1448ba-750d-4707-8570-e3a6be60e4d9",
+          "target": "5fb5a110-16b6-4df6-b421-82311340a721"
+        },
+        {
+          "id": "planning-edge-6",
+          "source": "5fb5a110-16b6-4df6-b421-82311340a721",
+          "target": "2fef4ecb-b690-46c1-9cf1-abe1b9cee7e1"
+        },
+        {
+          "id": "planning-edge-7",
+          "source": "2fef4ecb-b690-46c1-9cf1-abe1b9cee7e1",
+          "target": "85b4ec7f-4d70-442e-a301-86b94b11e28a"
+        },
+        {
+          "id": "planning-edge-8",
+          "source": "85b4ec7f-4d70-442e-a301-86b94b11e28a",
+          "target": "33309387-4c6e-475e-a28e-fe0308ce2d6a"
+        },
+        {
+          "id": "planning-edge-9",
+          "source": "33309387-4c6e-475e-a28e-fe0308ce2d6a",
+          "target": "e43ba72e-9fdb-4233-bad7-eb8c14fcc9d8"
+        },
+        {
+          "id": "planning-edge-10",
+          "source": "e43ba72e-9fdb-4233-bad7-eb8c14fcc9d8",
+          "target": "b6f3968f-4e45-4800-af42-3386a1f28d5a"
+        }
+      ],
+      "id": "af665243-1a04-4486-9914-3793161532b6",
+      "workspaceId": "3e8e6188-0e29-48d6-83d0-17daaca8dc9e",
+      "title": "R7订单汇总验收",
+      "description": "复用已验收试做：从可变输入 orderFilePath 读取订单 JSON 数组（id/status/category/amountCents 整数分），严格筛选 status==='paid'，按 category 对整数金额求和，向可变输入 outputDir 写出固定结构 summary.json（{paidCount,totalCents,byCategory}）与最小格式 report.md（固定标题+笔数+总额（分）+各分类行），最后回读两文件展示供人工核对。统计与格式化全部为确定性节点，文件读写用真实工具 read/write，不硬编码统计值或分类名单，不联网。",
+      "revision": 2,
+      "notes": [],
+      "createdAt": "2026-10-19T00:53:16.527Z",
+      "updatedAt": "2026-10-19T01:00:34.868Z",
+      "editor": {
+        "viewport": {
+          "x": -416.7,
+          "y": 170,
+          "scale": 1
+        },
+        "scopePath": []
+      },
+      "budgetDecision": {
+        "mode": "unlimited",
+        "decidedAt": "2026-10-19T00:53:16.509Z"
+      },
+      "executionPolicy": {}
+    },
+    {
+      "nodes": [
+        {
+          "id": "b24457c5-bb19-4522-99ed-d247aeb6f980",
+          "number": "a-1",
+          "kind": "input",
+          "title": "库存补货清单输入",
+          "x": 90,
+          "y": 180,
+          "fixed": false,
+          "config": {
+            "fields": [
+              {
+                "name": "records",
+                "label": "库存记录 JSON 数组文本（每项含非空字符串 sku 与非负整数 stock）",
+                "required": true,
+                "type": "paragraph"
+              },
+              {
+                "name": "threshold",
+                "label": "补货阈值（非负整数）",
+                "required": true,
+                "type": "number"
+              },
+              {
+                "name": "outputPath",
+                "label": "输出 Markdown 文件路径（当前工作区内）",
+                "required": true,
+                "type": "text"
+              }
+            ]
+          }
+        },
+        {
+          "id": "70b26b89-49ff-4713-bef7-9125e444c2f0",
+          "number": "a-5",
+          "kind": "output",
+          "title": "返回目标路径与完整正文",
+          "x": 400,
+          "y": 180,
+          "fixed": false,
+          "config": {
+            "text": "已写入补货清单：{{input.filePath}}\n\n{{input.markdown}}",
+            "outputName": "result",
+            "inputs": {
+              "filePath": "{{b24457c5-bb19-4522-99ed-d247aeb6f980.outputPath}}",
+              "markdown": "{{568f6f74-455b-4551-bdb6-2ea110fb27b6.text}}"
+            }
+          }
+        },
+        {
+          "id": "b80e9c8a-2c9e-422d-b24f-93b124ab8864",
+          "number": "a-2",
+          "kind": "code",
+          "title": "校验并计算补货清单",
+          "x": 720,
+          "y": 120,
+          "fixed": false,
+          "config": {
+            "language": "javascript",
+            "code": "function main(inputs) {\n  var errors = [];\n  var records = inputs.records;\n  var threshold = inputs.threshold;\n  var outputPath = inputs.outputPath;\n\n  if (typeof outputPath !== 'string' || outputPath.length === 0) {\n    errors.push('outputPath 必须为非空字符串，实际收到：' + JSON.stringify(outputPath));\n  }\n\n  if (typeof threshold !== 'number' || !isFinite(threshold) || Math.floor(threshold) !== threshold || threshold < 0) {\n    errors.push('threshold 必须为非负整数，实际收到：' + JSON.stringify(threshold));\n  }\n\n  var list = null;\n  if (typeof records !== 'string') {\n    errors.push('records 必须为 JSON 数组文本，实际收到：' + JSON.stringify(records));\n  } else {\n    try {\n      var parsed = JSON.parse(records);\n      if (!Array.isArray(parsed)) {\n        errors.push('records 必须是合法 JSON 数组');\n      } else {\n        list = parsed;\n        for (var i = 0; i < list.length; i++) {\n          var item = list[i];\n          if (item === null || typeof item !== 'object' || Array.isArray(item)) {\n            errors.push('records[' + i + '] 必须是对象');\n            continue;\n          }\n          if (typeof item.sku !== 'string' || item.sku.length === 0) {\n            errors.push('records[' + i + '].sku 必须为非空字符串，实际收到：' + JSON.stringify(item.sku));\n          }\n          if (typeof item.stock !== 'number' || !isFinite(item.stock) || Math.floor(item.stock) !== item.stock || item.stock < 0) {\n            errors.push('records[' + i + '].stock 必须为非负整数，实际收到：' + JSON.stringify(item.stock));\n          }\n        }\n      }\n    } catch (err) {\n      errors.push('records 不是合法 JSON：' + err.message);\n    }\n  }\n\n  if (errors.length > 0) {\n    throw new Error('输入校验失败：' + errors.join('；'));\n  }\n\n  var lines = [];\n  var total = 0;\n  for (var j = 0; j < list.length; j++) {\n    var rec = list[j];\n    if (rec.stock < threshold) {\n      var need = threshold - rec.stock;\n      lines.push({ sku: rec.sku, restock: need });\n      total += need;\n    }\n  }\n\n  return { lines: lines, count: lines.length, total: total };\n}",
+            "inputs": {
+              "outputPath": "{{b24457c5-bb19-4522-99ed-d247aeb6f980.outputPath}}",
+              "records": "{{b24457c5-bb19-4522-99ed-d247aeb6f980.records}}",
+              "threshold": "{{b24457c5-bb19-4522-99ed-d247aeb6f980.threshold}}"
+            },
+            "outputSchema": [
+              {
+                "name": "lines",
+                "type": "array",
+                "description": "保留记录（stock < threshold）按输入顺序组成的对象数组，每项含 sku 与 restock（= threshold - stock）",
+                "required": true
+              },
+              {
+                "name": "count",
+                "type": "number",
+                "description": "品类数 N：保留记录条数",
+                "required": true
+              },
+              {
+                "name": "total",
+                "type": "number",
+                "description": "总补货数 T：各条 threshold - stock 之和",
+                "required": true
+              }
+            ],
+            "timeoutMs": 3000
+          }
+        },
+        {
+          "id": "568f6f74-455b-4551-bdb6-2ea110fb27b6",
+          "number": "a-3",
+          "kind": "template",
+          "title": "渲染 Markdown 正文",
+          "x": 1040,
+          "y": 120,
+          "fixed": false,
+          "config": {
+            "text": "# 库存补货清单（验收修订）\n品类：{{count}}\n补货总数：{{total}}\n{% for row in lines %}{{row.sku}}：{{row.restock}}\n{% else %}无需补货\n{% endfor %}",
+            "inputs": {
+              "count": "{{b80e9c8a-2c9e-422d-b24f-93b124ab8864.count}}",
+              "lines": "{{b80e9c8a-2c9e-422d-b24f-93b124ab8864.lines}}",
+              "total": "{{b80e9c8a-2c9e-422d-b24f-93b124ab8864.total}}"
+            }
+          }
+        },
+        {
+          "id": "afde5350-8255-40a0-b2fa-b60447c272fa",
+          "number": "a-4",
+          "kind": "tool",
+          "title": "写入补货清单 Markdown",
+          "x": 1360,
+          "y": 120,
+          "fixed": false,
+          "config": {
+            "toolId": "native:write",
+            "inputs": {
+              "content": "{{568f6f74-455b-4551-bdb6-2ea110fb27b6.text}}",
+              "file_path": "{{b24457c5-bb19-4522-99ed-d247aeb6f980.outputPath}}"
+            }
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "planning-edge-1",
+          "source": "b24457c5-bb19-4522-99ed-d247aeb6f980",
+          "target": "b80e9c8a-2c9e-422d-b24f-93b124ab8864"
+        },
+        {
+          "id": "planning-edge-2",
+          "source": "b80e9c8a-2c9e-422d-b24f-93b124ab8864",
+          "target": "568f6f74-455b-4551-bdb6-2ea110fb27b6"
+        },
+        {
+          "id": "planning-edge-3",
+          "source": "568f6f74-455b-4551-bdb6-2ea110fb27b6",
+          "target": "afde5350-8255-40a0-b2fa-b60447c272fa"
+        },
+        {
+          "id": "planning-edge-4",
+          "source": "afde5350-8255-40a0-b2fa-b60447c272fa",
+          "target": "70b26b89-49ff-4713-bef7-9125e444c2f0"
+        }
+      ],
+      "id": "d6b44612-439a-43f8-94a4-dc0d9b801226",
+      "workspaceId": "13abf792-a3f3-415c-9ba2-850857e02461",
+      "title": "模板驱动验收·库存补货清单",
+      "description": "design-only 确定性单链：input 声明 records/threshold/outputPath；code 节点运行时解析并严格校验输入（任何不合法即抛出具体错误信息使工作流明确失败），仅保留 stock < threshold 的记录并实时计算品类数 N 与总补货数 T；template 节点渲染固定 Markdown 正文（标题/品类/补货总数/逐条「sku：补货数」或「无需补货」）；tool 节点用 native:write 将正文写入 outputPath；output 节点返回目标文件路径与完整 Markdown 正文。不使用模型、agent、human、联网、Secret、requiredReadFiles。",
+      "revision": 2,
+      "notes": [],
+      "createdAt": "2026-10-19T03:53:18.724Z",
+      "updatedAt": "2026-10-19T03:58:20.915Z",
+      "editor": {
+        "viewport": {
+          "x": 32,
+          "y": 40,
+          "scale": 1
+        },
+        "scopePath": []
+      },
+      "budgetDecision": {
+        "mode": "unlimited",
+        "decidedAt": "2026-10-19T03:53:18.699Z"
+      },
+      "executionPolicy": {}
+    }
+  ],
+  "requests": {
+    "r7": {
+      "source": "docs/evidence/r7-compiler-desktop-20261019/planning-tasks.json [0].request.instruction",
+      "text": "创建「R7订单汇总验收」工作流：复用已验收试做，读取可变输入的订单 JSON 文件（数组，每条含 id/status/category/amountCents，amountCents 为整数分），筛选 status 严格等于 paid 的订单，按 category 对整数 amountCents 求和，输出两个文件到可变输出目录：summary.json 固定结构 {paidCount,totalCents,byCategory}；report.md 固定标题‘# 已支付订单汇总’，正文含‘笔数：N’‘总额（分）：T’及各分类‘分类：金额分’行，不包含评价或额外文案。不得硬编码本次统计值或分类名单。计算与格式化使用确定性节点，文件读写使用真实工具 read/write；订单文件路径和输出目录都应为可变输入。优化目标为每次运行模型调用0次、子Agent调用0次；超目标仍保留候选和优化比较。只处理当前工作区合成文件，不联网。保留来源映射、已有复核结论及不能由单个样本证明的边界。",
+      "kind": "verbatim-request"
+    },
+    "inventory": {
+      "source": "docs/evidence/template-fill-desktop-20261019/planning-tasks.json [0].request.instruction",
+      "text": "新建一个此前不存在的确定性工作流「模板驱动验收·库存补货清单」，仅设计（design-only 预览），不执行业务、不保存、不发布。目标结构为 input→code→template→tool→output 的简洁单链，产出的工作流不使用模型、agent、human 节点，不联网、不使用 Secret、不使用 requiredReadFiles；连线与节点编号交给规划驱动自动处理。\n\n【输入（input 节点）】三个声明输入：1) records：JSON 数组文本，每个元素为对象，必须含非空字符串 sku 与非负整数 stock；2) threshold：非负整数；3) outputPath：当前工作区内输出 Markdown 文件的路径。\n\n【确定性计算（code 节点）】实时计算、禁止硬编码任何样本数据：解析并校验 records（records 必须是合法 JSON 数组；每条 sku 为非空字符串、stock 为非负整数；threshold 必须为非负整数；outputPath 必须为非空字符串）。任何输入不合法都必须让工作流明确失败并给出具体错误信息。校验通过后：仅保留 stock < threshold 的记录，保持输入顺序，逐条生成 sku 与补货数 threshold-stock；同时实时统计品类数 N（保留记录条数）与总补货数 T（各条 threshold-stock 之和）。\n\n【模板渲染（template 节点）】输出 Markdown 正文，固定结构：第一行固定标题「# 库存补货清单」；随后一行「品类：N」；随后一行「补货总数：T」；有补货时，对每条保留记录按输入顺序输出一行「sku：补货数」（中文冒号）；无补货时输出一行「无需补货」，不输出任何 sku 行。\n\n【写文件（tool 节点）】使用实际 native 工具 native:write（已查合同：必填参数 file_path 与 content，均为字符串）把模板渲染出的完整 Markdown 正文保存到 outputPath，file_path 取输入 outputPath，content 取模板正文；不得假写、不得用 bash 代替。\n\n【输出（output 节点）】最后返回写文件的目标文件路径与完整 Markdown 正文。\n\n约束重申：所有统计必须运行时实时计算，禁止硬编码样本；无效输入必须明确失败；只允许 input/code/template/tool/output 五类节点按单链组织。",
+      "kind": "verbatim-request"
+    },
+    "trending-llm": {
+      "source": ".test-data/t24/library-reference-graphs.json workflows[0].description",
+      "text": "抓取 github.com/trending（today）页面，LLM 从真实抓取内容提取前 10 个热门项目并把描述翻译为中文，代码节点按固定规范确定性排版（千分位、汇总表+项目详情、缺失标「暂无」），native:write 按运行日期写入工作区根目录 github-top10-YYYY-MM-DD.md，输出节点返回报告全文与保存路径。",
+      "kind": "saved-graph-description; original user request not present in repository evidence"
+    },
+    "trending-http": {
+      "source": ".test-data/t24/library-reference-graphs.json workflows[1].description",
+      "text": "每次运行抓取 https://github.com/trending 每日榜，解析前 10 个项目（排名/名称/链接/简介/语言/Star/今日新增/Fork），按固定模板生成 Markdown 日报，写入工作区 github-trending-top10-<当日日期>.md，并在输出中告知文件路径。",
+      "kind": "saved-graph-description; original user request not present in repository evidence"
+    }
+  },
+  "workflowsSha256": "3b514b2f34bb21738792ba4caadd07331fb32e07164a662f01dc27a71ea5cb94"
+}

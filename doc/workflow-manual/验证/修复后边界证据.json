@@ -1,0 +1,375 @@
+{
+  "schema": 1,
+  "date": "2026-10-16",
+  "graphon": "0.7.0",
+  "scope": "isolated-real-engine-boundary-probes-and-safe-saved-graph-copies-original-libraries-read-only",
+  "externalModelCalls": 0,
+  "libraries": [
+    {
+      "libraryIndex": 1,
+      "sha256": "111c5055fb4e05f433f61c006e8bd2865deb880e7ff68bcd78e2182d14f63f3b",
+      "unchanged": true,
+      "workflows": [
+        {
+          "index": 1,
+          "title": "Harness Web 验收示例",
+          "revision": 6,
+          "rootNodes": 4,
+          "totalNodes": 4,
+          "kinds": [
+            "input",
+            "output",
+            "template"
+          ],
+          "validSchema": true,
+          "executableIssues": [
+            "节点未连接到用户输入入口"
+          ],
+          "unreachableRootNodes": [
+            {
+              "number": "u-1",
+              "kind": "output"
+            }
+          ],
+          "execution": {
+            "status": "not-run",
+            "reason": "saved-graph-has-executable-validation-issues"
+          }
+        },
+        {
+          "index": 2,
+          "title": "性能验收 · 200 个混合节点",
+          "revision": 1,
+          "rootNodes": 200,
+          "totalNodes": 320,
+          "kinds": [
+            "assigner",
+            "code",
+            "http",
+            "human",
+            "if",
+            "input",
+            "iteration",
+            "list",
+            "llm",
+            "loop",
+            "output",
+            "template"
+          ],
+          "validSchema": true,
+          "executableIssues": [
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型",
+            "请填写请求 URL",
+            "请选择此节点的模型"
+          ],
+          "unreachableRootNodes": [],
+          "execution": {
+            "status": "not-run",
+            "reason": "saved-graph-has-executable-validation-issues"
+          }
+        },
+        {
+          "index": 3,
+          "title": "Graphon · 文档解析配置验收",
+          "revision": 7,
+          "rootNodes": 3,
+          "totalNodes": 3,
+          "kinds": [
+            "document",
+            "input",
+            "output"
+          ],
+          "validSchema": true,
+          "executableIssues": [],
+          "unreachableRootNodes": [],
+          "execution": {
+            "status": "not-run",
+            "reason": "requires-external-model-tool-file-context-or-python-sandbox"
+          }
+        },
+        {
+          "index": 4,
+          "title": "模型默认继承 · 界面验收",
+          "revision": 25,
+          "rootNodes": 3,
+          "totalNodes": 3,
+          "kinds": [
+            "input",
+            "llm",
+            "output"
+          ],
+          "validSchema": true,
+          "executableIssues": [
+            "节点未连接到用户输入入口",
+            "请选择此节点的模型"
+          ],
+          "unreachableRootNodes": [
+            {
+              "number": "u-1",
+              "kind": "llm"
+            }
+          ],
+          "execution": {
+            "status": "not-run",
+            "reason": "saved-graph-has-executable-validation-issues"
+          }
+        },
+        {
+          "index": 5,
+          "title": "节点验证 · 循环与状态",
+          "revision": 24,
+          "rootNodes": 3,
+          "totalNodes": 8,
+          "kinds": [
+            "assigner",
+            "exit_loop",
+            "if",
+            "input",
+            "loop",
+            "output"
+          ],
+          "validSchema": true,
+          "executableIssues": [],
+          "unreachableRootNodes": [],
+          "execution": {
+            "status": "success",
+            "engine": {
+              "name": "graphon",
+              "version": "0.7.0",
+              "protocol": 1
+            },
+            "successfulSteps": 15,
+            "humanAnswers": 0,
+            "outputKeys": [
+              "result"
+            ],
+            "isolation": "temporary-copy-original-library-not-written"
+          }
+        },
+        {
+          "index": 6,
+          "title": "工具验证 · OpenAPI 问候",
+          "revision": 9,
+          "rootNodes": 3,
+          "totalNodes": 3,
+          "kinds": [
+            "input",
+            "output",
+            "tool"
+          ],
+          "validSchema": true,
+          "executableIssues": [],
+          "unreachableRootNodes": [],
+          "execution": {
+            "status": "not-run",
+            "reason": "requires-external-model-tool-file-context-or-python-sandbox"
+          }
+        },
+        {
+          "index": 7,
+          "title": "节点验证 · 数据处理与人工确认",
+          "revision": 20,
+          "rootNodes": 8,
+          "totalNodes": 11,
+          "kinds": [
+            "code",
+            "human",
+            "input",
+            "iteration",
+            "list",
+            "output",
+            "template",
+            "tool"
+          ],
+          "validSchema": true,
+          "executableIssues": [],
+          "unreachableRootNodes": [],
+          "execution": {
+            "status": "success",
+            "engine": {
+              "name": "graphon",
+              "version": "0.7.0",
+              "protocol": 1
+            },
+            "successfulSteps": 16,
+            "humanAnswers": 1,
+            "outputKeys": [
+              "result"
+            ],
+            "isolation": "temporary-copy-original-library-not-written"
+          }
+        }
+      ]
+    },
+    {
+      "libraryIndex": 2,
+      "sha256": "d9df1b081025b3d6a71379aaf2ece7d47c1953190b5b58c8f85482949222d245",
+      "unchanged": true,
+      "workflows": [
+        {
+          "index": 1,
+          "title": "桌面验收 · 文本处理",
+          "revision": 32,
+          "rootNodes": 4,
+          "totalNodes": 4,
+          "kinds": [
+            "input",
+            "output",
+            "template",
+            "tool"
+          ],
+          "validSchema": true,
+          "executableIssues": [
+            "节点未连接到用户输入入口"
+          ],
+          "unreachableRootNodes": [
+            {
+              "number": "u-1",
+              "kind": "tool"
+            }
+          ],
+          "execution": {
+            "status": "not-run",
+            "reason": "saved-graph-has-executable-validation-issues"
+          }
+        },
+        {
+          "index": 2,
+          "title": "桌面验收 · 文本处理 副本",
+          "revision": 9,
+          "rootNodes": 4,
+          "totalNodes": 4,
+          "kinds": [
+            "input",
+            "output",
+            "template",
+            "tool"
+          ],
+          "validSchema": true,
+          "executableIssues": [],
+          "unreachableRootNodes": [],
+          "execution": {
+            "status": "success",
+            "engine": {
+              "name": "graphon",
+              "version": "0.7.0",
+              "protocol": 1
+            },
+            "successfulSteps": 4,
+            "humanAnswers": 0,
+            "outputKeys": [
+              "result"
+            ],
+            "isolation": "temporary-copy-original-library-not-written"
+          }
+        }
+      ]
+    }
+  ],
+  "probes": {
+    "siblingReferenceWithoutDependency": {
+      "status": "rejected",
+      "phase": "start-validation",
+      "engineStarted": false,
+      "outputs": {},
+      "error": "b: 节点引用 a.text 不在当前节点的上游依赖作用域内",
+      "completedOutputs": 0
+    },
+    "duplicateOutputName": {
+      "engine": {
+        "name": "graphon",
+        "version": "0.7.0",
+        "protocol": 1
+      },
+      "status": "failed",
+      "outputs": {
+        "result": "first"
+      },
+      "error": "输出名称「result」重复：多个已激活的输出不能覆盖同一结果，请使用不同名称或先汇总",
+      "completedOutputs": 1
+    },
+    "fullJinjaMacro": {
+      "engine": {
+        "name": "graphon",
+        "version": "0.7.0",
+        "protocol": 1
+      },
+      "status": "failed",
+      "outputs": {},
+      "error": "当前模板不支持标签 macro greet()",
+      "completedOutputs": 0
+    },
+    "exitLoopInsideIteration_terminate": {
+      "engine": {
+        "name": "graphon",
+        "version": "0.7.0",
+        "protocol": 1
+      },
+      "status": "success",
+      "outputs": {
+        "result": "1"
+      },
+      "completedOutputs": 1
+    },
+    "exitLoopInsideIteration_null": {
+      "engine": {
+        "name": "graphon",
+        "version": "0.7.0",
+        "protocol": 1
+      },
+      "status": "success",
+      "outputs": {
+        "result": "1"
+      },
+      "completedOutputs": 1
+    },
+    "exitLoopInsideIteration_remove": {
+      "engine": {
+        "name": "graphon",
+        "version": "0.7.0",
+        "protocol": 1
+      },
+      "status": "success",
+      "outputs": {
+        "result": "1"
+      },
+      "completedOutputs": 1
+    }
+  }
+}

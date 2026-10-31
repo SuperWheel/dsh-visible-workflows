@@ -1,3 +1,4 @@
+import { t, useLocale } from './i18n.ts'
 import type { ModelChoice, NodeConfig } from '../shared/types.ts'
 import { Field, Select } from './controls.tsx'
 
@@ -12,12 +13,12 @@ export interface ModelSettingsProps {
 const modelKey = (model: { provider: string; model: string }) => JSON.stringify([model.provider, model.model])
 
 /** Undefined is a deliberate runtime inheritance policy, never the first catalog entry. */
-export function ModelSettings({ config, models, modelsError, disabled = false, onChange }: ModelSettingsProps) {
+export function ModelSettings({ config, models, modelsError, disabled = false, onChange }: ModelSettingsProps) {useLocale();
   const selectedId = config.model ? modelKey(config.model) : ''
   const selected = config.model ? models.find(model => modelKey(model) === selectedId) : undefined
-  const modelOptions = [{ id: '', label: '跟随 DSH' }, ...models.map(model => ({ id: modelKey(model), label: model.label }))]
+  const modelOptions = [{ id: '', label: t('跟随 DSH') }, ...models.map(model => ({ id: modelKey(model), label: model.label }))]
   if (config.model && !selected) modelOptions.push({ id: selectedId, label: `${config.model.model} · ${config.model.provider}（暂不在目录）` })
-  const effortOptions = [{ id: '', label: config.model ? '默认设置' : '跟随 DSH' }, ...(selected?.efforts ?? [])]
+  const effortOptions = [{ id: '', label: config.model ? t('默认设置') : t('跟随 DSH') }, ...(selected?.efforts.map(effort=>({...effort,label:t(effort.label)})) ?? [])]
   const unsupportedEffort = !!config.effort && !!selected && !selected.efforts.some(effort => effort.id === config.effort)
   if (config.effort && !effortOptions.some(effort => effort.id === config.effort)) {
     effortOptions.push({ id: config.effort, label: `${config.effort}${unsupportedEffort ? '（当前模型不支持）' : '（已指定）'}` })
@@ -30,12 +31,12 @@ export function ModelSettings({ config, models, modelsError, disabled = false, o
       : !selected ? '模型能力暂不可用，保留当前强度，执行前由宿主校验。'
         : '与 DSH 当前模型相同时沿用其强度；其他模型使用自身默认设置。'
   return <>
-    <Field label="模型" help={modelHelp} helpVisible={!!modelsError || !!config.model && !selected}><Select label="选择模型" value={selectedId} disabled={disabled} options={modelOptions} onChange={id => {
+    <Field label={t("模型")} help={t(modelHelp)} helpVisible={!!modelsError || !!config.model && !selected}><Select label={t("选择模型")} value={selectedId} disabled={disabled} options={modelOptions} onChange={id => {
       if (id === '') { onChange({ model: undefined }); return }
       const model = models.find(item => modelKey(item) === id)
       if (model) onChange({ model: { provider: model.provider, model: model.model } })
     }}/></Field>
-    <Field label="思考强度" help={effortHelp} helpVisible={unsupportedEffort || !!config.model && !selected}><Select label="选择思考强度" value={config.effort ?? ''}
+    <Field label={t("思考强度")} help={t(effortHelp)} helpVisible={unsupportedEffort || !!config.model && !selected}><Select label={t("选择思考强度")} value={config.effort ?? ''}
       disabled={disabled || (!selected?.efforts.length && !config.effort)} options={effortOptions}
       onChange={id => onChange({ effort: id || undefined })}/></Field>
   </>

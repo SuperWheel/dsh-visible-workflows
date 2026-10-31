@@ -4,8 +4,12 @@ import { resolve, join } from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { build } from 'tsdown'
 import { WorkspaceTypertGenerator } from '@deepseek-ai/dsh-typert-generator'
+import { stageTypertSdk } from './stage-typert-sdk.mjs'
+import { verifyTypertBuild } from './verify-typert-build.mjs'
 
 const root = resolve('.')
+// Build the OS credential helper explicitly; plugin builds never replace it.
+if (process.platform === 'darwin' && !existsSync('native/os-secret-broker/dist/integrity.json')) throw new Error('Build the OS credential component with node native/os-secret-broker/build.mjs first.')
 // A plugin without its private runtime cannot execute any workflow. Fail the
 // build before producing an apparently installable but incomplete package.
 const runtimeManifests = readdirSync('runtime-assets').filter(name => /^(macos-arm64|windows-x64)\.json$/.test(name))
@@ -23,16 +27,18 @@ const tsc = (project) =>
   execFileSync(process.execPath, ['node_modules/typescript/bin/tsc', '-p', project], { stdio: 'inherit' })
 tsc('tsconfig.host-build.json')
 await build({
-  entry: { index: 'lib/types/host/index.js' },
+  entry: { 'html-tools': 'lib/types/host/html-tools.js', index: 'lib/types/host/index.js', compiler: 'lib/types/shared/workflow-compiler.js', 'workflow-compile': 'lib/types/host/planning/compiler-cli.js' },
   outDir: 'lib',
   format: 'esm',
   platform: 'node',
+  deps: { alwaysBundle: ['htmlparser2', 'css-select'] },
   clean: false,
   sourcemap: true,
   dts: false,
   outputOptions: { entryFileNames: '[name].js' },
 })
-
+// Keep the emitted source entry usable without external HTML parser packages.
+writeFileSync('lib/types/host/html-tools.js', "export * from '../../html-tools.js'\n")
 // The published generator requires a packages/* workspace inventory. Stage our
 // single package at build time; no Harness source checkout is needed by users.
 const stage = join(root, '.cache/typert')
@@ -53,31 +59,18 @@ writeFileSync(
     include: ['src/host/**/*.ts', 'src/shared/**/*.ts'],
   }),
 )
-const protocol = join(stage, 'packages/protocol')
-cpSync('node_modules/@deepseek-ai/dsh-typert-protocol', protocol, { recursive: true, dereference: true })
-cpSync(join(protocol, 'lib/types'), join(protocol, 'declarations'), { recursive: true })
-const protocolManifest = JSON.parse(readFileSync(join(protocol, 'package.json')))
-protocolManifest.exports['.'] = { types: './declarations/index.d.ts', default: './declarations/index.d.ts' }
-protocolManifest.exports['./types'] = {
-  types: './declarations/types.d.ts',
-  default: './declarations/types.d.ts',
-}
-writeFileSync(join(protocol, 'package.json'), JSON.stringify(protocolManifest))
-writeFileSync(join(protocol, 'tsconfig.host.json'), JSON.stringify({ include: ['lib/types/**/*.d.ts'] }))
+const sdk = stageTypertSdk(root, stage)
 writeFileSync(
   join(stage, 'tsconfig.host.json'),
   JSON.stringify({
     compilerOptions: {
       ...JSON.parse(readFileSync('tsconfig.base.json')).compilerOptions,
-      paths: {
-        '@deepseek-ai/dsh-typert-protocol': ['./packages/protocol/declarations/index.d.ts'],
-        '@deepseek-ai/dsh-typert-protocol/types': ['./packages/protocol/declarations/types.d.ts'],
-      },
+      paths: sdk.paths,
     },
     files: [],
     references: [
       { path: './packages/workflows/tsconfig.host.json' },
-      { path: './packages/protocol/tsconfig.host.json' },
+      ...sdk.references,
     ],
   }),
 )
@@ -102,7 +95,9 @@ await build({
   dts: false,
   sourcemap: true,
   deps: {
-    alwaysBundle: ['zod', 'dsh-visible-dynamic-workflows/remote'],
+    // The generated 0.2.1 Remote artifact uses this browser-safe lazy helper;
+    // it is an npm subpath, not a renderer module-loader seed.
+    alwaysBundle: ['zod', 'dsh-visible-dynamic-workflows/remote', '@deepseek-ai/dsh-typert-protocol/remote-info'],
     neverBundle: [
       'react',
       'react-dom',
@@ -118,3 +113,4 @@ await build({
     entryFileNames: '[name].js',
   },
 })
+console.log(JSON.stringify({ typertBuild: await verifyTypertBuild(root) }))

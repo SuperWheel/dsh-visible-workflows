@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-17T08:20:51.974Z",
+  "id": "2daf86e4-bfdb-4330-a442-fa3ff048398c",
+  "workflowId": "162878e8-e655-4572-a573-5649b6100d15",
+  "workspaceId": "d2e086c9-7939-426a-a358-f2192fe8255f",
+  "nodeId": "e5067461-992d-4ac0-a344-93092a5d4732",
+  "runStatus": "success",
+  "httpStatus": "success",
+  "startedAt": "2026-10-17T08:20:22.110Z",
+  "endedAt": "2026-10-17T08:20:23.098Z",
+  "inputIsReferenceOnly": true,
+  "responseIsStatusOnly": true,
+  "response": {
+    "ok": false,
+    "status_code": 401
+  },
+  "declarationFieldsOnly": true,
+  "secretNotInEnvironment": true,
+  "responseMatchesOutput": true,
+  "rawCredentialRead": false,
+  "runFileSha256": "c23030bf25dd1a281783c13daf49c5e70851655df801ebc29b40a14932c3199e"
+}

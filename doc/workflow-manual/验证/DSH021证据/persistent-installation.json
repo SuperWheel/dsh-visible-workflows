@@ -1,0 +1,15 @@
+{
+  "state": "installed",
+  "at": "2026-10-17T08:17:58.284Z",
+  "target": "$DSH_HOME/profiles/desktop/node_modules/dsh-visible-dynamic-workflows",
+  "backupName": ".workflow-backup-8ebac502-6ef3-4816-ad30-19a91181aedc",
+  "beforeSha256": "6c9d1ea28ddee8a7903f3886e39c226b9e038cc06b832b7baaa8baf8ddf6f560",
+  "installedSha256": "86b890e37cdc181873054252f4c87148eef5fe10e9396146d245d70ec88ca098",
+  "profileHashes": {
+    "package.json": "ab9eb8c35aa678f87f26bdff7d23171947af11de0d0204537bf593db781d8548",
+    "cordis.patch.yml": "201f615a2c65373aac987ad6ad12cddd1a4d1a7c7729c23ffe3f9d10cf88190d",
+    "cordis.yml": "c300dcf2ebc5f02062d6591268d29d3db6fe45e0cb138f5467276fe2ba06076e"
+  },
+  "archiveSha256": "b12b90a7d9022e5805ea758d7649cc784e63b12a12ed10a865fbfccf3cf59a9e",
+  "rawProfileIncluded": false
+}

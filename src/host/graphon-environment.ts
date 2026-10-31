@@ -1,10 +1,11 @@
 import { createHash, randomUUID } from 'node:crypto'
-import { createReadStream } from 'node:fs'
-import { chmod, lstat, mkdir, open, readFile, realpath, rename, rm, stat, writeFile } from 'node:fs/promises'
+import { constants, createReadStream, type Stats } from 'node:fs'
+import { chmod, lstat, mkdir, open, readFile, readdir, realpath, rename, rm, writeFile } from 'node:fs/promises'
 import { spawn } from 'node:child_process'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createGunzip } from 'node:zlib'
+import { Readable } from 'node:stream'
 import { z } from 'zod'
 
 const hash = z.string().regex(/^[a-f0-9]{64}$/)
@@ -36,7 +37,7 @@ export interface GraphonEnvironment {
   manifestDigest: string
   tokenizer: { encoding: 'cl100k_base'; path: string; sha256: string; estimatedForUnmatchedModels: true }
 }
-export interface GraphonEnvironmentOptions { directory: string; assetsDirectory?: string; signal?: AbortSignal }
+export interface GraphonEnvironmentOptions { directory: string; assetsDirectory?: string; signal?: AbortSignal; verifyRuntimeContents?: boolean }
 
 export function resolveGraphonPlatform(platform: string = process.platform, arch: string = process.arch): GraphonPlatform {
   if (platform === 'darwin' && arch === 'arm64') return 'macos-arm64'
@@ -61,11 +62,18 @@ export function validateGraphonManifest(value: unknown, platform: GraphonPlatfor
 }
 
 export function graphonSpawnEnvironment(directory: string, source: NodeJS.ProcessEnv = process.env): Record<string, string> {
+  // The private scheduler needs neither model credentials nor the Host's plugin,
+  // proxy, shell or authentication environment. A denylist of Python variables
+  // left every other credential inherited by the long-lived Python process.
   const env: Record<string, string> = {}
-  for (const [key, value] of Object.entries(source)) {
-    if (value !== undefined && !key.toUpperCase().startsWith('PYTHON') && !['LD_PRELOAD','LD_LIBRARY_PATH','DYLD_INSERT_LIBRARIES','DYLD_LIBRARY_PATH','DYLD_FRAMEWORK_PATH'].includes(key.toUpperCase())) env[key] = value
+  for (const key of ['SystemRoot', 'WINDIR', 'LANG', 'LC_ALL', 'LC_CTYPE']) {
+    const value = source[key]
+    if (typeof value === 'string' && value.length <= 16_384 && !value.includes('\0')) env[key] = value
   }
-  return { ...env, PYTHONNOUSERSITE: '1', PYTHONDONTWRITEBYTECODE: '1', TIKTOKEN_CACHE_DIR: join(directory, 'tokenizer-cache'), HF_HUB_OFFLINE: '1', TRANSFORMERS_OFFLINE: '1' }
+  // Python is always an absolute path from the verified bundled runtime.
+  env.PATH = process.platform === 'win32' ? '' : '/usr/bin:/bin:/usr/sbin:/sbin'
+  return { ...env, HOME: directory, TMPDIR: directory, TEMP: directory, TMP: directory,
+    PYTHONNOUSERSITE: '1', PYTHONDONTWRITEBYTECODE: '1', TIKTOKEN_CACHE_DIR: join(directory, 'tokenizer-cache'), HF_HUB_OFFLINE: '1', TRANSFORMERS_OFFLINE: '1' }
 }
 
 export async function findGraphonAssetsDirectory(moduleURL: string = import.meta.url): Promise<string> {
@@ -118,27 +126,56 @@ async function prepareDirectory(directory: string): Promise<string> {
   return target
 }
 
-/** Extract only the regular-file USTAR subset emitted by our pinned builder. */
-export async function extractGraphonArchive(archive: string, target: string, manifest: GraphonRuntimeManifest, signal?: AbortSignal): Promise<void> {
-  const targetEntry = await lstat(target)
-  if (targetEntry.isSymbolicLink() || !targetEntry.isDirectory()) throw new Error('Graphon 解压目录必须为私有普通目录')
+function sameFile(a: Stats, b: Stats): boolean {
+  return a.dev === b.dev && a.ino === b.ino && a.size === b.size && a.mode === b.mode && a.uid === b.uid && a.nlink === b.nlink && a.mtimeMs === b.mtimeMs && a.ctimeMs === b.ctimeMs
+}
+
+/** The parser/extractor consumes these verified bytes, never a reopened pathname. */
+async function verifiedArchiveBytes(archive: string, manifest: GraphonRuntimeManifest, signal?: AbortSignal): Promise<Buffer> {
+  checkAbort(signal)
   await regularFile(archive)
-  if ((await stat(archive)).size !== manifest.archiveBytes || await digestFile(archive, signal) !== manifest.sha256) throw new Error('Graphon 运行时压缩包校验失败')
-  const source = createReadStream(archive), stream = createGunzip()
+  const handle = await open(archive, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0))
+  try {
+    const before = await handle.stat()
+    if (!before.isFile() || before.size !== manifest.archiveBytes) throw new Error('Graphon 运行时压缩包校验失败')
+    const bytes = Buffer.allocUnsafe(manifest.archiveBytes)
+    let offset = 0
+    while (offset < bytes.length) {
+      checkAbort(signal)
+      const { bytesRead } = await handle.read(bytes, offset, Math.min(64 * 1024, bytes.length - offset), offset)
+      if (!bytesRead) throw new Error('Graphon 运行时压缩包校验失败')
+      offset += bytesRead
+    }
+    checkAbort(signal)
+    if (!sameFile(before, await handle.stat()) || bytes.length !== manifest.archiveBytes || createHash('sha256').update(bytes).digest('hex') !== manifest.sha256) throw new Error('Graphon 运行时压缩包校验失败')
+    return bytes
+  } finally { await handle.close() }
+}
+
+interface ArchiveEntry { name: string; size: number; mode: number; body: Buffer }
+/** Read only the regular-file USTAR subset emitted by our pinned builder. */
+async function visitArchive(bytes: Buffer, manifest: GraphonRuntimeManifest, visit: (entry: ArchiveEntry) => Promise<void>, signal?: AbortSignal): Promise<void> {
+  const source = Readable.from([bytes]), stream = createGunzip()
   source.on('error', error => stream.destroy(error))
   source.pipe(stream)
   const iterator = stream[Symbol.asyncIterator]()
-  let buffered = Buffer.alloc(0), total = 0, files = 0
+  let buffered: Buffer = Buffer.alloc(0)
+  let total = 0, files = 0
   const seen = new Set<string>()
   const take = async (size: number): Promise<Buffer> => {
-    while (buffered.length < size) {
+    const part = Buffer.allocUnsafe(size)
+    let offset = 0
+    while (offset < size) {
       checkAbort(signal)
-      const next = await iterator.next()
-      if (next.done) throw new Error('Graphon 运行时压缩包被截断')
-      buffered = Buffer.concat([buffered, next.value as Buffer])
+      if (!buffered.length) {
+        const next = await iterator.next()
+        if (next.done) throw new Error('Graphon 运行时压缩包被截断')
+        buffered = next.value as Buffer
+      }
+      const count = Math.min(size - offset, buffered.length)
+      buffered.copy(part, offset, 0, count)
+      offset += count; buffered = buffered.subarray(count)
     }
-    const part = buffered.subarray(0, size)
-    buffered = buffered.subarray(size)
     return part
   }
   try {
@@ -163,23 +200,116 @@ export async function extractGraphonArchive(archive: string, target: string, man
       total += size; files++
       if (!Number.isSafeInteger(size) || size > 50_000_000 || total > manifest.expandedFileBytes || files > manifest.fileCount) throw new Error('Graphon tar 解压大小超出清单限制')
       seen.add(name)
-      const destination = join(target, ...name.split('/'))
-      let parent = target
-      for (const part of name.split('/').slice(0, -1)) {
-        parent = join(parent, part)
-        await mkdir(parent, { mode: 0o700 }).catch(error => { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error })
-        const entry = await lstat(parent)
-        if (entry.isSymbolicLink() || !entry.isDirectory()) throw new Error('Graphon 解压路径不允许符号链接')
-      }
-      const handle = await open(destination, 'wx', mode & 0o111 ? 0o700 : 0o600)
-      try {
-        let remaining = size
-        while (remaining) { const chunk = await take(Math.min(remaining, 64 * 1024)); await handle.writeFile(chunk); remaining -= chunk.length }
-      } finally { await handle.close() }
+      await visit({ name, size, mode: mode & 0o111 ? 0o700 : 0o600, body: await take(size) })
       if (size % 512) await take(512 - size % 512)
     }
     if (total !== manifest.expandedFileBytes || files !== manifest.fileCount) throw new Error('Graphon 运行时文件清单与压缩包不一致')
+    // Drain the gzip stream to validate its checksum and reject hidden tar data.
+    if (buffered.some(byte => byte !== 0)) throw new Error('Graphon tar 结束标记之后包含额外内容')
+    for (;;) {
+      checkAbort(signal)
+      const next = await iterator.next()
+      if (next.done) break
+      if ((next.value as Buffer).some(byte => byte !== 0)) throw new Error('Graphon tar 结束标记之后包含额外内容')
+    }
   } finally { source.destroy(); stream.destroy(); await iterator.return?.() }
+}
+
+export async function extractGraphonArchive(archive: string, target: string, manifest: GraphonRuntimeManifest, signal?: AbortSignal): Promise<void> {
+  const targetEntry = await lstat(target)
+  if (targetEntry.isSymbolicLink() || !targetEntry.isDirectory()) throw new Error('Graphon 解压目录必须为私有普通目录')
+  const bytes = await verifiedArchiveBytes(archive, manifest, signal)
+  await extractVerifiedArchive(bytes, target, manifest, signal)
+}
+
+async function extractVerifiedArchive(bytes: Buffer, target: string, manifest: GraphonRuntimeManifest, signal?: AbortSignal): Promise<void> {
+  await visitArchive(bytes, manifest, async ({ name, mode, body }) => {
+    const destination = join(target, ...name.split('/'))
+    let parent = target
+    for (const part of name.split('/').slice(0, -1)) {
+      parent = join(parent, part)
+      await mkdir(parent, { mode: 0o700 }).catch(error => { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error })
+      const entry = await lstat(parent)
+      if (entry.isSymbolicLink() || !entry.isDirectory()) throw new Error('Graphon 解压路径不允许符号链接')
+    }
+    const handle = await open(destination, 'wx', mode)
+    try { await handle.writeFile(body) } finally { await handle.close() }
+  }, signal)
+}
+
+type RuntimeFile = { size: number; mode: number; sha256: string }
+interface RuntimeInventory { files: Map<string, RuntimeFile>; directories: Set<string> }
+async function archiveInventory(bytes: Buffer, manifest: GraphonRuntimeManifest, signal?: AbortSignal): Promise<RuntimeInventory> {
+  const files = new Map<string, RuntimeFile>(), directories = new Set<string>([''])
+  await visitArchive(bytes, manifest, async ({ name, size, mode, body }) => {
+    if (name === 'ready.json') throw new Error('Graphon 分发包不能包含安装状态文件')
+    files.set(name, { size, mode, sha256: createHash('sha256').update(body).digest('hex') })
+    const parts = name.split('/')
+    for (let i = 1; i < parts.length; i++) directories.add(parts.slice(0, i).join('/'))
+  }, signal)
+  if ([...directories].some(name => files.has(name))) throw new Error('Graphon 分发包文件与目录冲突')
+  return { files, directories }
+}
+
+function assertPrivateEntry(info: Stats, directory: boolean, mode: number): void {
+  if (info.isSymbolicLink() || (directory ? !info.isDirectory() : !info.isFile()) || (!directory && info.nlink !== 1)) throw new Error('Graphon 完整性校验拒绝链接或异常文件类型')
+  if (process.getuid && info.uid !== process.getuid()) throw new Error('Graphon 完整性校验拒绝异常文件所有者')
+  if (process.platform !== 'win32' && (info.mode & 0o7777) !== mode) throw new Error('Graphon 完整性校验拒绝异常文件权限')
+}
+
+async function verifyInventory(directory: string, inventory: RuntimeInventory, manifestDigest: string, signal?: AbortSignal, readyRequired = true): Promise<void> {
+  const actualFiles = new Set<string>(), actualDirectories = new Set<string>(), identities = new Map<string, Stats>()
+  const walk = async (relative: string): Promise<void> => {
+    checkAbort(signal)
+    const path = join(directory, relative), info = await lstat(path)
+    if (info.isDirectory() && !info.isSymbolicLink()) {
+      assertPrivateEntry(info, true, 0o700)
+      if (!inventory.directories.has(relative)) throw new Error('Graphon 完整性校验发现额外目录')
+      identities.set(relative, info); actualDirectories.add(relative)
+      for (const name of await readdir(path)) await walk(relative ? `${relative}/${name}` : name)
+      return
+    }
+    const expected = inventory.files.get(relative), isReady = relative === 'ready.json' && readyRequired
+    assertPrivateEntry(info, false, expected?.mode ?? 0o600)
+    if (!expected && !isReady) throw new Error('Graphon 完整性校验发现额外文件')
+    if (expected ? info.size !== expected.size : info.size > 4096) throw new Error('Graphon 完整性校验文件大小不符')
+    const handle = await open(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0))
+    try {
+      const opened = await handle.stat()
+      if (!sameFile(info, opened)) throw new Error('Graphon 完整性校验期间文件发生变化')
+      const digest = createHash('sha256'), chunks: Buffer[] = []
+      let totalRead = 0
+      for await (const chunk of handle.createReadStream({ autoClose: false })) {
+        checkAbort(signal); totalRead += (chunk as Buffer).length
+        if (totalRead > info.size) throw new Error('Graphon 完整性校验期间文件发生变化')
+        digest.update(chunk as Buffer)
+        if (isReady) chunks.push(chunk as Buffer)
+      }
+      if (!sameFile(opened, await handle.stat()) || !sameFile(opened, await lstat(path))) throw new Error('Graphon 完整性校验期间文件发生变化')
+      if (expected && digest.digest('hex') !== expected.sha256) throw new Error('Graphon 完整性校验文件内容不符')
+      if (isReady) {
+        let ready: { manifestDigest?: string } | null
+        try { ready = JSON.parse(Buffer.concat(chunks).toString('utf8')) } catch { throw new Error('Graphon 完整性校验安装状态不符') }
+        if (ready?.manifestDigest !== manifestDigest) throw new Error('Graphon 完整性校验安装状态不符')
+      }
+    } finally { await handle.close() }
+    actualFiles.add(relative)
+  }
+  await walk('')
+  if (actualFiles.size !== inventory.files.size + Number(readyRequired) || [...inventory.files.keys()].some(name => !actualFiles.has(name)) || actualDirectories.size !== inventory.directories.size) throw new Error('Graphon 完整性校验文件集合不完整')
+  // Detect directory replacements/additions while traversing; no cache-derived
+  // baseline is trusted. The protected Host must also keep this root unwritable
+  // by Agents between validation and the child process using it.
+  for (const [relative, before] of identities) {
+    checkAbort(signal)
+    if (!sameFile(before, await lstat(join(directory, relative)))) throw new Error('Graphon 完整性校验期间目录发生变化')
+  }
+}
+
+/** Compare all cache entries with the fixed-SHA distribution, including .pyc and native libraries. */
+export async function verifyGraphonRuntimeContents(archive: string, directory: string, manifest: GraphonRuntimeManifest, manifestDigest: string, signal?: AbortSignal): Promise<void> {
+  const bytes = await verifiedArchiveBytes(archive, manifest, signal)
+  await verifyInventory(directory, await archiveInventory(bytes, manifest, signal), manifestDigest, signal)
 }
 
 function delay(ms: number, signal?: AbortSignal): Promise<void> {
@@ -287,23 +417,39 @@ export async function ensureGraphonEnvironment(options: GraphonEnvironmentOption
   if (manifestBytes.length > 100_000) throw new Error('Graphon 运行时清单过大')
   const manifest = validateGraphonManifest(JSON.parse(manifestBytes.toString('utf8')), platform)
   const manifestDigest = createHash('sha256').update(manifestBytes).digest('hex')
+  const archive = join(assets, manifest.archive)
+  // In protected mode the reference is always derived from the authenticated
+  // archive bytes. Never learn an allowlist from the mutable installed cache.
+  const verifiedBytes = options.verifyRuntimeContents ? await verifiedArchiveBytes(archive, manifest, options.signal) : undefined
+  const inventory = verifiedBytes ? await archiveInventory(verifiedBytes, manifest, options.signal) : undefined
   const base = await prepareDirectory(options.directory)
   const directory = join(base, `${platform}-${manifestDigest.slice(0, 24)}`)
   const result = (): GraphonEnvironment => ({ python: join(directory, ...manifest.pythonExecutable.split('/')), env: graphonSpawnEnvironment(directory), directory, platform, manifestDigest, tokenizer: { ...manifest.tokenizer, path: join(directory, ...manifest.tokenizer.path.split('/')) } })
-  if (await checkInstalled(directory, manifest, manifestDigest)) return result()
+  const installed = async (): Promise<boolean> => {
+    if (!inventory) return checkInstalled(directory, manifest, manifestDigest)
+    try { await lstat(directory) } catch (error) { if (isMissing(error)) return false; throw error }
+    // A present but invalid protected cache is a failure, never a repair that
+    // could execute its contents or hide the detected integrity violation.
+    await verifyInventory(directory, inventory, manifestDigest, options.signal)
+    return true
+  }
+  if (await installed()) return result()
   const release = await acquireLock(join(base, `${platform}.lock`), options.signal)
   let stage: string | undefined
   try {
-    if (await checkInstalled(directory, manifest, manifestDigest)) return result()
+    if (await installed()) return result()
     stage = join(base, `.install-${platform}-${randomUUID()}`)
     await mkdir(stage, { mode: 0o700 })
-    await extractGraphonArchive(join(assets, manifest.archive), stage, manifest, options.signal)
+    if (verifiedBytes) await extractVerifiedArchive(verifiedBytes, stage, manifest, options.signal)
+    else await extractGraphonArchive(archive, stage, manifest, options.signal)
     for (const [path, expected] of [[manifest.pythonExecutable, manifest.pythonExecutableSha256], [manifest.dependencyManifest, manifest.dependencyManifestSha256], [manifest.tokenizer.path, manifest.tokenizer.sha256]]) {
       if (await digestFile(await assertPrivateChild(stage, path!), options.signal) !== expected) throw new Error('解压后的 Graphon 文件校验失败')
     }
+    if (inventory) await verifyInventory(stage, inventory, manifestDigest, options.signal, false)
     await probePython(join(stage, manifest.pythonExecutable), graphonSpawnEnvironment(stage), options.signal)
     checkAbort(options.signal)
     await writeFile(join(stage, 'ready.json'), JSON.stringify({ manifestDigest, platform, pythonVersion: manifest.pythonVersion, graphonVersion: manifest.graphonVersion }), { mode: 0o600, flag: 'wx' })
+    if (inventory) await verifyInventory(stage, inventory, manifestDigest, options.signal)
     // The private, digest-named destination is owned solely by this installer.
     await rm(directory, { recursive: true, force: true })
     await rename(stage, directory)

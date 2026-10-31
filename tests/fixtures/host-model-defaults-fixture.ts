@@ -22,8 +22,8 @@ const pending = { provider: 'selected', model: 'current' }
 let events: any[] = [{ seq: 0, type: 'request/header', data: { reason: 'initial', header } }, { seq: 1, type: 'model/selection', data: pending }]
 const agents = new Map<string, any>()
 const provisions = [
-  ctx.provide('llm', { listModels: async (provider: string) => [{ id: provider === 'harness' ? 'default' : provider === 'selected' ? 'current' : 'old' }], resolveModelInfo: async () => ({ reasoning: { efforts: [{ id: 'high' }, { id: 'medium' }] } }), stream: async function* (request: any) { calls.push(request); yield { type: 'text-delta', text: 'fixture result' }; yield { type: 'finish', reason: { kind: 'stop' } } } }),
-  ctx.provide('agents', { get: (id: string) => agents.get(id) }),
+  ctx.provide('llm', { listProviders: () => ['harness','selected','old','later'].map(id=>({id,name:id})), listModels: async (provider: string) => [{ id: provider === 'harness' ? 'default' : provider === 'selected' ? 'current' : 'old' }], resolveModelInfo: async () => ({ reasoning: { efforts: [{ id: 'high' }, { id: 'medium' }] } }), stream: async function* (request: any) { calls.push(request); yield { type: 'text-delta', text: 'fixture result' }; yield { type: 'finish', reason: { kind: 'stop' } } } }),
+  ctx.provide('agents', { get: (id: string) => agents.get(id), isOwnedBy: () => false }),
   ctx.provide('workspaceRegistry', { list: () => [{ id: workspaceId, title: 'Test', path: directory, sessionIds: [sessionId] }, { id: 'other', title: 'Other', path: join(directory, 'other'), sessionIds: [] }] }),
   ctx.provide('systemPrompt', { section: () => () => {} }), ctx.provide('typert', {}),
   ctx.provide('tools', { register: (tool: unknown) => { registered.push(tool); return () => {} }, schemas: () => [] }),
@@ -44,7 +44,7 @@ try {
   const coldRun = await start(cold.id, sessionId); assert.equal((await settle(coldRun.id)).status, 'success'); assert.deepEqual(coldRun.modelDefaults, { model: { provider: 'selected', model: 'current' }, source: 'session' }); assert.equal(agents.size, 0)
   const other = flow('other'); await service.save(JSON.stringify(other), 0)
   const otherRun = await start(other.id, sessionId); assert.equal((await settle(otherRun.id)).status, 'success'); assert.equal(otherRun.modelDefaults?.source, 'harness')
-  const live = { id: sessionId, ctx, session: { header: { cwd: directory }, requestHeader: () => header, snapshotEvents: () => events, inheritedEventCount: 0 } }
+  const live = { id: sessionId, ctx, session: { id: sessionId, header: { id: sessionId, cwd: directory }, requestHeader: () => header, snapshotEvents: () => events, inheritedEventCount: 0 } }
   agents.set(sessionId, live)
   const selected = await resolveHarnessModelDefaults(fiber.ctx, workspaceId, sessionId, live as any, true)
   assert.deepEqual(selected, { model: { provider: 'old', model: 'old' }, effort: 'high', source: 'session' })

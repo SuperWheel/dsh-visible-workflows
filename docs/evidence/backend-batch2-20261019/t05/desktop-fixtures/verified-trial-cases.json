@@ -1,0 +1,41 @@
+{
+  "synthetic": true,
+  "basis": "The production Host request shape and greeting artifact checks are reused from the verified-trial-human offline fixture; real native tools replace the explicitly offline execution driver.",
+  "preparation": [
+    {
+      "path": "t05-input.json",
+      "content": {
+        "name": "Ada"
+      }
+    }
+  ],
+  "exactToolRequirement": "Before real execution confirm current native names read and write exist in the actual session. If they differ, root must resolve exact names and regenerate this frozen request before the first trial; no silent alias or fallback.",
+  "primaryTrial": {
+    "expectedFile": "t05-greeting.json",
+    "jsonEquals": {
+      "text": "Hello Ada"
+    },
+    "reviewRequired": true
+  },
+  "holdoutWorkflowRun": {
+    "inputs": {
+      "name": "小明"
+    },
+    "expectedText": "Hello 小明",
+    "expectedArtifact": {
+      "path": "t05-greeting.json",
+      "jsonEquals": {
+        "text": "Hello 小明"
+      },
+      "mustChangeFromPrimary": true
+    },
+    "humanReviewRequired": true
+  },
+  "failureChecks": [
+    "Decline human review: no downstream author/publish and no automatic replay.",
+    "Artifact with text WRONG: verification fails before distillation.",
+    "Repeat the exact requestId: reuse owned trial receipt; do not redo writes."
+  ],
+  "prompt": "在当前独立验收工作区，先确认已准备 t05-input.json={\"name\":\"Ada\"} 且本会话确有 read/write。按 verified-trial.request.json 完整调用 visible_workflow_plan；人工质量复核和预算问题交由真人选择。只预览，不代答、不换 requestId 重做；完成后展示 source/procedure/candidate 与 receipt 状态。真人允许发布后，用生成流程的姓名输入“小明”作独立样本，保留人工介入；不要把单个文件检查称为泛化证明。",
+  "boundary": "Synthetic preparation only; no real trial/model/native execution or Desktop result is asserted here. The offline generated graph checks greeting output and human gating; its file-write equivalence is not established, so the real holdout artifact check is required separately."
+}

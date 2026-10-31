@@ -1,0 +1,14 @@
+{
+  "sourceEvidence": "docs/evidence/backend-batch2-20261019/live/20261019T082658984Z-cc2cc6/public-events.json; child 7f5383ee-337e-4c44-a6be-422a3901ab6b seq15/16/21/22",
+  "classification": "Minimized public failure shape; synthetic business steps/events are created by the test. No reasoning or business sample values.",
+  "wire": { "mode": "distill", "procedure": {} },
+  "emptyReviewStep": {
+    "id": "s4",
+    "title": "Future human review",
+    "instruction": "Require human review on every future run; do not claim it already executed.",
+    "dependsOn": ["s3"],
+    "evidenceRefs": [],
+    "requiresReview": true,
+    "specRefs": ["trialTask.reviewItems[0]"]
+  }
+}

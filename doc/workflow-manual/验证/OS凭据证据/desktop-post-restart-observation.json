@@ -1,0 +1,33 @@
+{
+  "observedAt": "2026-10-17T07:11:25.242Z",
+  "source": "Coordinator observed actual DSH AX UI after installing child-workspace fix",
+  "workflowId": "162878e8-e655-4572-a573-5649b6100d15",
+  "libraryCount": 8,
+  "configuredSource": {
+    "revision": 1,
+    "nodeCount": 3,
+    "nodeTitles": [
+      "接收文本",
+      "待配置的受控请求",
+      "输出结果"
+    ],
+    "linkedStickyNote": true,
+    "nodeAnnotationCount": 1,
+    "viewportPercent": 75,
+    "secretMissingWarningVisible": false,
+    "executeButtonEnabled": true,
+    "environmentButton": "icon with accessible label",
+    "systemButton": "icon with accessible label"
+  },
+  "secretPanel": {
+    "componentReady": true,
+    "managementEnabled": true,
+    "valueInCanvas": false
+  },
+  "nativeManagerOpened": false,
+  "keychainValueRead": false,
+  "limitations": [
+    "Readiness is passive metadata; no Keychain raw value was read",
+    "Existing-value view/edit/delete and controlled HTTP consumption were not performed in this check"
+  ]
+}

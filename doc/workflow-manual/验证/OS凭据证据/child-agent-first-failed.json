@@ -1,0 +1,20 @@
+{
+  "id": "c26e9df7-81a9-4e27-a935-60a88363e2ca",
+  "origin": "subagent",
+  "parentSession": "session-9d7a7b32-47a9-4795-89d6-0b288507a0f6",
+  "tools": [
+    {
+      "tool": "visible_workflow_get",
+      "callId": "call_ca3611e41a934a96bda30ecd",
+      "resultPresent": true,
+      "isError": true,
+      "publicDeclarationFields": [],
+      "valueFieldsPresent": null,
+      "workspaceDenied": true
+    }
+  ],
+  "children": [],
+  "turnEnd": [
+    "completed"
+  ]
+}

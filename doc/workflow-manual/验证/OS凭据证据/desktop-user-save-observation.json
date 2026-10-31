@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-17T07:03:17.493Z",
+  "kind": "coordinating-agent-ui-observation",
+  "source": "Parent /root real Desktop CUA observations and direct human replies",
+  "workflowId": "162878e8-e655-4572-a573-5649b6100d15",
+  "userReportedSystemAuthenticationCount": 2,
+  "nativeManagerClosed": true,
+  "pendingBefore": 1,
+  "pendingAfter": 0,
+  "saveCorroboratedByPassiveStatusUI": true,
+  "secretValueReadByAgent": false,
+  "viewTested": false,
+  "editTested": false,
+  "deleteTested": false,
+  "fixedConsumerTested": false,
+  "importedWorkflowId": "ddb9340b-2880-478e-8abc-055f5446a725",
+  "importedPendingWarningReturned": true,
+  "limitations": [
+    "Human confirmation alone is not treated as storage success. The closed native manager and cleared pending configuration provide additional UI evidence.",
+    "No direct Keychain read or raw session/library copy was performed for this report."
+  ]
+}

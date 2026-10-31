@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-17",
+  "host": "DeepSeek Harness Desktop 0.2rc2",
+  "installedPackageSha256": "03a4586598fbe3ecb26b4347f1ee594fa2785137be2e8db65ff2df3a9f5ce833",
+  "testFiles": 103,
+  "tests": 1085,
+  "passedTests": 1085,
+  "desktop": {
+    "jsonImportedWorkflowId": "162878e8-e655-4572-a573-5649b6100d15",
+    "zipReimportedWorkflowId": "d509d971-a850-4a8c-895b-c01069b87094",
+    "sourceToBothImportsLayoutNotesAnnotationsExact": true,
+    "jsonEqualsZipWorkflow": true,
+    "secretIdsRebuiltAndReferencesMapped": true,
+    "secretExportDeclarationOnly": true,
+    "secretValuesStoredDuringTest": false,
+    "secretRunCount": 0,
+    "clickExecuteObserved": "请先处理缺失配置；去处理聚焦待处理清单；运行记录未增加",
+    "credentialEntryObserved": "Secret 暂不可用；管理凭据禁用；编辑仅允许声明",
+    "ordinaryRegressionRun": {
+      "id": "291c3b72-5a80-4252-a8d6-caeb2367aef3",
+      "status": "success",
+      "outputs": {
+        "result": "导入补齐验收通过"
+      },
+      "budget": {
+        "spentTokens": 0,
+        "reservedTokens": 0,
+        "unknownTokens": 0,
+        "unknownCalls": 0,
+        "agentTasks": 0,
+        "calls": 0,
+        "allocations": {}
+      }
+    },
+    "zipAttachments": 0
+  },
+  "files": {
+    "桌面实际导出.workflow.json": {
+      "bytes": 3173,
+      "sha256": "e111f719d5b08616da5d4a87fd9f60bb65ae2049c2956384aa3c9c7d4a67a133"
+    },
+    "桌面实际导出.workflow.zip": {
+      "bytes": 3478,
+      "sha256": "991db2825a21fa1869b9465431a9d833cefb5a4f151c64d1183dff581a8eeaa6"
+    }
+  },
+  "preservation": {
+    "profileUnchanged": true,
+    "managedCodeUnchanged": true,
+    "cliRecordsUnchanged": false,
+    "originalWorkflowsUnchanged": true,
+    "originalPresetsUnchanged": true,
+    "originalRunFilesUnchanged": true
+  },
+  "cliRecordsExactlyEqualToPreShutdownBaseline": true,
+  "cliShutdownChange": "单个 followups.json 暂停原因随退出与重启变化；最终已恢复退出前原始哈希",
+  "notVerified": [
+    "trusted signed broker positive admission",
+    "native secret enrollment and controlled operation",
+    "real primary and child Agent refusal after enrollment",
+    "complete global Host isolation and process-tree lifecycle"
+  ]
+}

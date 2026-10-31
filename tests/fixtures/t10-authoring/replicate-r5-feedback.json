@@ -1,0 +1,343 @@
+[
+  {
+    "journal": ".test-data/replicate-r5/retry-429/shard-6/events.jsonl",
+    "line": 33,
+    "caseId": "container",
+    "arm": "template-fill",
+    "repeat": 6,
+    "submission": {
+      "submission": {
+        "chains": [
+          {
+            "key": "main",
+            "nodes": [
+              "start",
+              "iterate",
+              "result"
+            ]
+          },
+          {
+            "container": "iterate",
+            "key": "inner_body",
+            "nodes": [
+              "inner_gen",
+              "inner_out"
+            ]
+          }
+        ],
+        "coverage": {
+          "R1": [
+            "start",
+            "iterate",
+            "inner_gen",
+            "inner_out",
+            "result"
+          ]
+        },
+        "description": "用户输入 items（json，字符串数组）。iteration 容器 iterate 遍历 input.items，每项在内部子图中由 template 节点 inner_gen 生成“项：{item}”，outputVariable=inner_gen.text 按输入顺序收集；最终输出节点 result 输出结果数组的紧凑 JSON 文本（空数组为 []）。未使用 template 循环、代码、模型或工具替代迭代。",
+        "forms": [
+          {
+            "key": "start",
+            "template": "input",
+            "title": "用户输入 items",
+            "values": {
+              "fields": [
+                {
+                  "label": "items（字符串数组）",
+                  "name": "items",
+                  "required": true,
+                  "type": "json"
+                }
+              ]
+            }
+          },
+          {
+            "key": "iterate",
+            "template": "iteration",
+            "title": "迭代遍历 items",
+            "values": {
+              "concurrency": 3,
+              "errorMode": "terminate",
+              "iterator": "input.items",
+              "outputVariable": "inner_gen.text",
+              "parallel": false
+            }
+          },
+          {
+            "container": [
+              "iterate"
+            ],
+            "key": "inner_gen",
+            "template": "template",
+            "title": "生成项文本",
+            "values": {
+              "text": "项：{{item}}"
+            }
+          },
+          {
+            "container": [
+              "iterate"
+            ],
+            "key": "inner_out",
+            "template": "output",
+            "title": "内部出口",
+            "values": {
+              "outputName": "result",
+              "text": "{{inner_gen.text}}"
+            }
+          },
+          {
+            "key": "result",
+            "template": "output",
+            "title": "最终结果",
+            "values": {
+              "outputName": "result",
+              "text": "{{iterate.text}}"
+            }
+          }
+        ],
+        "summary": "输入 items 为 JSON 字符串数组；iteration 容器按输入顺序遍历，内部 template 生成“项：{item}”，收集模板 text 后由最终输出给出结果数组的紧凑 JSON 文本（空数组为 []）。",
+        "title": "迭代遍历 items 生成“项：{item}”结果数组"
+      }
+    }
+  },
+  {
+    "journal": ".test-data/replicate-r5/retry-429/shard-8/events.jsonl",
+    "line": 46,
+    "sourceLayer": "direct",
+    "caseId": "large-edit",
+    "repeat": 8,
+    "arm": "template-fill",
+    "position": 0,
+    "arguments": "{\"submission\":{\"coverage\": {\"R1\": [\"n30\"]}, \"mode\": \"edit\", \"summary\": \"仅修改目标模板节点 n30：text 改为「结果：{{text}}」，inputs 绑定 text={{input.text}}（text 来自工作流输入）；其余节点、配置、顺序与连线保持不变。\", \"updates\": {\"n30\": {\"values\": {\"inputs\": {\"text\": \"{{input.text}}\"}, \"text\": \"结果：{{text}}\"}}}}"
+  },
+  {
+    "journal": ".test-data/replicate-r5/retry-429/shard-8/events.jsonl",
+    "line": 81,
+    "caseId": "large-edit",
+    "arm": "template-fill",
+    "repeat": 9,
+    "submission": {
+      "submission": {
+        "coverage": {
+          "R1": [
+            "n30"
+          ]
+        },
+        "mode": "edit",
+        "summary": "仅修改目标模板节点 n30：把模板正文从「原文 {{input.text}}」改为「结果：{{input.text}}」，text 引用工作流输入字段 text；不改动 inputs 映射，其余节点、配置、顺序与连线全部保留。",
+        "updates": {
+          "n30": {
+            "text": "结果：{{input.text}}",
+            "unset": []
+          }
+        }
+      }
+    }
+  },
+  {
+    "journal": ".test-data/replicate-r5/shards/shard-1/events.jsonl",
+    "line": 18,
+    "sourceLayer": "direct",
+    "caseId": "greeting",
+    "repeat": 6,
+    "arm": "compact-repair",
+    "position": 0,
+    "arguments": "{\"submission\":{\"assumptions\": [\"name 为必需文本字段；文案按需求固定为“你好，{name}！”（感叹号为全角）\", \"仅使用 input/template/output 三类节点，无模型或外部工具\"], \"chains\": [{\"key\": \"main\", \"nodes\": [\"start\", \"greet\", \"result\"]}], \"coverage\": {\"R1\": [\"start\", \"greet\", \"result\"]}, \"description\": \"输入 name，模板节点渲染固定文案“你好，{name}！”，经 result 展示；无模型、无外部工具。\", \"mode\": \"create\", \"nodes\": [{\"config\": {\"fields\": [{\"label\": \"姓名\", \"name\": \"name\", \"required\": true, \"type\": \"text\"}]}, \"key\": \"start\", \"kind\": \"input\", \"title\": \"用户输入 name\"}, {\"config\": {\"inputs\": {\"name\": \"{{start.name}}\"}, \"text\": \"你好，{{name}}！\"}, \"key\": \"greet\", \"kind\": \"template\", \"title\": \"生成问候语\"}, {\"config\": {\"outputName\": \"result\", \"text\": \"{{greet.text}}\"}, \"key\": \"result\", \"kind\": \"output\", \"title\": \"输出问候结果\"}], \"summary\": \"三节点线性流：input(name) → template 渲染“你好，{{name}}！” → output(outputName=result)。\", \"title\": \"你好问候生成\"}]}"
+  },
+  {
+    "journal": ".test-data/replicate-r5/shards/shard-1/events.jsonl",
+    "line": 63,
+    "sourceLayer": "direct",
+    "caseId": "greeting",
+    "repeat": 9,
+    "arm": "template-fill",
+    "position": 0,
+    "arguments": "{\"submission\":{\"chains\": [{\"key\": \"main\", \"nodes\": [\"start\", \"greet\", \"result\"]}], \"coverage\": {\"R1\": [\"start\", \"greet\", \"result\"]}, \"description\": \"用户通过表单输入姓名，模板节点按固定文本「你好，{name}！」渲染问候语，经 output 节点以 result 输出展示；全程不使用模型或外部工具。\", \"forms\": [{\"key\": \"start\", \"template\": \"input\", \"title\": \"用户输入\", \"values\": {\"fields\": [{\"label\": \"姓名\", \"name\": \"name\", \"required\": true, \"type\": \"text\"}]}}, {\"key\": \"greet\", \"template\": \"template\", \"title\": \"生成问候语\", \"values\": {\"inputs\": {\"name\": \"{{start.name}}\"}, \"text\": \"你好，{{name}}！\"}}, {\"key\": \"result\", \"template\": \"output\", \"title\": \"输出结果\", \"values\": {\"outputName\": \"result\", \"text\": \"{{greet.text}}\"}}], \"summary\": \"input(start) → template(greet) → output(result)：用 template 将输入 name 渲染为严格文本「你好，{name}！」，输出键为 result，无模型与外部工具。\", \"title\": \"你好问候生成\", }}"
+  },
+  {
+    "journal": ".test-data/replicate-r5/shards/shard-2/events.jsonl",
+    "line": 106,
+    "caseId": "web-process",
+    "arm": "template-fill",
+    "repeat": 9,
+    "submission": {
+      "submission": {
+        "assumptions": [
+          "标签按需求字面直接删除（不替换为空格），再合并连续空白并去除首尾空白",
+          "main 标签缺失或处理后文本为空时，main 值使用“空”",
+          "严格线性流程：仅一次 HTTP 请求，无分支、无模型节点、无硬编码样本"
+        ],
+        "chains": [
+          {
+            "key": "main",
+            "nodes": [
+              "start",
+              "fetch",
+              "extract",
+              "result"
+            ]
+          }
+        ],
+        "coverage": {
+          "R1": [
+            "start",
+            "fetch",
+            "extract",
+            "result"
+          ]
+        },
+        "description": "输入 page 后执行一次 HTTP GET https://fixture.invalid/pages/{{input.page}} 获取离线 HTML，用 JavaScript 提取 title 与 main 的纯文本（删除标签、连续空白合并为空格、首尾去空白，main 为空时用“空”），最终以 outputName=result 严格输出“{title}|{main}”。不使用模型，不硬编码样本。",
+        "forms": [
+          {
+            "key": "start",
+            "template": "input",
+            "title": "用户输入",
+            "values": {
+              "fields": [
+                {
+                  "label": "页面标识 page",
+                  "name": "page",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "key": "fetch",
+            "template": "http",
+            "title": "获取页面 HTML",
+            "values": {
+              "headers": {},
+              "method": "GET",
+              "timeoutMs": 30000,
+              "url": "https://fixture.invalid/pages/{{input.page}}"
+            }
+          },
+          {
+            "key": "extract",
+            "template": "code",
+            "title": "提取 title 与 main 纯文本",
+            "values": {
+              "code": "function main(inputs) {\n  var html = String(inputs.html == null ? \"\" : inputs.html);\n  function plain(s) {\n    return String(s).replace(/<[^>]*>/g, \"\").replace(/\\s+/g, \" \").trim();\n  }\n  var t = html.match(/<title\\b[^>]*>([\\s\\S]*?)<\\/title\\s*>/i);\n  var title = t ? plain(t[1]) : \"\";\n  var m = html.match(/<main\\b[^>]*>([\\s\\S]*?)<\\/main\\s*>/i);\n  var mainText = m ? plain(m[1]) : \"\";\n  if (mainText === \"\") {\n    mainText = \"空\";\n  }\n  return { out: title + \"|\" + mainText };\n}",
+              "inputs": {
+                "html": "{{fetch.text}}"
+              },
+              "language": "javascript",
+              "outputSchema": [
+                {
+                  "description": "title 与 main 处理后的值，以半角竖线连接",
+                  "name": "out",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "timeoutMs": 3000
+            }
+          },
+          {
+            "key": "result",
+            "template": "output",
+            "title": "输出",
+            "values": {
+              "outputName": "result",
+              "text": "{{extract.out}}"
+            }
+          }
+        ],
+        "summary": "start（输入 page）→ fetch（HTTP GET https://fixture.invalid/pages/{{input.page}}）→ extract（JavaScript 正则提取 title 与 main 纯文本：删标签、合并连续空白、去首尾空白，main 空时用“空”，拼接 title|main）→ result（outputName=result，输出 {{extract.out}}）。"
+      }
+    }
+  },
+  {
+    "journal": ".test-data/replicate-r5/shards/shard-5/events.jsonl",
+    "line": 83,
+    "caseId": "branch",
+    "arm": "template-fill",
+    "repeat": 9,
+    "submission": {
+      "submission": {
+        "chains": [
+          {
+            "key": "main",
+            "nodes": [
+              "start",
+              "check"
+            ]
+          }
+        ],
+        "coverage": {
+          "R1": [
+            "start",
+            "check",
+            "pass_out",
+            "fail_out"
+          ]
+        },
+        "description": "用户输入 score，if 节点判断 score>=60：true 分支输出“合格”，false 分支输出“不合格”，两个输出均为 result，不使用模型、代码或工具。",
+        "forms": [
+          {
+            "key": "start",
+            "template": "input",
+            "title": "用户输入",
+            "values": {
+              "fields": [
+                {
+                  "label": "score",
+                  "name": "score",
+                  "required": true,
+                  "type": "number"
+                }
+              ]
+            }
+          },
+          {
+            "key": "check",
+            "template": "if",
+            "title": "判断 score 是否合格",
+            "values": {
+              "operator": "gte",
+              "value": "60",
+              "variable": "input.score"
+            }
+          },
+          {
+            "key": "pass_out",
+            "template": "output",
+            "title": "输出合格",
+            "values": {
+              "outputName": "result",
+              "text": "合格"
+            }
+          },
+          {
+            "key": "fail_out",
+            "template": "output",
+            "title": "输出不合格",
+            "values": {
+              "outputName": "result",
+              "text": "不合格"
+            }
+          }
+        ],
+        "links": [
+          {
+            "key": "pass_branch",
+            "port": "true",
+            "source": "check",
+            "target": "pass_out"
+          },
+          {
+            "key": "fail_branch",
+            "port": "false",
+            "source": "check",
+            "target": "fail_out"
+          }
+        ],
+        "mode": "create",
+        "summary": "工作流：input 表单输入 score（number）→ if 节点以 gte 60 判断 → true 出口接输出“合格”、false 出口接输出“不合格”，两个 output 节点 outputName 均为 result；全程仅使用 input/if/output 模板，无模型、代码或工具。"
+      }
+    }
+  }
+]

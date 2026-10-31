@@ -1,0 +1,2121 @@
+{
+  "repeats": 3,
+  "model": {
+    "provider": "zai-coding-cn",
+    "model": "glm-5.3-flash",
+    "reasoningEffort": "max",
+    "temperature": 0.2,
+    "maxOutputTokens": 8192
+  },
+  "limits": {
+    "maxModelRequests": 8,
+    "maxSubmissions": 3,
+    "maxCatalogCalls": 20
+  },
+  "cases": [
+    {
+      "id": "greeting",
+      "sourceLayer": "direct",
+      "instruction": "创建输入 name 的工作流，用 template 生成严格文本“你好，{name}！”，最后 outputName=result。不要使用模型或外部工具。",
+      "context": {
+        "workflow": {
+          "id": "bench-flow",
+          "workspaceId": "compiler-benchmark",
+          "title": "基线",
+          "description": "",
+          "revision": 0,
+          "createdAt": "2026-10-18T00:00:00.000Z",
+          "updatedAt": "2026-10-18T00:00:00.000Z",
+          "nodes": [
+            {
+              "id": "base-0",
+              "kind": "input",
+              "config": {
+                "fields": [
+                  {
+                    "name": "text",
+                    "label": "文本",
+                    "required": true
+                  }
+                ]
+              },
+              "title": "base-0",
+              "number": "base-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "base-out",
+              "kind": "output",
+              "config": {
+                "text": "{{input.text}}",
+                "outputName": "result"
+              },
+              "title": "base-out",
+              "number": "base-out",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-0",
+              "source": "base-0",
+              "target": "base-out"
+            }
+          ],
+          "notes": []
+        },
+        "operation": "create",
+        "targetNodeIds": [],
+        "nodeIds": [
+          "allocated-0",
+          "allocated-1",
+          "allocated-2",
+          "allocated-3",
+          "allocated-4",
+          "allocated-5",
+          "allocated-6",
+          "allocated-7",
+          "allocated-8",
+          "allocated-9",
+          "allocated-10",
+          "allocated-11",
+          "allocated-12",
+          "allocated-13",
+          "allocated-14",
+          "allocated-15",
+          "allocated-16",
+          "allocated-17",
+          "allocated-18",
+          "allocated-19",
+          "allocated-20",
+          "allocated-21",
+          "allocated-22",
+          "allocated-23",
+          "allocated-24",
+          "allocated-25",
+          "allocated-26",
+          "allocated-27",
+          "allocated-28",
+          "allocated-29",
+          "allocated-30",
+          "allocated-31",
+          "allocated-32",
+          "allocated-33",
+          "allocated-34",
+          "allocated-35",
+          "allocated-36",
+          "allocated-37",
+          "allocated-38",
+          "allocated-39",
+          "allocated-40",
+          "allocated-41",
+          "allocated-42",
+          "allocated-43",
+          "allocated-44",
+          "allocated-45",
+          "allocated-46",
+          "allocated-47",
+          "allocated-48",
+          "allocated-49",
+          "allocated-50",
+          "allocated-51",
+          "allocated-52",
+          "allocated-53",
+          "allocated-54",
+          "allocated-55",
+          "allocated-56",
+          "allocated-57",
+          "allocated-58",
+          "allocated-59",
+          "allocated-60",
+          "allocated-61",
+          "allocated-62",
+          "allocated-63",
+          "allocated-64",
+          "allocated-65",
+          "allocated-66",
+          "allocated-67",
+          "allocated-68",
+          "allocated-69",
+          "allocated-70",
+          "allocated-71",
+          "allocated-72",
+          "allocated-73",
+          "allocated-74",
+          "allocated-75",
+          "allocated-76",
+          "allocated-77",
+          "allocated-78",
+          "allocated-79",
+          "allocated-80",
+          "allocated-81",
+          "allocated-82",
+          "allocated-83",
+          "allocated-84",
+          "allocated-85",
+          "allocated-86",
+          "allocated-87",
+          "allocated-88",
+          "allocated-89",
+          "allocated-90",
+          "allocated-91",
+          "allocated-92",
+          "allocated-93",
+          "allocated-94",
+          "allocated-95",
+          "allocated-96",
+          "allocated-97",
+          "allocated-98",
+          "allocated-99"
+        ],
+        "subagentIds": [
+          "allocated-role"
+        ],
+        "environmentIds": [
+          "allocated-env"
+        ],
+        "model": {
+          "provider": "zai-coding-cn",
+          "model": "glm-5.3-flash"
+        },
+        "effort": "max",
+        "tools": []
+      },
+      "samples": [
+        {
+          "inputs": {
+            "name": "小明"
+          },
+          "expected": "你好，小明！"
+        },
+        {
+          "inputs": {
+            "name": "Ada"
+          },
+          "expected": "你好，Ada！"
+        }
+      ]
+    },
+    {
+      "id": "web-process",
+      "sourceLayer": "direct",
+      "instruction": "创建输入 page（text 类型字符串）的网页处理工作流。必须执行一次 http GET https://fixture.invalid/pages/{{input.page}} 获取固定离线 HTML（oracle 拦截请求，不访问互联网），再用 JavaScript code 提取 title 和 main 内的纯文本：删除标签、连续空白合并为空格、首尾去空白，main 为空时用“空”。最后 outputName=result，严格输出 title 与 main 处理后的值，以半角竖线连接，格式为“{title}|{main}”（不含字段名、引号或额外空白）。不得硬编码样本或使用模型。",
+      "context": {
+        "workflow": {
+          "id": "bench-flow",
+          "workspaceId": "compiler-benchmark",
+          "title": "基线",
+          "description": "",
+          "revision": 0,
+          "createdAt": "2026-10-18T00:00:00.000Z",
+          "updatedAt": "2026-10-18T00:00:00.000Z",
+          "nodes": [
+            {
+              "id": "base-0",
+              "kind": "input",
+              "config": {
+                "fields": [
+                  {
+                    "name": "text",
+                    "label": "文本",
+                    "required": true
+                  }
+                ]
+              },
+              "title": "base-0",
+              "number": "base-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "base-out",
+              "kind": "output",
+              "config": {
+                "text": "{{input.text}}",
+                "outputName": "result"
+              },
+              "title": "base-out",
+              "number": "base-out",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-0",
+              "source": "base-0",
+              "target": "base-out"
+            }
+          ],
+          "notes": []
+        },
+        "operation": "create",
+        "targetNodeIds": [],
+        "nodeIds": [
+          "allocated-0",
+          "allocated-1",
+          "allocated-2",
+          "allocated-3",
+          "allocated-4",
+          "allocated-5",
+          "allocated-6",
+          "allocated-7",
+          "allocated-8",
+          "allocated-9",
+          "allocated-10",
+          "allocated-11",
+          "allocated-12",
+          "allocated-13",
+          "allocated-14",
+          "allocated-15",
+          "allocated-16",
+          "allocated-17",
+          "allocated-18",
+          "allocated-19",
+          "allocated-20",
+          "allocated-21",
+          "allocated-22",
+          "allocated-23",
+          "allocated-24",
+          "allocated-25",
+          "allocated-26",
+          "allocated-27",
+          "allocated-28",
+          "allocated-29",
+          "allocated-30",
+          "allocated-31",
+          "allocated-32",
+          "allocated-33",
+          "allocated-34",
+          "allocated-35",
+          "allocated-36",
+          "allocated-37",
+          "allocated-38",
+          "allocated-39",
+          "allocated-40",
+          "allocated-41",
+          "allocated-42",
+          "allocated-43",
+          "allocated-44",
+          "allocated-45",
+          "allocated-46",
+          "allocated-47",
+          "allocated-48",
+          "allocated-49",
+          "allocated-50",
+          "allocated-51",
+          "allocated-52",
+          "allocated-53",
+          "allocated-54",
+          "allocated-55",
+          "allocated-56",
+          "allocated-57",
+          "allocated-58",
+          "allocated-59",
+          "allocated-60",
+          "allocated-61",
+          "allocated-62",
+          "allocated-63",
+          "allocated-64",
+          "allocated-65",
+          "allocated-66",
+          "allocated-67",
+          "allocated-68",
+          "allocated-69",
+          "allocated-70",
+          "allocated-71",
+          "allocated-72",
+          "allocated-73",
+          "allocated-74",
+          "allocated-75",
+          "allocated-76",
+          "allocated-77",
+          "allocated-78",
+          "allocated-79",
+          "allocated-80",
+          "allocated-81",
+          "allocated-82",
+          "allocated-83",
+          "allocated-84",
+          "allocated-85",
+          "allocated-86",
+          "allocated-87",
+          "allocated-88",
+          "allocated-89",
+          "allocated-90",
+          "allocated-91",
+          "allocated-92",
+          "allocated-93",
+          "allocated-94",
+          "allocated-95",
+          "allocated-96",
+          "allocated-97",
+          "allocated-98",
+          "allocated-99"
+        ],
+        "subagentIds": [
+          "allocated-role"
+        ],
+        "environmentIds": [
+          "allocated-env"
+        ],
+        "model": {
+          "provider": "zai-coding-cn",
+          "model": "glm-5.3-flash"
+        },
+        "effort": "max",
+        "tools": []
+      },
+      "samples": [
+        {
+          "inputs": {
+            "page": "news"
+          },
+          "expected": "公告|欢迎 Ada 阅读"
+        },
+        {
+          "inputs": {
+            "page": "notice"
+          },
+          "expected": "更新|版本 2 已发布"
+        },
+        {
+          "inputs": {
+            "page": "empty"
+          },
+          "expected": "空白|空"
+        }
+      ]
+    },
+    {
+      "id": "tool-wrapper",
+      "sourceLayer": "direct",
+      "instruction": "创建输入 sku（text 类型字符串）的工作流，必须调用一次冻结工具 native:benchmark_lookup，参数 sku 来自输入。该离线工具的原始返回是 {sku:string,label:string,stock:number}；native 包装为 value（原始对象）与 text（对象 JSON 文本）。用 template 从 value.label 与 value.stock 生成文本，输出格式严格为“{label}：{stock}”（只含字段值与全角冒号），例如 SKU A 输出“铅笔：3”，最后 outputName=result。禁止解析 text、硬编码样本、代码或模型调用。",
+      "context": {
+        "workflow": {
+          "id": "bench-flow",
+          "workspaceId": "compiler-benchmark",
+          "title": "基线",
+          "description": "",
+          "revision": 0,
+          "createdAt": "2026-10-18T00:00:00.000Z",
+          "updatedAt": "2026-10-18T00:00:00.000Z",
+          "nodes": [
+            {
+              "id": "base-0",
+              "kind": "input",
+              "config": {
+                "fields": [
+                  {
+                    "name": "text",
+                    "label": "文本",
+                    "required": true
+                  }
+                ]
+              },
+              "title": "base-0",
+              "number": "base-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "base-out",
+              "kind": "output",
+              "config": {
+                "text": "{{input.text}}",
+                "outputName": "result"
+              },
+              "title": "base-out",
+              "number": "base-out",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-0",
+              "source": "base-0",
+              "target": "base-out"
+            }
+          ],
+          "notes": []
+        },
+        "operation": "create",
+        "targetNodeIds": [],
+        "nodeIds": [
+          "allocated-0",
+          "allocated-1",
+          "allocated-2",
+          "allocated-3",
+          "allocated-4",
+          "allocated-5",
+          "allocated-6",
+          "allocated-7",
+          "allocated-8",
+          "allocated-9",
+          "allocated-10",
+          "allocated-11",
+          "allocated-12",
+          "allocated-13",
+          "allocated-14",
+          "allocated-15",
+          "allocated-16",
+          "allocated-17",
+          "allocated-18",
+          "allocated-19",
+          "allocated-20",
+          "allocated-21",
+          "allocated-22",
+          "allocated-23",
+          "allocated-24",
+          "allocated-25",
+          "allocated-26",
+          "allocated-27",
+          "allocated-28",
+          "allocated-29",
+          "allocated-30",
+          "allocated-31",
+          "allocated-32",
+          "allocated-33",
+          "allocated-34",
+          "allocated-35",
+          "allocated-36",
+          "allocated-37",
+          "allocated-38",
+          "allocated-39",
+          "allocated-40",
+          "allocated-41",
+          "allocated-42",
+          "allocated-43",
+          "allocated-44",
+          "allocated-45",
+          "allocated-46",
+          "allocated-47",
+          "allocated-48",
+          "allocated-49",
+          "allocated-50",
+          "allocated-51",
+          "allocated-52",
+          "allocated-53",
+          "allocated-54",
+          "allocated-55",
+          "allocated-56",
+          "allocated-57",
+          "allocated-58",
+          "allocated-59",
+          "allocated-60",
+          "allocated-61",
+          "allocated-62",
+          "allocated-63",
+          "allocated-64",
+          "allocated-65",
+          "allocated-66",
+          "allocated-67",
+          "allocated-68",
+          "allocated-69",
+          "allocated-70",
+          "allocated-71",
+          "allocated-72",
+          "allocated-73",
+          "allocated-74",
+          "allocated-75",
+          "allocated-76",
+          "allocated-77",
+          "allocated-78",
+          "allocated-79",
+          "allocated-80",
+          "allocated-81",
+          "allocated-82",
+          "allocated-83",
+          "allocated-84",
+          "allocated-85",
+          "allocated-86",
+          "allocated-87",
+          "allocated-88",
+          "allocated-89",
+          "allocated-90",
+          "allocated-91",
+          "allocated-92",
+          "allocated-93",
+          "allocated-94",
+          "allocated-95",
+          "allocated-96",
+          "allocated-97",
+          "allocated-98",
+          "allocated-99"
+        ],
+        "subagentIds": [
+          "allocated-role"
+        ],
+        "environmentIds": [
+          "allocated-env"
+        ],
+        "model": {
+          "provider": "zai-coding-cn",
+          "model": "glm-5.3-flash"
+        },
+        "effort": "max",
+        "tools": [
+          {
+            "id": "native:benchmark_lookup",
+            "name": "离线库存夹具",
+            "description": "确定性离线工具，返回 sku、label、stock 的原始对象；不读文件、不访问网络。",
+            "providerId": "benchmark-fixture",
+            "providerName": "benchmark-fixture",
+            "category": "plugin",
+            "available": true,
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "sku"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "toolOutputs": {
+          "protocolVersion": 1,
+          "contracts": [
+            {
+              "toolId": "native:benchmark_lookup",
+              "guarantee": {
+                "adapterVersion": "native-output-v1",
+                "fields": {
+                  "text": "原始 value 的字符串或 JSON 文本。",
+                  "value": "原始返回值。内部字段未知；仅凭本包装不能推断 value.text 或 value.result。"
+                },
+                "schema": {
+                  "toolId": "native:benchmark_lookup",
+                  "sourceId": "native-tool:benchmark_lookup",
+                  "version": "t09-fixture-v1",
+                  "valuePath": "value",
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "sku": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "stock": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "sku",
+                      "label",
+                      "stock"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "source": "host-tool-definition",
+                  "digest": "1dfc0316c5659dfe167f7b6f211f64fc5afaaa345245cd783f6ac63a17e6606f"
+                },
+                "digest": "82192b9b84f1dce604d2cd96a4b9ad95606efeaeb4011619a0313dd74beadec6"
+              },
+              "observations": [],
+              "digest": "fbd85344db986334e0a19d73ace6513184e482f117f888730c88d629424558f9"
+            }
+          ],
+          "digest": "e9f95f17da4ed96d8040ddd876f2063763872d188f504c52ec1c39034d587f2c"
+        }
+      },
+      "samples": [
+        {
+          "inputs": {
+            "sku": "A"
+          },
+          "expected": "铅笔：3"
+        },
+        {
+          "inputs": {
+            "sku": "B"
+          },
+          "expected": "笔记本：0"
+        },
+        {
+          "inputs": {
+            "sku": "C"
+          },
+          "expected": "橡皮：12"
+        }
+      ]
+    },
+    {
+      "id": "structured-llm",
+      "sourceLayer": "direct",
+      "instruction": "创建输入 record（json，含 name:string、amount:number）的工作流。必须用 llm 节点，每次运行仅调用一次，prompt 第一行严格为“保留 name；计算 total=amount*2、taxable=amount>0；只返回符合输出 schema 的 JSON 对象。”，换行后接输入 record 的 JSON 文本。声明必填输出 name:string、total:number、taxable:boolean。oracle 使用确定性 JSON 后端，不调用真实模型。用 template 读取该节点的三个类型化字段，生成三个字段值以半角竖线连接的文本，格式严格为“{name}|{total}|{taxable}”（不含字段名或引号，布尔值为小写 true/false），最后 outputName=result。禁止代码、工具或硬编码样本。",
+      "context": {
+        "workflow": {
+          "id": "bench-flow",
+          "workspaceId": "compiler-benchmark",
+          "title": "基线",
+          "description": "",
+          "revision": 0,
+          "createdAt": "2026-10-18T00:00:00.000Z",
+          "updatedAt": "2026-10-18T00:00:00.000Z",
+          "nodes": [
+            {
+              "id": "base-0",
+              "kind": "input",
+              "config": {
+                "fields": [
+                  {
+                    "name": "text",
+                    "label": "文本",
+                    "required": true
+                  }
+                ]
+              },
+              "title": "base-0",
+              "number": "base-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "base-out",
+              "kind": "output",
+              "config": {
+                "text": "{{input.text}}",
+                "outputName": "result"
+              },
+              "title": "base-out",
+              "number": "base-out",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-0",
+              "source": "base-0",
+              "target": "base-out"
+            }
+          ],
+          "notes": []
+        },
+        "operation": "create",
+        "targetNodeIds": [],
+        "nodeIds": [
+          "allocated-0",
+          "allocated-1",
+          "allocated-2",
+          "allocated-3",
+          "allocated-4",
+          "allocated-5",
+          "allocated-6",
+          "allocated-7",
+          "allocated-8",
+          "allocated-9",
+          "allocated-10",
+          "allocated-11",
+          "allocated-12",
+          "allocated-13",
+          "allocated-14",
+          "allocated-15",
+          "allocated-16",
+          "allocated-17",
+          "allocated-18",
+          "allocated-19",
+          "allocated-20",
+          "allocated-21",
+          "allocated-22",
+          "allocated-23",
+          "allocated-24",
+          "allocated-25",
+          "allocated-26",
+          "allocated-27",
+          "allocated-28",
+          "allocated-29",
+          "allocated-30",
+          "allocated-31",
+          "allocated-32",
+          "allocated-33",
+          "allocated-34",
+          "allocated-35",
+          "allocated-36",
+          "allocated-37",
+          "allocated-38",
+          "allocated-39",
+          "allocated-40",
+          "allocated-41",
+          "allocated-42",
+          "allocated-43",
+          "allocated-44",
+          "allocated-45",
+          "allocated-46",
+          "allocated-47",
+          "allocated-48",
+          "allocated-49",
+          "allocated-50",
+          "allocated-51",
+          "allocated-52",
+          "allocated-53",
+          "allocated-54",
+          "allocated-55",
+          "allocated-56",
+          "allocated-57",
+          "allocated-58",
+          "allocated-59",
+          "allocated-60",
+          "allocated-61",
+          "allocated-62",
+          "allocated-63",
+          "allocated-64",
+          "allocated-65",
+          "allocated-66",
+          "allocated-67",
+          "allocated-68",
+          "allocated-69",
+          "allocated-70",
+          "allocated-71",
+          "allocated-72",
+          "allocated-73",
+          "allocated-74",
+          "allocated-75",
+          "allocated-76",
+          "allocated-77",
+          "allocated-78",
+          "allocated-79",
+          "allocated-80",
+          "allocated-81",
+          "allocated-82",
+          "allocated-83",
+          "allocated-84",
+          "allocated-85",
+          "allocated-86",
+          "allocated-87",
+          "allocated-88",
+          "allocated-89",
+          "allocated-90",
+          "allocated-91",
+          "allocated-92",
+          "allocated-93",
+          "allocated-94",
+          "allocated-95",
+          "allocated-96",
+          "allocated-97",
+          "allocated-98",
+          "allocated-99"
+        ],
+        "subagentIds": [
+          "allocated-role"
+        ],
+        "environmentIds": [
+          "allocated-env"
+        ],
+        "model": {
+          "provider": "zai-coding-cn",
+          "model": "glm-5.3-flash"
+        },
+        "effort": "max",
+        "tools": []
+      },
+      "samples": [
+        {
+          "inputs": {
+            "record": "{\"name\":\"Ada\",\"amount\":3}"
+          },
+          "expected": "Ada|6|true"
+        },
+        {
+          "inputs": {
+            "record": "{\"name\":\"林\",\"amount\":0}"
+          },
+          "expected": "林|0|false"
+        },
+        {
+          "inputs": {
+            "record": "{\"name\":\"负数\",\"amount\":-2.5}"
+          },
+          "expected": "负数|-5|false"
+        }
+      ]
+    },
+    {
+      "id": "branch",
+      "sourceLayer": "direct",
+      "instruction": "创建输入 score（number）的工作流，必须用 if 节点判断 score>=60，两条 port 分支分别输出“合格”与“不合格”。输出名均为 result，不使用模型、代码或工具。",
+      "context": {
+        "workflow": {
+          "id": "bench-flow",
+          "workspaceId": "compiler-benchmark",
+          "title": "基线",
+          "description": "",
+          "revision": 0,
+          "createdAt": "2026-10-18T00:00:00.000Z",
+          "updatedAt": "2026-10-18T00:00:00.000Z",
+          "nodes": [
+            {
+              "id": "base-0",
+              "kind": "input",
+              "config": {
+                "fields": [
+                  {
+                    "name": "text",
+                    "label": "文本",
+                    "required": true
+                  }
+                ]
+              },
+              "title": "base-0",
+              "number": "base-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "base-out",
+              "kind": "output",
+              "config": {
+                "text": "{{input.text}}",
+                "outputName": "result"
+              },
+              "title": "base-out",
+              "number": "base-out",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-0",
+              "source": "base-0",
+              "target": "base-out"
+            }
+          ],
+          "notes": []
+        },
+        "operation": "create",
+        "targetNodeIds": [],
+        "nodeIds": [
+          "allocated-0",
+          "allocated-1",
+          "allocated-2",
+          "allocated-3",
+          "allocated-4",
+          "allocated-5",
+          "allocated-6",
+          "allocated-7",
+          "allocated-8",
+          "allocated-9",
+          "allocated-10",
+          "allocated-11",
+          "allocated-12",
+          "allocated-13",
+          "allocated-14",
+          "allocated-15",
+          "allocated-16",
+          "allocated-17",
+          "allocated-18",
+          "allocated-19",
+          "allocated-20",
+          "allocated-21",
+          "allocated-22",
+          "allocated-23",
+          "allocated-24",
+          "allocated-25",
+          "allocated-26",
+          "allocated-27",
+          "allocated-28",
+          "allocated-29",
+          "allocated-30",
+          "allocated-31",
+          "allocated-32",
+          "allocated-33",
+          "allocated-34",
+          "allocated-35",
+          "allocated-36",
+          "allocated-37",
+          "allocated-38",
+          "allocated-39",
+          "allocated-40",
+          "allocated-41",
+          "allocated-42",
+          "allocated-43",
+          "allocated-44",
+          "allocated-45",
+          "allocated-46",
+          "allocated-47",
+          "allocated-48",
+          "allocated-49",
+          "allocated-50",
+          "allocated-51",
+          "allocated-52",
+          "allocated-53",
+          "allocated-54",
+          "allocated-55",
+          "allocated-56",
+          "allocated-57",
+          "allocated-58",
+          "allocated-59",
+          "allocated-60",
+          "allocated-61",
+          "allocated-62",
+          "allocated-63",
+          "allocated-64",
+          "allocated-65",
+          "allocated-66",
+          "allocated-67",
+          "allocated-68",
+          "allocated-69",
+          "allocated-70",
+          "allocated-71",
+          "allocated-72",
+          "allocated-73",
+          "allocated-74",
+          "allocated-75",
+          "allocated-76",
+          "allocated-77",
+          "allocated-78",
+          "allocated-79",
+          "allocated-80",
+          "allocated-81",
+          "allocated-82",
+          "allocated-83",
+          "allocated-84",
+          "allocated-85",
+          "allocated-86",
+          "allocated-87",
+          "allocated-88",
+          "allocated-89",
+          "allocated-90",
+          "allocated-91",
+          "allocated-92",
+          "allocated-93",
+          "allocated-94",
+          "allocated-95",
+          "allocated-96",
+          "allocated-97",
+          "allocated-98",
+          "allocated-99"
+        ],
+        "subagentIds": [
+          "allocated-role"
+        ],
+        "environmentIds": [
+          "allocated-env"
+        ],
+        "model": {
+          "provider": "zai-coding-cn",
+          "model": "glm-5.3-flash"
+        },
+        "effort": "max",
+        "tools": []
+      },
+      "samples": [
+        {
+          "inputs": {
+            "score": "60"
+          },
+          "expected": "合格"
+        },
+        {
+          "inputs": {
+            "score": "59"
+          },
+          "expected": "不合格"
+        }
+      ]
+    },
+    {
+      "id": "container",
+      "sourceLayer": "direct",
+      "instruction": "创建输入 items（json，字符串数组）的工作流。必须用 iteration 容器遍历工作流输入 items，每次运行遍历一次；内部子图对每项用 template 生成“项：{item}”（将 {item} 替换为当前项的字符串值），按输入顺序收集该模板的 text。最终 result 是结果数组的紧凑 JSON 文本；空数组为 []。禁止用 template 循环、代码、模型或工具替代 iteration。",
+      "context": {
+        "workflow": {
+          "id": "bench-flow",
+          "workspaceId": "compiler-benchmark",
+          "title": "基线",
+          "description": "",
+          "revision": 0,
+          "createdAt": "2026-10-18T00:00:00.000Z",
+          "updatedAt": "2026-10-18T00:00:00.000Z",
+          "nodes": [
+            {
+              "id": "base-0",
+              "kind": "input",
+              "config": {
+                "fields": [
+                  {
+                    "name": "text",
+                    "label": "文本",
+                    "required": true
+                  }
+                ]
+              },
+              "title": "base-0",
+              "number": "base-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "base-out",
+              "kind": "output",
+              "config": {
+                "text": "{{input.text}}",
+                "outputName": "result"
+              },
+              "title": "base-out",
+              "number": "base-out",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-0",
+              "source": "base-0",
+              "target": "base-out"
+            }
+          ],
+          "notes": []
+        },
+        "operation": "create",
+        "targetNodeIds": [],
+        "nodeIds": [
+          "allocated-0",
+          "allocated-1",
+          "allocated-2",
+          "allocated-3",
+          "allocated-4",
+          "allocated-5",
+          "allocated-6",
+          "allocated-7",
+          "allocated-8",
+          "allocated-9",
+          "allocated-10",
+          "allocated-11",
+          "allocated-12",
+          "allocated-13",
+          "allocated-14",
+          "allocated-15",
+          "allocated-16",
+          "allocated-17",
+          "allocated-18",
+          "allocated-19",
+          "allocated-20",
+          "allocated-21",
+          "allocated-22",
+          "allocated-23",
+          "allocated-24",
+          "allocated-25",
+          "allocated-26",
+          "allocated-27",
+          "allocated-28",
+          "allocated-29",
+          "allocated-30",
+          "allocated-31",
+          "allocated-32",
+          "allocated-33",
+          "allocated-34",
+          "allocated-35",
+          "allocated-36",
+          "allocated-37",
+          "allocated-38",
+          "allocated-39",
+          "allocated-40",
+          "allocated-41",
+          "allocated-42",
+          "allocated-43",
+          "allocated-44",
+          "allocated-45",
+          "allocated-46",
+          "allocated-47",
+          "allocated-48",
+          "allocated-49",
+          "allocated-50",
+          "allocated-51",
+          "allocated-52",
+          "allocated-53",
+          "allocated-54",
+          "allocated-55",
+          "allocated-56",
+          "allocated-57",
+          "allocated-58",
+          "allocated-59",
+          "allocated-60",
+          "allocated-61",
+          "allocated-62",
+          "allocated-63",
+          "allocated-64",
+          "allocated-65",
+          "allocated-66",
+          "allocated-67",
+          "allocated-68",
+          "allocated-69",
+          "allocated-70",
+          "allocated-71",
+          "allocated-72",
+          "allocated-73",
+          "allocated-74",
+          "allocated-75",
+          "allocated-76",
+          "allocated-77",
+          "allocated-78",
+          "allocated-79",
+          "allocated-80",
+          "allocated-81",
+          "allocated-82",
+          "allocated-83",
+          "allocated-84",
+          "allocated-85",
+          "allocated-86",
+          "allocated-87",
+          "allocated-88",
+          "allocated-89",
+          "allocated-90",
+          "allocated-91",
+          "allocated-92",
+          "allocated-93",
+          "allocated-94",
+          "allocated-95",
+          "allocated-96",
+          "allocated-97",
+          "allocated-98",
+          "allocated-99"
+        ],
+        "subagentIds": [
+          "allocated-role"
+        ],
+        "environmentIds": [
+          "allocated-env"
+        ],
+        "model": {
+          "provider": "zai-coding-cn",
+          "model": "glm-5.3-flash"
+        },
+        "effort": "max",
+        "tools": []
+      },
+      "samples": [
+        {
+          "inputs": {
+            "items": "[\"乙\",\"甲\",\"乙\"]"
+          },
+          "expected": "[\"项：乙\",\"项：甲\",\"项：乙\"]"
+        },
+        {
+          "inputs": {
+            "items": "[]"
+          },
+          "expected": "[]"
+        },
+        {
+          "inputs": {
+            "items": "[\"Ada\"]"
+          },
+          "expected": "[\"项：Ada\"]"
+        }
+      ]
+    },
+    {
+      "id": "local-edit",
+      "sourceLayer": "direct",
+      "instruction": "仅修改指定的模板节点，把输出改为“完成：{text}”，text 来自工作流输入。可修改该模板的 text 和 inputs 映射；保留其余节点、配置、节点顺序与连线。",
+      "context": {
+        "workflow": {
+          "id": "bench-flow",
+          "workspaceId": "compiler-benchmark",
+          "title": "基线",
+          "description": "输入一段文字，按模板生成结果；无需模型即可运行。",
+          "revision": 7,
+          "createdAt": "2026-10-18T00:00:00.000Z",
+          "updatedAt": "2026-10-18T00:00:00.000Z",
+          "nodes": [
+            {
+              "id": "base-0",
+              "kind": "input",
+              "config": {
+                "fields": [
+                  {
+                    "name": "text",
+                    "label": "文本",
+                    "required": true
+                  }
+                ]
+              },
+              "title": "base-0",
+              "number": "base-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "target",
+              "kind": "template",
+              "config": {
+                "text": "原文 {{input.text}}"
+              },
+              "title": "target",
+              "number": "target",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "base-out",
+              "kind": "output",
+              "config": {
+                "text": "{{target.text}}",
+                "outputName": "result"
+              },
+              "title": "base-out",
+              "number": "base-out",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-0",
+              "source": "base-0",
+              "target": "target"
+            },
+            {
+              "id": "edge-1",
+              "source": "target",
+              "target": "base-out"
+            }
+          ],
+          "notes": []
+        },
+        "operation": "revise",
+        "targetNodeIds": [
+          "target"
+        ],
+        "nodeIds": [
+          "allocated-0",
+          "allocated-1",
+          "allocated-2",
+          "allocated-3",
+          "allocated-4",
+          "allocated-5",
+          "allocated-6",
+          "allocated-7",
+          "allocated-8",
+          "allocated-9",
+          "allocated-10",
+          "allocated-11",
+          "allocated-12",
+          "allocated-13",
+          "allocated-14",
+          "allocated-15",
+          "allocated-16",
+          "allocated-17",
+          "allocated-18",
+          "allocated-19",
+          "allocated-20",
+          "allocated-21",
+          "allocated-22",
+          "allocated-23",
+          "allocated-24",
+          "allocated-25",
+          "allocated-26",
+          "allocated-27",
+          "allocated-28",
+          "allocated-29",
+          "allocated-30",
+          "allocated-31",
+          "allocated-32",
+          "allocated-33",
+          "allocated-34",
+          "allocated-35",
+          "allocated-36",
+          "allocated-37",
+          "allocated-38",
+          "allocated-39",
+          "allocated-40",
+          "allocated-41",
+          "allocated-42",
+          "allocated-43",
+          "allocated-44",
+          "allocated-45",
+          "allocated-46",
+          "allocated-47",
+          "allocated-48",
+          "allocated-49",
+          "allocated-50",
+          "allocated-51",
+          "allocated-52",
+          "allocated-53",
+          "allocated-54",
+          "allocated-55",
+          "allocated-56",
+          "allocated-57",
+          "allocated-58",
+          "allocated-59",
+          "allocated-60",
+          "allocated-61",
+          "allocated-62",
+          "allocated-63",
+          "allocated-64",
+          "allocated-65",
+          "allocated-66",
+          "allocated-67",
+          "allocated-68",
+          "allocated-69",
+          "allocated-70",
+          "allocated-71",
+          "allocated-72",
+          "allocated-73",
+          "allocated-74",
+          "allocated-75",
+          "allocated-76",
+          "allocated-77",
+          "allocated-78",
+          "allocated-79",
+          "allocated-80",
+          "allocated-81",
+          "allocated-82",
+          "allocated-83",
+          "allocated-84",
+          "allocated-85",
+          "allocated-86",
+          "allocated-87",
+          "allocated-88",
+          "allocated-89",
+          "allocated-90",
+          "allocated-91",
+          "allocated-92",
+          "allocated-93",
+          "allocated-94",
+          "allocated-95",
+          "allocated-96",
+          "allocated-97",
+          "allocated-98",
+          "allocated-99"
+        ],
+        "subagentIds": [
+          "allocated-role"
+        ],
+        "environmentIds": [
+          "allocated-env"
+        ],
+        "model": {
+          "provider": "zai-coding-cn",
+          "model": "glm-5.3-flash"
+        },
+        "effort": "max",
+        "tools": []
+      },
+      "samples": [
+        {
+          "inputs": {
+            "text": "样本"
+          },
+          "expected": "完成：样本"
+        },
+        {
+          "inputs": {
+            "text": "另一个"
+          },
+          "expected": "完成：另一个"
+        }
+      ]
+    },
+    {
+      "id": "large-edit",
+      "sourceLayer": "direct",
+      "instruction": "仅修改指定的最后一个模板节点，把输出改为“结果：{text}”，text 来自工作流输入。可修改该模板的 text 和 inputs 映射；保留其余节点、配置、顺序与连线。",
+      "context": {
+        "workflow": {
+          "id": "bench-flow",
+          "workspaceId": "compiler-benchmark",
+          "title": "基线",
+          "description": "输入一段文字，按模板生成结果；无需模型即可运行。",
+          "revision": 7,
+          "createdAt": "2026-10-18T00:00:00.000Z",
+          "updatedAt": "2026-10-18T00:00:00.000Z",
+          "nodes": [
+            {
+              "id": "base-0",
+              "kind": "input",
+              "config": {
+                "fields": [
+                  {
+                    "name": "text",
+                    "label": "文本",
+                    "required": true
+                  }
+                ]
+              },
+              "title": "base-0",
+              "number": "base-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-0",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 0 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-0",
+              "number": "padding-0",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-1",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 1 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-1",
+              "number": "padding-1",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-2",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 2 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-2",
+              "number": "padding-2",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-3",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 3 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-3",
+              "number": "padding-3",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-4",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 4 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-4",
+              "number": "padding-4",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-5",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 5 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-5",
+              "number": "padding-5",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-6",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 6 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-6",
+              "number": "padding-6",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-7",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 7 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-7",
+              "number": "padding-7",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-8",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 8 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-8",
+              "number": "padding-8",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-9",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 9 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-9",
+              "number": "padding-9",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-10",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 10 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-10",
+              "number": "padding-10",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-11",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 11 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-11",
+              "number": "padding-11",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-12",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 12 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-12",
+              "number": "padding-12",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-13",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 13 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-13",
+              "number": "padding-13",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-14",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 14 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-14",
+              "number": "padding-14",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-15",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 15 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-15",
+              "number": "padding-15",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-16",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 16 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-16",
+              "number": "padding-16",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-17",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 17 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-17",
+              "number": "padding-17",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-18",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 18 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-18",
+              "number": "padding-18",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-19",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 19 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-19",
+              "number": "padding-19",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-20",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 20 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-20",
+              "number": "padding-20",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-21",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 21 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-21",
+              "number": "padding-21",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-22",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 22 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-22",
+              "number": "padding-22",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-23",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 23 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-23",
+              "number": "padding-23",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-24",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 24 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-24",
+              "number": "padding-24",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-25",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 25 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-25",
+              "number": "padding-25",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-26",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 26 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-26",
+              "number": "padding-26",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "padding-27",
+              "kind": "template",
+              "config": {
+                "text": "内部固定说明 27 保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。保留无关业务说明。"
+              },
+              "title": "padding-27",
+              "number": "padding-27",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "target",
+              "kind": "template",
+              "config": {
+                "text": "原文 {{input.text}}"
+              },
+              "title": "target",
+              "number": "target",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            },
+            {
+              "id": "base-out",
+              "kind": "output",
+              "config": {
+                "text": "{{target.text}}",
+                "outputName": "result"
+              },
+              "title": "base-out",
+              "number": "base-out",
+              "x": 0,
+              "y": 0,
+              "fixed": false
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-0",
+              "source": "base-0",
+              "target": "padding-0"
+            },
+            {
+              "id": "edge-1",
+              "source": "padding-0",
+              "target": "padding-1"
+            },
+            {
+              "id": "edge-2",
+              "source": "padding-1",
+              "target": "padding-2"
+            },
+            {
+              "id": "edge-3",
+              "source": "padding-2",
+              "target": "padding-3"
+            },
+            {
+              "id": "edge-4",
+              "source": "padding-3",
+              "target": "padding-4"
+            },
+            {
+              "id": "edge-5",
+              "source": "padding-4",
+              "target": "padding-5"
+            },
+            {
+              "id": "edge-6",
+              "source": "padding-5",
+              "target": "padding-6"
+            },
+            {
+              "id": "edge-7",
+              "source": "padding-6",
+              "target": "padding-7"
+            },
+            {
+              "id": "edge-8",
+              "source": "padding-7",
+              "target": "padding-8"
+            },
+            {
+              "id": "edge-9",
+              "source": "padding-8",
+              "target": "padding-9"
+            },
+            {
+              "id": "edge-10",
+              "source": "padding-9",
+              "target": "padding-10"
+            },
+            {
+              "id": "edge-11",
+              "source": "padding-10",
+              "target": "padding-11"
+            },
+            {
+              "id": "edge-12",
+              "source": "padding-11",
+              "target": "padding-12"
+            },
+            {
+              "id": "edge-13",
+              "source": "padding-12",
+              "target": "padding-13"
+            },
+            {
+              "id": "edge-14",
+              "source": "padding-13",
+              "target": "padding-14"
+            },
+            {
+              "id": "edge-15",
+              "source": "padding-14",
+              "target": "padding-15"
+            },
+            {
+              "id": "edge-16",
+              "source": "padding-15",
+              "target": "padding-16"
+            },
+            {
+              "id": "edge-17",
+              "source": "padding-16",
+              "target": "padding-17"
+            },
+            {
+              "id": "edge-18",
+              "source": "padding-17",
+              "target": "padding-18"
+            },
+            {
+              "id": "edge-19",
+              "source": "padding-18",
+              "target": "padding-19"
+            },
+            {
+              "id": "edge-20",
+              "source": "padding-19",
+              "target": "padding-20"
+            },
+            {
+              "id": "edge-21",
+              "source": "padding-20",
+              "target": "padding-21"
+            },
+            {
+              "id": "edge-22",
+              "source": "padding-21",
+              "target": "padding-22"
+            },
+            {
+              "id": "edge-23",
+              "source": "padding-22",
+              "target": "padding-23"
+            },
+            {
+              "id": "edge-24",
+              "source": "padding-23",
+              "target": "padding-24"
+            },
+            {
+              "id": "edge-25",
+              "source": "padding-24",
+              "target": "padding-25"
+            },
+            {
+              "id": "edge-26",
+              "source": "padding-25",
+              "target": "padding-26"
+            },
+            {
+              "id": "edge-27",
+              "source": "padding-26",
+              "target": "padding-27"
+            },
+            {
+              "id": "edge-28",
+              "source": "padding-27",
+              "target": "target"
+            },
+            {
+              "id": "edge-29",
+              "source": "target",
+              "target": "base-out"
+            }
+          ],
+          "notes": []
+        },
+        "operation": "revise",
+        "targetNodeIds": [
+          "target"
+        ],
+        "nodeIds": [
+          "allocated-0",
+          "allocated-1",
+          "allocated-2",
+          "allocated-3",
+          "allocated-4",
+          "allocated-5",
+          "allocated-6",
+          "allocated-7",
+          "allocated-8",
+          "allocated-9",
+          "allocated-10",
+          "allocated-11",
+          "allocated-12",
+          "allocated-13",
+          "allocated-14",
+          "allocated-15",
+          "allocated-16",
+          "allocated-17",
+          "allocated-18",
+          "allocated-19",
+          "allocated-20",
+          "allocated-21",
+          "allocated-22",
+          "allocated-23",
+          "allocated-24",
+          "allocated-25",
+          "allocated-26",
+          "allocated-27",
+          "allocated-28",
+          "allocated-29",
+          "allocated-30",
+          "allocated-31",
+          "allocated-32",
+          "allocated-33",
+          "allocated-34",
+          "allocated-35",
+          "allocated-36",
+          "allocated-37",
+          "allocated-38",
+          "allocated-39",
+          "allocated-40",
+          "allocated-41",
+          "allocated-42",
+          "allocated-43",
+          "allocated-44",
+          "allocated-45",
+          "allocated-46",
+          "allocated-47",
+          "allocated-48",
+          "allocated-49",
+          "allocated-50",
+          "allocated-51",
+          "allocated-52",
+          "allocated-53",
+          "allocated-54",
+          "allocated-55",
+          "allocated-56",
+          "allocated-57",
+          "allocated-58",
+          "allocated-59",
+          "allocated-60",
+          "allocated-61",
+          "allocated-62",
+          "allocated-63",
+          "allocated-64",
+          "allocated-65",
+          "allocated-66",
+          "allocated-67",
+          "allocated-68",
+          "allocated-69",
+          "allocated-70",
+          "allocated-71",
+          "allocated-72",
+          "allocated-73",
+          "allocated-74",
+          "allocated-75",
+          "allocated-76",
+          "allocated-77",
+          "allocated-78",
+          "allocated-79",
+          "allocated-80",
+          "allocated-81",
+          "allocated-82",
+          "allocated-83",
+          "allocated-84",
+          "allocated-85",
+          "allocated-86",
+          "allocated-87",
+          "allocated-88",
+          "allocated-89",
+          "allocated-90",
+          "allocated-91",
+          "allocated-92",
+          "allocated-93",
+          "allocated-94",
+          "allocated-95",
+          "allocated-96",
+          "allocated-97",
+          "allocated-98",
+          "allocated-99"
+        ],
+        "subagentIds": [
+          "allocated-role"
+        ],
+        "environmentIds": [
+          "allocated-env"
+        ],
+        "model": {
+          "provider": "zai-coding-cn",
+          "model": "glm-5.3-flash"
+        },
+        "effort": "max",
+        "tools": []
+      },
+      "samples": [
+        {
+          "inputs": {
+            "text": "甲"
+          },
+          "expected": "结果：甲"
+        },
+        {
+          "inputs": {
+            "text": "乙"
+          },
+          "expected": "结果：乙"
+        }
+      ]
+    }
+  ],
+  "implementationHashes": {}
+}

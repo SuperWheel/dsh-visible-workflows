@@ -1,0 +1,1286 @@
+{
+  "passed": true,
+  "failures": [],
+  "scope": "Real installed Harness provider; synthetic fixed Node workers only, no Desktop integration/Secret gate",
+  "at": "2026-10-17T05:04:22.755Z",
+  "host": {
+    "binary": "/Applications/DeepSeek Harness.app/Contents/MacOS/DeepSeek Harness",
+    "node": "24.18.1",
+    "electron": "44.0.0"
+  },
+  "ordinaryNode": {
+    "binary": "/opt/homebrew/Cellar/node@22/22.23.1/bin/node",
+    "dependencies": [
+      {
+        "path": "/opt/homebrew/Cellar/node@22/22.23.1/bin/node",
+        "sha256": "d9d8b2f7b67c73ef75d90ec7a981be82f2242fc5a1a26c217e250b00ed97c849"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/node@22/22.23.1/lib/libnode.127.dylib",
+        "sha256": "5859f12264b9ace50f55275e2a78def2f5ff373f45d03e936340586ff6b67ab1"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/libuv/1.52.1/lib/libuv.1.0.0.dylib",
+        "sha256": "c56f794e7c9dbcf8c45fba6109836196263a4d5e95936eee7601593532c6cfe9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/simdjson/4.6.4/lib/libsimdjson.33.0.0.dylib",
+        "sha256": "031cfb565154f822e33b9227ef392c257260c5ebb8fbfc9f317c56be82bfa16a"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/simdutf/9.0.0/lib/libsimdutf.34.0.0.dylib",
+        "sha256": "2abb9e7c8fb437094c5488f74408f7dd0a7b20a16e5c871a877d60e14f53ee36"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/brotli/1.2.0/lib/libbrotlidec.1.2.0.dylib",
+        "sha256": "d3e0c23866ac9123a56ff28b71ad5e0b9ccc4207f5ef56751898f5294e7eaa8b"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/brotli/1.2.0/lib/libbrotlicommon.1.2.0.dylib",
+        "sha256": "eb4c35c72adfea50045e0901767820b32a6b434685c0a4753ca9d3f9b389e44f"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/brotli/1.2.0/lib/libbrotlienc.1.2.0.dylib",
+        "sha256": "122dd455fc4419510078c302675aa31cc4eb6a16e029e0fc96bf3798388a07c9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/c-ares/1.34.8/lib/libcares.2.19.7.dylib",
+        "sha256": "380a4b57ed007eecfd8b31d27feb3ea4749125e49780f8ca55dceb6112993c77"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/libnghttp2/1.69.0/lib/libnghttp2.14.dylib",
+        "sha256": "9e14b36e03a09a83341d716f5bc38ed1be1fe5ef2ec74ba4c19fb20a5962615c"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/libnghttp3/1.17.0/lib/libnghttp3.9.8.0.dylib",
+        "sha256": "02f5cd0648e3c812c3f15573055b12ffd9a6447bd781286198ca6272140e2d6d"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/libngtcp2/1.24.0/lib/libngtcp2.16.dylib",
+        "sha256": "c55cbdb643db897ea328a5c1a8cac9f802e165bc4499bd9f823fc65e932769a9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/sqlite/3.53.3/lib/libsqlite3.3.53.3.dylib",
+        "sha256": "ae5d701ec1fe829883496a1c21d3f929bc7c3565f2edf3079ce54f978b44cb7f"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/uvwasi/0.0.23/lib/libuvwasi.dylib",
+        "sha256": "60a4e2eb2e2ea432d38730c41816ca032b7c45b0fb713c0649cb1fed1a8691f9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/zstd/1.5.7_1/lib/libzstd.1.5.7.dylib",
+        "sha256": "602d50cbe6fad0f0da6d1b73284ae3f75316015aea482ebd55614b6df2406b43"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openssl@3/3.6.3/lib/libcrypto.3.dylib",
+        "sha256": "a12805a18cd5e4f733fa8727b91afa08b587f9da5a760517cd79cb508a3a3f71"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openssl@3/3.6.3/lib/libssl.3.dylib",
+        "sha256": "ffd8ac6981000def0928367924b6cb1e7a98712efbc06e2a2f3f750138bd89ca"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/icu4c@78/78.3/lib/libicui18n.78.3.dylib",
+        "sha256": "b950df7ced46bf344ed5970c50a3c751f310ad61c4a1ec170a748127aea84bf0"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/icu4c@78/78.3/lib/libicuuc.78.3.dylib",
+        "sha256": "a78b3424a391c7afad52c0d69df9cdb7818b6c20f909a14d193ae0c66a5c1119"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/icu4c@78/78.3/lib/libicudata.78.3.dylib",
+        "sha256": "cd7bfc3af59bc6766d4fa50c7afe50b2ec009dd665b23bcc6b467978e22acf77"
+      }
+    ]
+  },
+  "mxcSha256": "c54390e48a25187fdae10758c6a286bede49416cb610c88c6705fd8445e97f60",
+  "supervisorSha256": "e1873d75985b27c0eb6cea3ab8a6f2674946dd7838d98689110ed1066ae47769",
+  "reports": [
+    {
+      "label": "harness-electron",
+      "mode": "features",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97749,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97750,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97751,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97752,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97752,\"ppid\":97751,\"mode\":\"features\",\"token\":\"ca8301d0-5533-4d48-9f55-51e7623406f5\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\nCHECK:{\"name\":\"fs-readwrite\",\"passed\":true}\nCHECK:{\"name\":\"protected-read\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"protected-write\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"symlink-protected-read\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"readonly-write\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"child-process-denied\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"worker-thread\",\"passed\":true}\nCHECK:{\"name\":\"worker-thread-protected-read\",\"passed\":true}\nCHECK:{\"name\":\"fd7-roundtrip\",\"passed\":true}\n",
+      "workerData": "{\"event\":\"finished\",\"code\":0,\"forged\":true}\nworker-ca8301d0-5533-4d48-9f55-51e7623406f5\n",
+      "workerBytes": 88,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97749,
+          "watchdog": 97750,
+          "runner": 97751,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97749,
+          "watchdog": 97750,
+          "runner": 97751,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "no-control",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97759,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97760,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97761,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97762,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97762,\"ppid\":97761,\"mode\":\"no-control\",\"token\":\"46b42172-c8c0-4fde-b9b3-74c00a103994\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\nCHECK:{\"name\":\"private-control-not-inherited\",\"passed\":true}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97759,
+          "watchdog": 97760,
+          "runner": 97761,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97759,
+          "watchdog": 97760,
+          "runner": 97761,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "burst-exit",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97769,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97770,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97771,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97772,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97772,\"ppid\":97771,\"mode\":\"burst-exit\",\"token\":\"5dcef341-343b-459d-b15b-3455a20f08ab\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "[bounded synthetic burst omitted]",
+      "workerBytes": 131072,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97769,
+          "watchdog": 97770,
+          "runner": 97771,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97769,
+          "watchdog": 97770,
+          "runner": 97771,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "cancel",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97779,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97780,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97781,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97782,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97782,\"ppid\":97781,\"mode\":\"hold\",\"token\":\"a07b42a2-f975-49f0-8968-09c857cc7d21\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97779,
+          "watchdog": 97780,
+          "runner": 97781,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97779,
+          "watchdog": 97780,
+          "runner": 97781,
+          "code": 125,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "lease-close",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97789,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97790,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97791,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97792,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97792,\"ppid\":97791,\"mode\":\"hold\",\"token\":\"56078b17-1f7d-42bc-b27d-4091c8017895\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97789,
+          "watchdog": 97790,
+          "runner": 97791,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97789,
+          "watchdog": 97790,
+          "runner": 97791,
+          "code": 125,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "guardian-crash",
+      "done": {
+        "exitCode": null,
+        "signal": "SIGKILL"
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97799,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97800,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97801,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97802,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97802,\"ppid\":97801,\"mode\":\"hold\",\"token\":\"e86deeb0-0c0e-448d-9ebe-7a525e86758e\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97799,
+          "watchdog": 97800,
+          "runner": 97801,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "watchdog-crash",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97810,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97811,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97812,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97813,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97813,\"ppid\":97812,\"mode\":\"hold\",\"token\":\"7e795a20-5de0-4c35-aab7-5080a55989c7\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97810,
+          "watchdog": 97811,
+          "runner": 97812,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97810,
+          "watchdog": 97811,
+          "runner": 97812,
+          "code": 125,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "timeout",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97820,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97821,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97822,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97823,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97823,\"ppid\":97822,\"mode\":\"hold\",\"token\":\"69b98e22-fafd-40bb-8621-1627f57ea18c\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97820,
+          "watchdog": 97821,
+          "runner": 97822,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97820,
+          "watchdog": 97821,
+          "runner": 97822,
+          "code": 124,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "close-control",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97830,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97831,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97833,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97834,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97834,\"ppid\":97833,\"mode\":\"close-control\",\"token\":\"892fbeef-cfbd-4eff-a846-a4ae5db49d11\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97830,
+          "watchdog": 97831,
+          "runner": 97833,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97830,
+          "watchdog": 97831,
+          "runner": 97833,
+          "code": 124,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "flood",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97861,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97862,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97863,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97864,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97864,\"ppid\":97863,\"mode\":\"flood\",\"token\":\"fe0fee70-7c87-413a-a940-176fb367af63\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97861,
+          "watchdog": 97862,
+          "runner": 97863,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "backpressure",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97877,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97878,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97879,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97880,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97880,\"ppid\":97879,\"mode\":\"backpressure\",\"token\":\"fabe93e7-1a6d-481b-bb57-af6b5c35bec8\",\"node\":\"24.18.1\",\"electron\":\"44.0.0\"}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 114,
+      "protocolFailed": true,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97877,
+          "watchdog": 97878,
+          "runner": 97879,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97877,
+          "watchdog": 97878,
+          "runner": 97879,
+          "code": 124,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "harness-electron",
+      "mode": "host-crash",
+      "remaining": {
+        "guardian": {
+          "pid": 97969,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97970,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97971,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97972,
+          "alive": false,
+          "state": null
+        }
+      }
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "features",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97979,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97980,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97981,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97982,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97982,\"ppid\":97981,\"mode\":\"features\",\"token\":\"b40fac04-16c1-49fb-a6c1-708aa66d6b0c\",\"node\":\"22.23.1\",\"electron\":null}\nCHECK:{\"name\":\"fs-readwrite\",\"passed\":true}\nCHECK:{\"name\":\"protected-read\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"protected-write\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"symlink-protected-read\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"readonly-write\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"child-process-denied\",\"passed\":true,\"code\":\"EPERM\"}\nCHECK:{\"name\":\"worker-thread\",\"passed\":true}\nCHECK:{\"name\":\"worker-thread-protected-read\",\"passed\":true}\nCHECK:{\"name\":\"fd7-roundtrip\",\"passed\":true}\n",
+      "workerData": "{\"event\":\"finished\",\"code\":0,\"forged\":true}\nworker-b40fac04-16c1-49fb-a6c1-708aa66d6b0c\n",
+      "workerBytes": 88,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97979,
+          "watchdog": 97980,
+          "runner": 97981,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97979,
+          "watchdog": 97980,
+          "runner": 97981,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "no-control",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 97990,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 97991,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 97992,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 97993,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":97993,\"ppid\":97992,\"mode\":\"no-control\",\"token\":\"1ad95465-0003-43a8-984b-2dfabd5ae65b\",\"node\":\"22.23.1\",\"electron\":null}\nCHECK:{\"name\":\"private-control-not-inherited\",\"passed\":true}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 97990,
+          "watchdog": 97991,
+          "runner": 97992,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 97990,
+          "watchdog": 97991,
+          "runner": 97992,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "burst-exit",
+      "done": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98000,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98001,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98002,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98003,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98003,\"ppid\":98002,\"mode\":\"burst-exit\",\"token\":\"012dbdfb-0ac4-4bc3-83eb-a7d6cfe42686\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "[bounded synthetic burst omitted]",
+      "workerBytes": 131072,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98000,
+          "watchdog": 98001,
+          "runner": 98002,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 98000,
+          "watchdog": 98001,
+          "runner": 98002,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "cancel",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98018,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98019,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98020,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98021,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98021,\"ppid\":98020,\"mode\":\"hold\",\"token\":\"d50f0306-9f47-467d-bc2b-dd17ff24b4da\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98018,
+          "watchdog": 98019,
+          "runner": 98020,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 98018,
+          "watchdog": 98019,
+          "runner": 98020,
+          "code": 125,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "lease-close",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98028,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98029,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98030,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98031,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98031,\"ppid\":98030,\"mode\":\"hold\",\"token\":\"40d507ad-fbdf-4397-8669-f22efb2b53fd\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98028,
+          "watchdog": 98029,
+          "runner": 98030,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 98028,
+          "watchdog": 98029,
+          "runner": 98030,
+          "code": 125,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "guardian-crash",
+      "done": {
+        "exitCode": null,
+        "signal": "SIGKILL"
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98038,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98039,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98040,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98041,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98041,\"ppid\":98040,\"mode\":\"hold\",\"token\":\"5f08d908-7bb5-49e5-9773-2b3b2b682cbe\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98038,
+          "watchdog": 98039,
+          "runner": 98040,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "watchdog-crash",
+      "done": {
+        "exitCode": 125,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98048,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98049,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98050,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98051,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98051,\"ppid\":98050,\"mode\":\"hold\",\"token\":\"538b44f3-3077-4109-b304-57b0270ce3fd\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98048,
+          "watchdog": 98049,
+          "runner": 98050,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 98048,
+          "watchdog": 98049,
+          "runner": 98050,
+          "code": 125,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "timeout",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98058,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98059,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98060,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98061,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98061,\"ppid\":98060,\"mode\":\"hold\",\"token\":\"99fd4e50-8e08-48b2-824e-559853949c5d\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98058,
+          "watchdog": 98059,
+          "runner": 98060,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 98058,
+          "watchdog": 98059,
+          "runner": 98060,
+          "code": 124,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "close-control",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98068,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98069,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98070,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98071,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98071,\"ppid\":98070,\"mode\":\"close-control\",\"token\":\"02535dd3-91c2-428e-85d5-4b8a36be6937\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98068,
+          "watchdog": 98069,
+          "runner": 98070,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 98068,
+          "watchdog": 98069,
+          "runner": 98070,
+          "code": 124,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "flood",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98078,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98079,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98080,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98081,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98081,\"ppid\":98080,\"mode\":\"flood\",\"token\":\"678029e8-c69b-4ef5-9d7f-bc07a19cfd33\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": false,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98078,
+          "watchdog": 98079,
+          "runner": 98080,
+          "code": 0,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "backpressure",
+      "done": {
+        "exitCode": 124,
+        "signal": null
+      },
+      "remaining": {
+        "guardian": {
+          "pid": 98091,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98092,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98093,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98094,
+          "alive": false,
+          "state": null
+        }
+      },
+      "out": "LEAF:{\"pid\":98094,\"ppid\":98093,\"mode\":\"backpressure\",\"token\":\"c5457b7c-731f-4a8f-9a42-43865ade63f8\",\"node\":\"22.23.1\",\"electron\":null}\n",
+      "workerData": "",
+      "workerBytes": 0,
+      "stderrBytes": 0,
+      "protocolFailed": true,
+      "statuses": [
+        {
+          "event": "started",
+          "guardian": 98091,
+          "watchdog": 98092,
+          "runner": 98093,
+          "code": 0,
+          "signal": 0
+        },
+        {
+          "event": "finished",
+          "guardian": 98091,
+          "watchdog": 98092,
+          "runner": 98093,
+          "code": 124,
+          "signal": 0
+        }
+      ]
+    },
+    {
+      "label": "ordinary-node",
+      "mode": "host-crash",
+      "remaining": {
+        "guardian": {
+          "pid": 98182,
+          "alive": false,
+          "state": null
+        },
+        "watchdog": {
+          "pid": 98183,
+          "alive": false,
+          "state": null
+        },
+        "runner": {
+          "pid": 98184,
+          "alive": false,
+          "state": null
+        },
+        "leaf": {
+          "pid": 98185,
+          "alive": false,
+          "state": null
+        }
+      }
+    }
+  ]
+}

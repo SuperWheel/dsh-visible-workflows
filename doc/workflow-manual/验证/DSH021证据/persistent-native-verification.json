@@ -1,0 +1,68 @@
+{
+  "at": "2026-10-17T08:13:02.521Z",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "native-protocol-values-identity",
+      "passed": true,
+      "count": 74
+    },
+    {
+      "name": "source-contract-no-global-policy-probe-no-secret-lookup-and-native-paste",
+      "passed": true
+    },
+    {
+      "name": "native-automatic-use-no-ui-gates-and-owner-session-mutation-contract",
+      "passed": true
+    },
+    {
+      "name": "missing-private-channel",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "wrong-request-binding",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "closed-private-channel",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "unexpected-environment",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "reject-secret-in-protocol",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "reject-resolve-api",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "bound-probe-closed-response-no-authentication-or-keychain-branch",
+      "passed": true,
+      "closed": true,
+      "available": false,
+      "code": "runtime_unsafe"
+    }
+  ],
+  "nativeBinarySha256": "c8851634b17c6eee3e73ad8572cec17fa6f924dccaae07ad4cc67ffe9b63c073",
+  "manifestSha256": "d045aacdf64cd3947c42a1b8b8661d093b99867590fcb81a8b49ce647c9c3ef4",
+  "authenticationInvoked": false,
+  "keychainReadOrWrite": false,
+  "uiUsed": false,
+  "networkCalled": false,
+  "productionModified": false,
+  "globalPolicyChanged": false,
+  "limitations": [
+    "Native user authentication, actual Keychain CRUD/CAS and native paste/view require human acceptance; source contracts and protocol tests do not establish those behaviors.",
+    "No protection against same-user arbitrary code is claimed."
+  ]
+}

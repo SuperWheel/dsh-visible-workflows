@@ -1,0 +1,34 @@
+{
+  "at": "2026-10-17T08:23:15.445Z",
+  "userConfirmed": "已保存并授权",
+  "authenticationMode": "one-native-management-session",
+  "nativeManagementWindowClosed": true,
+  "componentReady": true,
+  "missingConfigurationCleared": true,
+  "automaticRunIds": [
+    "c1f9a29a-5eb3-41e8-a3e4-f38846a71019",
+    "2daf86e4-bfdb-4330-a442-fa3ff048398c"
+  ],
+  "automaticRunStatuses": [
+    {
+      "ok": false,
+      "status_code": 401
+    },
+    {
+      "ok": false,
+      "status_code": 401
+    }
+  ],
+  "reauthenticationBetweenRuns": false,
+  "nativeValueReadByAgent": false,
+  "manualRevokeRetest": "not-repeated-to-minimize-user-interactions",
+  "revocationAndCredentialTargetInvalidation": "covered-by-native-and-workflow-regressions",
+  "testCredentialRetained": true,
+  "scope": "fixed GET https://api.deepseek.com/user/balance for existing workflow variable only",
+  "jsonRoundtrip": "passed-in-real-desktop",
+  "limitations": [
+    "HTTP401 with fake value establishes completed controlled requests, not successful authentication with a valid API key",
+    "No new real manual revoke, post-edit regrant or restart acceptance repeated",
+    "Windows not enabled or verified"
+  ]
+}

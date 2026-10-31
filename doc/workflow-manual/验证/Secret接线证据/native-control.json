@@ -1,0 +1,25 @@
+{
+  "scope": "Actual installed Harness runtime, subprocess provider and control helper; synthetic single-process payload; not Desktop global isolation",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "passed": true,
+  "status": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "nativeRangeExited": true,
+  "markerConsumed": true,
+  "credentialAbsent": true,
+  "controlReplyMatched": true,
+  "diagnosticBytes": 114,
+  "process": {
+    "launches": 1,
+    "retainedRanges": 0,
+    "controlPipe": true,
+    "pty": false,
+    "treeSupervision": "unverified",
+    "unverifiedTreeRanges": 1
+  },
+  "secretAvailable": false,
+  "stopCode": "PROCESS_TREE_SUPERVISION_UNVERIFIED"
+}

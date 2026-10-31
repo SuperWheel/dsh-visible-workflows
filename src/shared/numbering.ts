@@ -1,4 +1,4 @@
-import type { Workflow, WorkflowEdge } from './types.ts'
+import type { Workflow, WorkflowEdge, NodeGraph, WorkflowNode } from './types.ts'
 
 /**
  * Deterministic display numbering for DAGs and nested containers. Node/edge identities are never rewritten.
@@ -49,7 +49,7 @@ export function renumberWorkflow(flow: Workflow): Workflow {
   const pending = new Map(flow.nodes.map(n => [n.id, incoming.get(n.id)!.length]))
   const queue = flow.nodes.filter(n => pending.get(n.id) === 0).map(n => n.id).sort()
   while (queue.length) {
-    const id = queue.shift()!, node = nodes.get(id)!
+    const id = queue.shift()!
     const path = rootPaths.get(id) ?? (reached.has(id) ? commonPath(incoming.get(id)!.map(e => edgePaths.get(e.id)).filter((v): v is string => !!v)) : 'u')
     const index = (pathCounts.get(path) ?? 0) + 1; pathCounts.set(path, index); assigned.set(id, `${path}-${index}`)
     const outputs = outgoing.get(id)!
@@ -72,4 +72,59 @@ export function renumberWorkflow(flow: Workflow): Workflow {
     const prefix = (nodes: typeof flow.nodes): typeof flow.nodes => nodes.map(child => ({ ...child, number: `${number}:${child.number}`, config: child.config.body ? { ...child.config, body: { ...child.config.body, nodes: prefix(child.config.body.nodes) } } : child.config }))
     return { ...node, number, config: { ...node.config, body: { nodes: prefix(inner.nodes), edges: inner.edges } } }
   }) }
+}
+
+
+const numberedNodes=(graph:NodeGraph):WorkflowNode[]=>graph.nodes.flatMap(node=>[node,...(node.config.body?numberedNodes(node.config.body):[])])
+/** Host-owned numbering for a planning/proposal candidate. Keep saved IDs' numbers;
+ * deterministically allocate only genuinely new nodes, with each final container prefix.
+ * This is deliberately separate from ordinary user/agent save renumbering.
+ */
+export function normalizePlanningWorkflowNumbers(flow:Workflow,baseline:Workflow):Workflow {
+  const baselineNodes=new Map(numberedNodes(baseline).map(node=>[node.id,node]))
+  const materialized = renumberWorkflow(flow)
+  // Existing presentation numbers are not model edits. In particular, a fixed
+  // container's whole saved body must not change merely through projection.
+  for (const node of numberedNodes(materialized)) { const previous = baselineNodes.get(node.id); if (previous) node.number = previous.number }
+  // Restoring saved numbers can occupy a newly inserted node's generated number
+  // (input a-1 -> new a-2 -> saved output a-2). Reserve every surviving saved
+  // number first, then allocate only new nodes. Keep generated branch labels and
+  // use the final container number as the prefix for new descendants.
+  const usedNumbers = new Set(numberedNodes(materialized).filter(node => baselineNodes.has(node.id)).map(node => node.number))
+  const numberNewNodes = (graph: NodeGraph, prefix = ''): void => {
+    const added = graph.nodes.filter(node => !baselineNodes.has(node.id)).map(node => ({ node, local: node.number.slice(node.number.lastIndexOf(':') + 1) }))
+      .sort((left, right) => left.local.localeCompare(right.local) || left.node.id.localeCompare(right.node.id))
+    const collisions: typeof added = []
+    for (const item of added) {
+      const preferred = `${prefix}${item.local}`
+      if (usedNumbers.has(preferred)) collisions.push(item)
+      else { item.node.number = preferred; usedNumbers.add(preferred) }
+    }
+    for (const { node, local } of collisions) {
+      const match = local.match(/^(.*-)(\d+)$/)!
+      let ordinal = Number(match[2]), number: string
+      do { number = `${prefix}${match[1]}${++ordinal}` } while (usedNumbers.has(number))
+      node.number = number; usedNumbers.add(number)
+    }
+    for (const node of graph.nodes) if (node.config.body) numberNewNodes(node.config.body, `${node.number}:`)
+  }
+  numberNewNodes(materialized)
+  return materialized
+}
+/** Display metadata is not authority supplied by an agent or an old proposal.
+ * Compare against the current saved graph too: definition digests ignore numbers.
+ */
+export function assertExistingWorkflowNumbers(flow:Workflow,baseline:Workflow):void {
+  const previous=new Map(numberedNodes(baseline).map(node=>[node.id,node.number]))
+  for(const node of numberedNodes(flow))if(previous.has(node.id)&&node.number!==previous.get(node.id))throw new Error('WORKFLOW_NUMBER_CONFLICT: 已有节点编号已变化，请重新生成或核对提案：'+node.id)
+  const agents=new Map((baseline.subAgents??[]).map(agent=>[agent.id,agent.number]))
+  for(const agent of flow.subAgents??[])if(agents.has(agent.id)&&agent.number!==agents.get(agent.id))throw new Error('WORKFLOW_NUMBER_CONFLICT: 已有子 Agent 编号不能由提案改写：'+agent.id)
+}
+/** Acceptance must persist the very numbering already reviewed, never reassign it. */
+export function assertReviewedWorkflowNumbers(flow:Workflow,baseline:Workflow):void {
+  assertExistingWorkflowNumbers(flow,baseline)
+  const nodes=numberedNodes(flow),numbers=new Set<string>()
+  for(const node of nodes){if(!node.number.trim()||numbers.has(node.number))throw new Error('WORKFLOW_NUMBER_CONFLICT: 候选节点编号必须非空且唯一');numbers.add(node.number)}
+  const expected=new Map(numberedNodes(normalizePlanningWorkflowNumbers(flow,baseline)).map(node=>[node.id,node.number]))
+  for(const node of nodes)if(node.number!==expected.get(node.id))throw new Error('WORKFLOW_NUMBER_CONFLICT: 候选新节点编号与 Host 规范器不一致，请重新生成提案：'+node.id)
 }

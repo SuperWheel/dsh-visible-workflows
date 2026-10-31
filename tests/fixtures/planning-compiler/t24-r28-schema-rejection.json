@@ -1,0 +1,31 @@
+{
+  "guardValues": {
+    "cases": [
+      {
+        "conditions": [
+          {
+            "operator": "equals",
+            "value": "200",
+            "variable": "fetch.status_code"
+          },
+          {
+            "gte": true,
+            "operator": "gte",
+            "value": "1",
+            "variable": "select.count"
+          }
+        ],
+        "id": "ok",
+        "logic": "and"
+      }
+    ]
+  },
+  "checkpoint": {
+    "state": "clarification",
+    "revision": 0,
+    "submissions": 1,
+    "maxSubmissions": 3,
+    "issues": [],
+    "priorFailure": ""
+  }
+}

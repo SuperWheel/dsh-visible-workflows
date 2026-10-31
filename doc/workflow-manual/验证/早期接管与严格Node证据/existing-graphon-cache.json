@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-17T05:56:38.271Z",
+  "scope": "Read-only existing Desktop Graphon cache; no Python execution, cache mutation or Secret gate",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "manifestDigest": "a08acc9b1be2803835ec638d78a2370d6797f07de931a0cdb1640b337eaf7f6f",
+  "archiveSha256": "dd7940400a98253be02aec0b26bf75e188dc3f2fe925baf18cce510630aef4f0",
+  "expectedFileCount": 2626,
+  "expectedDirectoryCount": 340,
+  "actualCounts": {
+    "files": 2627,
+    "directories": 340,
+    "other": 0
+  },
+  "difference": {
+    "missingFiles": 0,
+    "missingDirectories": 0,
+    "extraFiles": 0,
+    "extraDirectories": 0,
+    "changedFileContents": 0,
+    "changedFileSizes": 0,
+    "wrongTypes": 0,
+    "symlinks": 0,
+    "hardlinkedFiles": 0,
+    "invalidOwners": 0,
+    "invalidModes": 0
+  },
+  "extraFileExtensions": {},
+  "strictCompatible": true,
+  "sourceSha256": "485a9362f49e39b8d347d5b3832996bc06fe433af73ffa3093ebb67adc250eb1",
+  "productionModified": false,
+  "pythonExecuted": false
+}

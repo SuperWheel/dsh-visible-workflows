@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-17",
+  "timeZone": "Asia/Shanghai",
+  "source": "Coordinating agent observations and explicit user confirmations; no credential read by acceptance tooling.",
+  "desktopVersion": "0.2.1-rc.1",
+  "runningWorkflowComponents": 1,
+  "visibleWorkflowCount": 8,
+  "canvasNotesAnnotationsAndJsonEntryVisible": true,
+  "secretBackendReady": true,
+  "userConfirmed": {
+    "viewOldValue": true,
+    "editSaved": true,
+    "reopenShowsNewValue": true,
+    "reopenClosedWithoutSaving": true,
+    "allowedFixedTargetRequestAndCompletedSystemAuthentication": true,
+    "nativeTestCredentialDeleted": true
+  },
+  "observedHttp": {
+    "runId": "3c4e7a6d-4b1f-468a-b13a-44e126c11f5c",
+    "output": "401"
+  },
+  "pending": [
+    "post-delete-new-json-roundtrip-not-performed",
+    "persistent-authorization-implementation-and-real-acceptance",
+    "obsolete-isolation-cleanup"
+  ],
+  "rawCredentialRead": false,
+  "credentialWindowCaptured": false,
+  "authorizationModel": "per-use-confirmation"
+}

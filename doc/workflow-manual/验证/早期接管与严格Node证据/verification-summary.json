@@ -1,0 +1,957 @@
+{
+  "version": 1,
+  "capturedAt": "2026-10-17T06:39:43.826798+00:00",
+  "scope": "Derived regression/build summary with actual ordinary-plugin/helper installation and first protected-profile failure/rollback. Component readiness does not prove Desktop welcome RPC usability. Secret readiness is not claimed; operator script revisions are separate from the tested runtime build.",
+  "regression": {
+    "firstRun": {
+      "path": ".cache/secret-bootstrap-20261017/full-tests-final.json",
+      "bytes": 479552,
+      "sha256": "4e09e0dbf0bbf2df733797860c47028323c747b71cf9c14827d902e6d04c7855",
+      "files": 121,
+      "tests": 1240,
+      "passed": 1238,
+      "failed": 2,
+      "skipped": 0,
+      "todo": 0,
+      "success": false,
+      "startTime": 1792216371202
+    },
+    "rerun": {
+      "path": ".cache/secret-bootstrap-20261017/loopback-final.json",
+      "bytes": 4899,
+      "sha256": "90dcf88d21996a3f0f3c988f454e4f41615ccea85fb2e08ed2ab5f5381b1a830",
+      "files": 2,
+      "tests": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "todo": 0,
+      "success": true,
+      "startTime": 1792216431348
+    },
+    "firstRunFailures": [
+      {
+        "file": "tests/graphon-capability-audit.test.ts",
+        "name": "Graphon full node-kind integration audit executes all 20 kinds through the real engine and production adapters using explicit model/SDK doubles",
+        "occurrence": 1,
+        "failure": "listen EPERM: operation not permitted 127.0.0.1"
+      },
+      {
+        "file": "tests/tool-adapters.test.ts",
+        "name": "isolated and bounded execution adapters uses actual HTTP responses, preserves status and never follows credential-bearing redirects",
+        "occurrence": 1,
+        "failure": "listen EPERM: operation not permitted 127.0.0.1"
+      }
+    ],
+    "mergeRule": "Replace matching file + fullName + occurrence results with the 11 rerun results; retain separate parameterized instances with duplicate titles and never add overlapping counts.",
+    "distinctFinal": {
+      "files": 121,
+      "tests": 1240,
+      "passed": 1240,
+      "failed": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "build": {
+    "command": "node scripts/build.mjs",
+    "exitCode": 0,
+    "exitCodeEvidence": "Build command completion confirmed by the coordinating agent; the stdout log itself does not embed an exit status.",
+    "log": {
+      "path": ".cache/secret-bootstrap-20261017/build-final-graphon.log",
+      "bytes": 2462,
+      "sha256": "c87791bb9b3cc71e257306de6f6c18517c067b5e317e0fd1e560094e9b8160fd"
+    },
+    "typechecks": [
+      "Host",
+      "Client",
+      "host-extensions/dsh-secret-isolation"
+    ],
+    "artifacts": [
+      {
+        "path": "lib/client.js",
+        "bytes": 979600,
+        "sha256": "fadd3c7a24eb2aaa58ee784eea1f75d31196029597b85620e3221d69d21ee611"
+      },
+      {
+        "path": "lib/index.js",
+        "bytes": 505000,
+        "sha256": "9c6469e3302e3dc19a27fcb0793829040cddcf76c7734c6f5d22cc8489e910fd"
+      },
+      {
+        "path": "lib/isolation-host.js",
+        "bytes": 183538,
+        "sha256": "a1f521d9de413fba2b3bb8a9949b04d761cdb8a40b31019c1ecaae7dc9de8542"
+      },
+      {
+        "path": "lib/typert.host.js",
+        "bytes": 124031,
+        "sha256": "9d2bd1f842ee5a0ddb6a253f14e1112ec6621e717f9ebe1f1b28d89a44ee143f"
+      },
+      {
+        "path": "lib/typert.remote-client.js",
+        "bytes": 105619,
+        "sha256": "62b32f177da7988c18fab87e0119b9dbeec2202a87a3e05862e76a3699b0cb99"
+      },
+      {
+        "path": "lib/workflow-archive-worker.js",
+        "bytes": 203310,
+        "sha256": "28959596b2732709711a47013c8e370de86acb3a4799d16843c16273b20b6e9f"
+      },
+      {
+        "path": "lib/workflow-file-worker.js",
+        "bytes": 148230,
+        "sha256": "9fdaef9d664ea4a0717f6ee3374b6bfec006ca6850ba37bbe9521335393dc827"
+      },
+      {
+        "path": "native/process-supervisor/dist/darwin-arm64/workflow-leaf-supervisor",
+        "bytes": 35736,
+        "sha256": "e1873d75985b27c0eb6cea3ab8a6f2674946dd7838d98689110ed1066ae47769"
+      },
+      {
+        "path": "native/process-supervisor/dist/darwin-arm64/manifest.json",
+        "bytes": 316,
+        "sha256": "6c5ecb679ad9684b89ce8396fc22ed2f0e6914a5a1a85eb6e9270a6ed335332d"
+      }
+    ]
+  },
+  "currentSourceHashes": [
+    {
+      "path": "host-extensions/dsh-secret-isolation/automatic-files-adapter.ts",
+      "bytes": 10843,
+      "sha256": "bc73155cefb24156c57072daf80ddf8669ed2c44e8828a8978a73547ae276df4"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/bootstrap.ts",
+      "bytes": 10765,
+      "sha256": "edae5313ef50226c088e899085bc0ea2ae520ab7c4411faf399d6c5f97823949"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/contracts.ts",
+      "bytes": 2848,
+      "sha256": "1a02e2454c0ee68f644768fc19157acc3240f8c502244bea62fd99bb5c8e7abe"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/desktop-cutover.mjs",
+      "bytes": 23132,
+      "sha256": "d26d2d8b08851fa3aa74cf22f971a169f772fece44ba971606e5557ed34e9e31",
+      "capturedAt": "2026-10-17T06:39:43.826798+00:00",
+      "scope": "stopped experimental operator script; ninth companion never deployed"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/desktop-driver.ts",
+      "bytes": 5395,
+      "sha256": "e3b4f47117c77dbceb39960626fa94e1e37659fa52ec3276ddb4af9e13e5aaf3"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/desktop-entry-imports.ts",
+      "bytes": 4330,
+      "sha256": "854a51f6b0e7ff3c0a65fe877b2b58ff3617e711b355bb6af6cc32513b311f90"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/desktop-entry.ts",
+      "bytes": 7976,
+      "sha256": "771240e4bbb0fd9a7773064682ed6ba64919c30b39bcfbe47b5236b30915b69c"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/desktop-office.ts",
+      "bytes": 2834,
+      "sha256": "ab00062b90abf50afcfb1902f567dc20b3c151d8b1a938cc81977a49becb6feb"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/desktop-profile.ts",
+      "bytes": 7379,
+      "sha256": "3f78c01d34bb53b168283c4e44a473e72295cc561f6ecf89b234b7465da8ba28"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/entry.ts",
+      "bytes": 2251,
+      "sha256": "c9e8320eaf69673345d6993c548819881e1c3dba599d71b3e992e7da2b3f7fb2"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/files.ts",
+      "bytes": 3092,
+      "sha256": "cadb0db7437c664e786b486750f2823b8889e0916eaa0733f4140d186f353bb1"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/guard.ts",
+      "bytes": 4221,
+      "sha256": "c73ee8c3a6d7d5fd04cafc914a882aef3e1b015a46dc6f884636beea024690ca"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/index.ts",
+      "bytes": 12273,
+      "sha256": "e1c91946c416ca98ee0af54bab862d05889447ea05a473de58f7f39e2fb99582"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/mcp-adapter.ts",
+      "bytes": 7278,
+      "sha256": "62e7ef0069ebb1f8375b235764a58df364a7e9a4e899035c84f17565379b7726"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/mcp-transport.ts",
+      "bytes": 8558,
+      "sha256": "3dab24a0c6fe630b70d14e1137abb4ed359028025fed8c3df91fc5ef8f41c6f9"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/mxc-host.ts",
+      "bytes": 2993,
+      "sha256": "a26e5348df4e84383b680062a9aba3b4188cc5a85028a3dc0264ba043b670127"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/process.ts",
+      "bytes": 13429,
+      "sha256": "b1e6bf9ee2c91d565677adfb7864527344258376c4ac43817d880286e9e62a91"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/public-http-adapter.ts",
+      "bytes": 10638,
+      "sha256": "692a7daf45e29dac79ef217ba21236d4b491005e96c4a86285f18c59d871952e"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/readonly-settings.mjs",
+      "bytes": 3620,
+      "sha256": "139abb89e4a975681866c49f198132e680debffca295f58285a7acb30dc840e6",
+      "capturedAt": "2026-10-17T06:24:26.722788+00:00",
+      "scope": "fixed companion generation or acceptance probe, not existing runtime bundle rebuild"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/strict-node-launcher.ts",
+      "bytes": 16852,
+      "sha256": "c4e58d5e0d5ce1888eea45d570d3827e8d81e980bd67fee2e9c1bdcf79c583b5"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/workflow-bridge.ts",
+      "bytes": 4483,
+      "sha256": "2a4bc0718b48ff9430086eaee0b5a385154044c26246ace564d9ac54670657a3"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/workflow-composition.ts",
+      "bytes": 6686,
+      "sha256": "a3a4ff7ea9b37c179da413d0fd77dffa6f75f6f0e7207603cf79071ff6006e79"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/workflow-tools.ts",
+      "bytes": 2080,
+      "sha256": "d8d11ce13701af06e02e51fdb40a1306704e42b1dcda302bec1f7309a75bfc9b"
+    },
+    {
+      "path": "host-extensions/dsh-secret-isolation/workspace-policy.ts",
+      "bytes": 4957,
+      "sha256": "6158923dbfef5404063a2aaf2b5172a79500a469446083ba8dcf1ac062f69a41"
+    },
+    {
+      "path": "native/process-supervisor/control.mjs",
+      "bytes": 3237,
+      "sha256": "54611cd2ce1d259177c670424ce52de0d5291f6232b4e87ceb617558fc18fcd6"
+    },
+    {
+      "path": "native/process-supervisor/strict-policy.mjs",
+      "bytes": 2229,
+      "sha256": "148c4172b89a54482e69be8b09ea94e318615d02f78b98cb912379eb6eb35459"
+    },
+    {
+      "path": "native/process-supervisor/supervisor.c",
+      "bytes": 14932,
+      "sha256": "150195a561f764abd91343cd77de301f8d29acbe71d9bdb3cb8a8577cacb6669"
+    },
+    {
+      "path": "scripts/build.mjs",
+      "bytes": 8168,
+      "sha256": "79c684a90f0a870884c712d15b753326b8a9f8b4f8ba385709cc4880f365535c"
+    },
+    {
+      "path": "src/host/execution-adapters.ts",
+      "bytes": 24173,
+      "sha256": "1437959248a52e09dd575d3800e34d475c6ed3812772acd4ce2f67fc587c0ef3"
+    },
+    {
+      "path": "src/host/graphon-environment.ts",
+      "bytes": 29003,
+      "sha256": "485a9362f49e39b8d347d5b3832996bc06fe433af73ffa3093ebb67adc250eb1"
+    },
+    {
+      "path": "src/host/graphon.ts",
+      "bytes": 11515,
+      "sha256": "6d39400db94f3229c78b436a7ec03934475e3deaa92ec38e1522d9457c84f7b1"
+    },
+    {
+      "path": "src/host/index.ts",
+      "bytes": 55619,
+      "sha256": "df724aa0eaf8592407412a212c5c9c3872214c71048df958419ab2dc58814f53"
+    },
+    {
+      "path": "src/host/isolation/broker-integrity.ts",
+      "bytes": 4751,
+      "sha256": "d8a500e18d8c90d6124342d8fafd69621da2c5a1f48f3f85607e9199a0e496f9"
+    },
+    {
+      "path": "src/host/isolation/broker-local.ts",
+      "bytes": 9788,
+      "sha256": "fd5ff86251c22ea3bf37030a846b9713e900653e3e7d7cb18520268c4a2611cb"
+    },
+    {
+      "path": "src/host/isolation/broker-manifest.ts",
+      "bytes": 303,
+      "sha256": "7dd98296a638ac13127ac9726c4f7a089c9882036b6168735f33d8a626524580"
+    },
+    {
+      "path": "src/host/isolation/confined-files.ts",
+      "bytes": 18422,
+      "sha256": "45ca207bbe8fc2224eaa65609188dd372b2a12e9f5a770d3a1ade56750b8200a"
+    },
+    {
+      "path": "src/host/isolation/deployment.ts",
+      "bytes": 1355,
+      "sha256": "6f243542bfc0cadc97053082f6618d38ce331981384e66915036146c814debd8"
+    },
+    {
+      "path": "src/host/isolation/isolation-gate.ts",
+      "bytes": 5236,
+      "sha256": "ab4d55960b4a44a52ba969b8522014bd89ceefa4c3834f6a1b828ec41a132655"
+    },
+    {
+      "path": "src/host/isolation/mxc-executor.ts",
+      "bytes": 6542,
+      "sha256": "f0cecd12d594340ea2bb49c8f15b2c0bbbdaeec00ceccb7b8a0da8dba90dba0d"
+    },
+    {
+      "path": "src/host/isolation/mxc-manifest.ts",
+      "bytes": 823,
+      "sha256": "4a963b8433df41b27df801ff22d6115fc217f4a03889332b523cc105d519d037"
+    },
+    {
+      "path": "src/host/isolation/mxc-policy.ts",
+      "bytes": 7894,
+      "sha256": "3cbe9290d19d9ea42889d9c84b84f0206b648abe8ec4fed511c89d4226eefc53"
+    },
+    {
+      "path": "src/host/isolation/workflow-archive-effects.ts",
+      "bytes": 8782,
+      "sha256": "8abc7bbca28c4cb77f2372a51de17077d3a026952bfe6471d3c30d25ba40f840"
+    },
+    {
+      "path": "src/host/isolation/workflow-archive-worker.ts",
+      "bytes": 2523,
+      "sha256": "a52111d0d301613beaca2b7eb5286744b6643f5c5d7b0632ce43d13b927caf40"
+    },
+    {
+      "path": "src/host/isolation/workflow-file-effects.ts",
+      "bytes": 7137,
+      "sha256": "453e1fc47b5e052e5c3277ceeef8dfe2df1acca014e67d2e439a92aebe9d47cb"
+    },
+    {
+      "path": "src/host/isolation/workflow-file-worker.ts",
+      "bytes": 2197,
+      "sha256": "b605d482845446a0599eaa217776f3a117bfaab365fbcac52b4ae166a53ce48f"
+    },
+    {
+      "path": "src/host/isolation/workflow-runtime.ts",
+      "bytes": 3140,
+      "sha256": "094847d5208b60fdf3ddb97743b6f73babcb39892ececb6426104d1fe1cb97be"
+    },
+    {
+      "path": "src/host/native-agent.ts",
+      "bytes": 36779,
+      "sha256": "dedb2884551a4504bdd4e5a9910b403a7f8e11ec83aeeaa1e0cc3e70a28a8816"
+    },
+    {
+      "path": "src/host/runtime.ts",
+      "bytes": 73109,
+      "sha256": "e27afd6a158852545f14dcb2d5a639af3a07b6e89f6c1d06ba8e5292a6baaab7"
+    },
+    {
+      "path": "src/host/workflow-import.ts",
+      "bytes": 11813,
+      "sha256": "c298343434a09a89ef1ee0c8d384bbee3c9fa39a49bba3f816d90f88ddeb9272"
+    },
+    {
+      "path": "src/host/workflow-package-archive.ts",
+      "bytes": 17525,
+      "sha256": "0aaec2f1d6857348791c0dff7ff7d88b51a20bd3e554ac85057a6d216a6b1d9d"
+    },
+    {
+      "path": "src/shared/protected-secret.ts",
+      "bytes": 2866,
+      "sha256": "4283097929089d4be1070ebaabc72171b827d4f2e902e797fc86458bbc98365d"
+    },
+    {
+      "path": "src/shared/workflow-format.ts",
+      "bytes": 19423,
+      "sha256": "ea1b791bcdf8cf336d5fbf457ee500b2ae983cb95377719878a8787e96a5b0f8"
+    },
+    {
+      "path": "tests/probes/desktop-profile-cutover.mjs",
+      "bytes": 2473,
+      "sha256": "c1853fe00b1b9120113165a36d6f71f22d873f13aca0a540c4d38301c87656f8",
+      "capturedAt": "2026-10-17T06:16:34.578476+00:00",
+      "scope": "operator script, not bundled runtime change"
+    },
+    {
+      "path": "tests/probes/desktop-profile-cutover.test.mjs",
+      "bytes": 18481,
+      "sha256": "075db31bbefd9a937b60f70e0dfa79dd374fc69ad9b2da094e30a34156a92e5b",
+      "capturedAt": "2026-10-17T06:39:43.826798+00:00",
+      "scope": "stopped experimental operator script; ninth companion never deployed"
+    },
+    {
+      "path": "tests/probes/desktop-welcome-read.mjs",
+      "bytes": 2988,
+      "sha256": "58ce3bbb876311694cb03045cb18ad11ebc1b97bd31a2dda7082e743a44af929",
+      "capturedAt": "2026-10-17T06:24:26.722788+00:00",
+      "scope": "fixed companion generation or acceptance probe, not existing runtime bundle rebuild"
+    },
+    {
+      "path": "tests/probes/install-current-workflow.mjs",
+      "bytes": 12495,
+      "sha256": "760b18ba0d8fa63279639bf968578128774799215db4705f5e702ff27829336a",
+      "capturedAt": "2026-10-17T06:16:34.578476+00:00",
+      "scope": "operator script, not bundled runtime change"
+    },
+    {
+      "path": "tests/probes/install-current-workflow.test.mjs",
+      "bytes": 6664,
+      "sha256": "468de12e1771aba9c143268b68a960068f87059e2ff0478b5ee43c1a94cb1d26",
+      "capturedAt": "2026-10-17T06:16:34.578476+00:00",
+      "scope": "operator script, not bundled runtime change"
+    },
+    {
+      "path": "tests/probes/readonly-settings.test.mjs",
+      "bytes": 5141,
+      "sha256": "6b8e4c759ecbbb12db78627d785de9ce5960b1915fc2548312e8f30c1022fb05",
+      "capturedAt": "2026-10-17T06:24:26.722788+00:00",
+      "scope": "fixed companion generation or acceptance probe, not existing runtime bundle rebuild"
+    },
+    {
+      "path": "tests/probes/stage-workflow-isolation-helper.mjs",
+      "bytes": 11037,
+      "sha256": "f16d104c24c54f1b67a3f841b9c125bb9b5552f92e8ff362fda030eda5fb7668",
+      "capturedAt": "2026-10-17T06:16:34.578476+00:00",
+      "scope": "operator script, not bundled runtime change"
+    },
+    {
+      "path": "tests/probes/stage-workflow-isolation-helper.test.mjs",
+      "bytes": 6206,
+      "sha256": "32bfa65d3aa54e68ce68a95490a2308ca529d7b46879ab99d57f72541f575bc7",
+      "capturedAt": "2026-10-17T06:16:34.578476+00:00",
+      "scope": "operator script, not bundled runtime change"
+    }
+  ],
+  "production": {
+    "desktopActivated": false,
+    "secretReady": false,
+    "credentialLifecycleAndMainChildAgentE2E": false,
+    "ordinaryWorkflowPackageInstalled": true,
+    "fixedRuntimeHelperInstalled": true,
+    "protectedProfileAttempted": true,
+    "protectedProfileCurrentlyActive": false,
+    "firstProtectedProfileAttempt": "welcome-rpc-failed-and-profile-rolled-back",
+    "secondProtectedProfileApplyReported": true,
+    "secondDesktopWindowReported": "dsh-app://app/ Loading plugins",
+    "secondAttemptEvidenceSource": "coordinating agent observed actual Desktop window after apply exit 0",
+    "desktopUiAccepted": false,
+    "secondAttempt": "welcome-read-succeeded-client-terminal-dependency-failed-profile-rolled-back",
+    "thirdAttempt": "renderer-and-existing-canvas-export-passed-new-session-preset-invalid-profile-rolled-back",
+    "normalDesktopRestored": true,
+    "normalNewSessionCreationPassed": true,
+    "cliWorkerEntryRestored": true,
+    "globalIsolationRoute": "stopped-at-user-request"
+  },
+  "operatorScriptValidation": {
+    "scope": "Synthetic temporary-directory tests, separately recorded from actual installation and first production profile apply/rollback. Not part of the 1240 Vitest tests.",
+    "packageInstaller": {
+      "tests": 15,
+      "passed": 15,
+      "log": {
+        "path": ".cache/secret-bootstrap-20261017/installation-script-tests.tap",
+        "bytes": 2832,
+        "sha256": "045a224a525de9765ba990d2d599ce6fb6a2c704aa00eb8be85eb782c657a492"
+      },
+      "readOnlyReview": {
+        "path": ".cache/secret-bootstrap-20261017/installation-script-review.json",
+        "bytes": 820,
+        "sha256": "2e7afdce02cccaea40e4ec467e952626901aa21d0ca696a9406005d397601ff3"
+      },
+      "source": {
+        "path": "tests/probes/install-current-workflow.mjs",
+        "bytes": 12495,
+        "sha256": "760b18ba0d8fa63279639bf968578128774799215db4705f5e702ff27829336a"
+      },
+      "latestReadOnlyReview": {
+        "path": ".cache/secret-bootstrap-20261017/plugin-install-review.json",
+        "bytes": 820,
+        "sha256": "bde358b75ed19d439c08b98b3a5be1e646f72b29b3bf25d7693a47c74419c734"
+      },
+      "latestRerun": {
+        "tests": 15,
+        "passed": 15,
+        "log": {
+          "path": ".cache/secret-bootstrap-20261017/helper-stage-tests.tap",
+          "bytes": 4943,
+          "sha256": "3aa4ee3b234aa9ffde9112d19d81749e64488fabc447cea7ebcf38154747a4b3"
+        },
+        "scope": "The same combined 26-test log includes these 15 tests and the 11 helper tests. Do not add overlapping runs."
+      }
+    },
+    "profileCutover": {
+      "tests": 33,
+      "passed": 33,
+      "log": {
+        "path": ".cache/secret-bootstrap-20261017/profile-cutover-script-tests.tap",
+        "bytes": 6595,
+        "sha256": "dd6da2ec8ee610caae211632e19fd2bcc745f62d1f252c6ae7cd0ad1c4c83d75"
+      },
+      "sources": [
+        {
+          "path": "tests/probes/desktop-profile-cutover.mjs",
+          "bytes": 2473,
+          "sha256": "c1853fe00b1b9120113165a36d6f71f22d873f13aca0a540c4d38301c87656f8"
+        },
+        {
+          "path": "host-extensions/dsh-secret-isolation/desktop-cutover.mjs",
+          "bytes": 23132,
+          "sha256": "d26d2d8b08851fa3aa74cf22f971a169f772fece44ba971606e5557ed34e9e31"
+        },
+        {
+          "path": "tests/probes/desktop-profile-cutover.test.mjs",
+          "bytes": 18481,
+          "sha256": "075db31bbefd9a937b60f70e0dfa79dd374fc69ad9b2da094e30a34156a92e5b"
+        }
+      ],
+      "readOnlyReviewHistory": [
+        {
+          "timeLocal": "2026-10-17 13:37 Asia/Shanghai",
+          "result": "passed",
+          "runtimeFiles": 6758,
+          "deploymentFiles": 7,
+          "workflowBuildInstalled": false,
+          "pending": [
+            "CURRENT_WORKFLOW_INSTALL_AND_FRESH_CANDIDATE_REQUIRED"
+          ]
+        },
+        {
+          "timeLocal": "2026-10-17 13:38 Asia/Shanghai",
+          "result": "rejected-stale-runtime-manifest",
+          "errorCode": "DESKTOP_RUNTIME_INTEGRITY_FAILED",
+          "observedChangedSize": "lib/tsconfig.host-build.tsbuildinfo",
+          "requiredAction": "Regenerate candidate after the final build/typecheck, then repeat read-only review."
+        }
+      ],
+      "scope": "Abandoned experimental operator script. Nine-file admission and legacy exact 7/8-file rollback passed 33 temporary-directory tests before the global route was stopped. Ninth companion was never deployed and is not a release prerequisite."
+    },
+    "helperStage": {
+      "tests": 11,
+      "passed": 11,
+      "combinedLog": {
+        "path": ".cache/secret-bootstrap-20261017/helper-stage-tests.tap",
+        "bytes": 4943,
+        "sha256": "3aa4ee3b234aa9ffde9112d19d81749e64488fabc447cea7ebcf38154747a4b3"
+      },
+      "combinedLogTests": 26,
+      "sources": [
+        {
+          "path": "tests/probes/stage-workflow-isolation-helper.mjs",
+          "bytes": 11037,
+          "sha256": "f16d104c24c54f1b67a3f841b9c125bb9b5552f92e8ff362fda030eda5fb7668"
+        },
+        {
+          "path": "tests/probes/stage-workflow-isolation-helper.test.mjs",
+          "bytes": 6206,
+          "sha256": "32bfa65d3aa54e68ce68a95490a2308ca529d7b46879ab99d57f72541f575bc7"
+        }
+      ],
+      "scope": "Fixed runtime package helper, not a new Host; exact archive/installed-plugin/tree agreement, no unknown overwrite, fail-closed links/locks and stopped-Desktop requirement."
+    },
+    "readOnlySettings": {
+      "tests": 6,
+      "passed": 6,
+      "logEvidence": "readonly-settings-tests.tap",
+      "scope": "Pinned official settings source, original tree/active scope restriction, secret redaction, write denial and lifecycle. Separate from 1240 Vitest cases."
+    }
+  },
+  "historicalRegressions": [
+    {
+      "firstRun": {
+        "path": ".cache/secret-bootstrap-20261017/full-tests.json",
+        "bytes": 471634,
+        "sha256": "13b51ffceedd344c545e2b83a7981698efe8b3da4abf01f7325d7ab817ba5dd0",
+        "files": 120,
+        "tests": 1218,
+        "passed": 1216,
+        "failed": 2,
+        "skipped": 0,
+        "todo": 0,
+        "success": false,
+        "startTime": 1792214218220
+      },
+      "rerun": {
+        "path": ".cache/secret-bootstrap-20261017/loopback-rerun.json",
+        "bytes": 4919,
+        "sha256": "2f1737bb6d13b72ebba04b30891750f79aaf2d3544b1bb9a5c773bb2f6573b73",
+        "files": 2,
+        "tests": 11,
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "todo": 0,
+        "success": true,
+        "startTime": 1792214290248
+      },
+      "firstRunFailures": [
+        {
+          "file": "tests/graphon-capability-audit.test.ts",
+          "name": "Graphon full node-kind integration audit executes all 20 kinds through the real engine and production adapters using explicit model/SDK doubles",
+          "occurrence": 1,
+          "failure": "listen EPERM: operation not permitted 127.0.0.1"
+        },
+        {
+          "file": "tests/tool-adapters.test.ts",
+          "name": "isolated and bounded execution adapters uses actual HTTP responses, preserves status and never follows credential-bearing redirects",
+          "occurrence": 1,
+          "failure": "listen EPERM: operation not permitted 127.0.0.1"
+        }
+      ],
+      "mergeRule": "Replace matching file + fullName + occurrence results with the 11 rerun results; retain separate parameterized instances with duplicate titles and never add overlapping counts.",
+      "distinctFinal": {
+        "files": 120,
+        "tests": 1218,
+        "passed": 1218,
+        "failed": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    }
+  ],
+  "historicalBuild": {
+    "command": "node scripts/build.mjs",
+    "exitCode": 0,
+    "exitCodeEvidence": "Build command completion confirmed by the coordinating agent; the stdout log itself does not embed an exit status.",
+    "log": {
+      "path": ".cache/secret-bootstrap-20261017/build-final.log",
+      "bytes": 2463,
+      "sha256": "a86244c5ce7190ef5618667ca12874cc3f130cf6ce1c0f4b35ed374f8c57ab1b"
+    },
+    "typechecks": [
+      "Host",
+      "Client",
+      "host-extensions/dsh-secret-isolation"
+    ],
+    "artifacts": [
+      {
+        "path": "lib/client.js",
+        "bytes": 979600,
+        "sha256": "fadd3c7a24eb2aaa58ee784eea1f75d31196029597b85620e3221d69d21ee611"
+      },
+      {
+        "path": "lib/index.js",
+        "bytes": 498044,
+        "sha256": "6b9edcb0ee54bda50f3bdf36ce7a030a93172f5df592e56108de52377b500c34"
+      },
+      {
+        "path": "lib/isolation-host.js",
+        "bytes": 178576,
+        "sha256": "40253393a79555f7afee981c1e6a758ece2b95a7c52bde4665c00133ec34f8c4"
+      },
+      {
+        "path": "lib/typert.host.js",
+        "bytes": 124031,
+        "sha256": "9d2bd1f842ee5a0ddb6a253f14e1112ec6621e717f9ebe1f1b28d89a44ee143f"
+      },
+      {
+        "path": "lib/typert.remote-client.js",
+        "bytes": 105619,
+        "sha256": "62b32f177da7988c18fab87e0119b9dbeec2202a87a3e05862e76a3699b0cb99"
+      },
+      {
+        "path": "lib/workflow-archive-worker.js",
+        "bytes": 203310,
+        "sha256": "28959596b2732709711a47013c8e370de86acb3a4799d16843c16273b20b6e9f"
+      },
+      {
+        "path": "lib/workflow-file-worker.js",
+        "bytes": 148230,
+        "sha256": "9fdaef9d664ea4a0717f6ee3374b6bfec006ca6850ba37bbe9521335393dc827"
+      },
+      {
+        "path": "native/process-supervisor/dist/darwin-arm64/workflow-leaf-supervisor",
+        "bytes": 35736,
+        "sha256": "e1873d75985b27c0eb6cea3ab8a6f2674946dd7838d98689110ed1066ae47769"
+      },
+      {
+        "path": "native/process-supervisor/dist/darwin-arm64/manifest.json",
+        "bytes": 316,
+        "sha256": "6c5ecb679ad9684b89ce8396fc22ed2f0e6914a5a1a85eb6e9270a6ed335332d"
+      }
+    ]
+  },
+  "targetedRegression": {
+    "path": ".cache/secret-bootstrap-20261017/transfer-secret-final.json",
+    "bytes": 20208,
+    "sha256": "2d93573a4ee511c78d735825139e570a79e030661e190874c6adddf8a226337e",
+    "files": 6,
+    "tests": 47,
+    "passed": 47,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "success": true,
+    "startTime": 1792215808664,
+    "scope": "JSON roundtrip, import mapping, Secret transfer, readiness UI, isolation runtime, bound workflow tools. Overlaps full regression; do not add counts.",
+    "filesDetail": [
+      {
+        "path": "tests/workflow-import-mapping.test.ts",
+        "tests": 11,
+        "status": "passed"
+      },
+      {
+        "path": "tests/workflow-isolation-runtime.test.ts",
+        "tests": 4,
+        "status": "passed"
+      },
+      {
+        "path": "tests/workflow-json-roundtrip.test.ts",
+        "tests": 9,
+        "status": "passed"
+      },
+      {
+        "path": "tests/workflow-readiness-client.test.tsx",
+        "tests": 13,
+        "status": "passed"
+      },
+      {
+        "path": "tests/workflow-secret-transfer.test.ts",
+        "tests": 7,
+        "status": "passed"
+      },
+      {
+        "path": "tests/workflow-tool-isolation.test.ts",
+        "tests": 3,
+        "status": "passed"
+      }
+    ]
+  },
+  "package": {
+    "archive": {
+      "path": "~/AI-Project/DeepSeekHarness/dsh-visible-dynamic-workflows/.cache/secret-bootstrap-20261017/dsh-visible-dynamic-workflows-0.0.1.tgz",
+      "bytes": 34230786,
+      "sha256": "752044906c7ecb1c7a8d7ff2f7a3d469cb44ec12ed62728d77c997a272398d1c"
+    },
+    "files": 410,
+    "review": {
+      "path": ".cache/secret-bootstrap-20261017/plugin-install-review.json",
+      "bytes": 820,
+      "sha256": "bde358b75ed19d439c08b98b3a5be1e646f72b29b3bf25d7693a47c74419c734"
+    },
+    "installed": true,
+    "installationEvidence": "plugin-installation.json",
+    "helperEvidence": "helper-installation.json",
+    "scope": "First actual ordinary plugin/helper package; retained after profile rollback. Later compatibility work is not represented as part of this archive."
+  },
+  "desktopDataBaseline": {
+    "path": ".cache/secret-bootstrap-20261017/desktop-state-before.json",
+    "bytes": 5638,
+    "sha256": "c827b852f9676e78a8d7138f7174be3a178087971587ad7ad58921e86f08ee8e",
+    "files": 30,
+    "postCutoverComparison": true,
+    "comparisonStage": "after first failed Desktop welcome and profile rollback",
+    "comparisonEvidence": "desktop-state-after-first-rollback.json",
+    "unchangedFiles": 30,
+    "productionProtectedUiVerified": false,
+    "secondRollbackComparison": {
+      "evidence": "desktop-state-after-second-rollback.json",
+      "checked": 30,
+      "unchanged": true
+    },
+    "thirdRollbackComparison": {
+      "evidence": "desktop-state-after-third-rollback.json",
+      "checked": 30,
+      "unchanged": true
+    }
+  },
+  "serviceRegistrationHardening": {
+    "scope": "Freeze actual Cordis registration records at seal; check scope, implementation, value, owner and check identity through controlled guards/effects/report, revoking on change.",
+    "agentExploitDemonstrated": false,
+    "notArbitraryHostCodeMemoryIsolation": true
+  },
+  "latestPending": [
+    "os-credential-broker-and-native-user-management-integration",
+    "workflow-interface-secret-ref-and-controlled-consumption-verification",
+    "real-desktop-json-zip-and-missing-config-compatibility",
+    "windows-native-credential-store-machine-verification"
+  ],
+  "fullGraphComponent": {
+    "evidence": "desktop-full-graph.json",
+    "originalRows": 190,
+    "bootActive": true,
+    "readyIpcReceived": true,
+    "fatal": false,
+    "exitCode": 0,
+    "productionProfileChanged": false,
+    "secretReady": false,
+    "restrictedEntryIds": [
+      "plugin-manager",
+      "tool-plugin-manager",
+      "hmr",
+      "client-hmr",
+      "config-editor",
+      "cordis-host-runner",
+      "workspace-changes",
+      "settings",
+      "cordis-inspect-providers",
+      "ui-deliverables",
+      "terminal-controller",
+      "directory-picker",
+      "office-to-pdf",
+      "cliworker-now",
+      "dsh-external-workflow"
+    ],
+    "probeAdditionalDisabled": [
+      "desktop-product-telemetry",
+      "product-analytics"
+    ],
+    "inactiveConsumerRecordScope": "Includes normal teardown after ready and deliberate shutdown; unreadyAtFailure is empty.",
+    "welcomeRpcVerified": false
+  },
+  "firstProductionAttempt": {
+    "profileApply": "installed",
+    "welcome": "failed",
+    "welcomeError": "desktop welcome: Web RPC failed",
+    "welcomeStackFrame": "settingsAndReference",
+    "diagnosis": "Required settings service was disabled; coordinating agent is adding a pinned read-only settings companion. The stack itself shows RPC failure, not the dependency diagnosis.",
+    "profileRollback": "rolled-back",
+    "ordinaryPluginRetained": true,
+    "secretReady": false,
+    "evidence": [
+      "first-profile-cutover-rollback.json",
+      "first-desktop-welcome-failure.log",
+      "desktop-state-after-first-rollback.json"
+    ],
+    "applyResultSource": "coordinating-agent tool result: state installed, secretReady false; timestamps and hashes preserved in original journal",
+    "limitation": "Scratch bootActive/ready IPC did not exercise the actual Desktop welcome settings RPC."
+  },
+  "fullGraphWithWelcome": {
+    "evidence": "desktop-full-graph-with-welcome.json",
+    "originalRows": 190,
+    "bootActive": true,
+    "readyIpcReceived": true,
+    "fatal": false,
+    "exitCode": 0,
+    "welcomeRead": {
+      "passed": true,
+      "installedMainSha256": "10325004a1ddbd8118ed0607ea28d50a7b0d692dcaeb25a67a7d8aea9165019d",
+      "readMethods": [
+        "settings/describe",
+        "llm/listConfigurableProviders",
+        "credentials/describe",
+        "account/getState"
+      ],
+      "configurationValuesRecorded": false
+    },
+    "productionProfileChanged": false,
+    "secretReady": false,
+    "scope": "Actual installed desktop-main welcome source and four RPC methods exercised against scratch Host; not renderer/production Agent acceptance."
+  },
+  "reviewWithSettings": {
+    "evidence": "review-with-settings.json",
+    "deploymentFiles": 8,
+    "runtimeFiles": 6896,
+    "workflowBuildInstalled": true,
+    "pending": [],
+    "restrictedEntryIds": [
+      "plugin-manager",
+      "tool-plugin-manager",
+      "hmr",
+      "client-hmr",
+      "config-editor",
+      "cordis-host-runner",
+      "workspace-changes",
+      "cordis-inspect-providers",
+      "ui-deliverables",
+      "terminal-controller",
+      "directory-picker",
+      "office-to-pdf",
+      "cliworker-now",
+      "dsh-external-workflow"
+    ],
+    "secretReady": false
+  },
+  "secondProductionAttempt": {
+    "profileApply": "installed",
+    "welcomeRead": "passed-to-real-window",
+    "renderer": "failed",
+    "rendererError": "web boot: 1 entry did not activate",
+    "pendingClient": "@deepseek-ai/dsh-client-ui-sidebar-terminal",
+    "missingService": "webTerminals",
+    "profileRollback": "rolled-back",
+    "secretReady": false,
+    "evidence": [
+      "second-profile-cutover-rollback.json",
+      "second-desktop-client-boot-failure.log",
+      "desktop-state-after-second-rollback.json"
+    ],
+    "scope": "Welcome RPC repair succeeded, but renderer startup exposed a remaining UI dependency on an intentionally disabled terminal provider. No fake provider is accepted as a fix.",
+    "unchangedOriginalWorkflowFiles": 30
+  },
+  "clientDependencyPreflight": {
+    "beforeEvidence": "desktop-client-dependencies-before.json",
+    "afterEvidence": "desktop-client-dependencies-fixed.json",
+    "declaredEntries": 62,
+    "verifiedStaticSeeds": 9,
+    "missingDependencies": [],
+    "scope": "Declaration dependency closure check from actual registered client entries and hash-verified official static seeds, not execution of the renderer or a UI acceptance. The earlier report omitted static seed entries and is retained without rewriting.",
+    "welcomeReadPassed": true,
+    "disabledAdditionalEntry": "ui-sidebar-terminal"
+  },
+  "reviewClientFixed": {
+    "evidence": "review-client-fixed.json",
+    "deploymentFiles": 8,
+    "runtimeFiles": 6896,
+    "pending": [],
+    "restrictedEntryIds": [
+      "plugin-manager",
+      "tool-plugin-manager",
+      "hmr",
+      "client-hmr",
+      "config-editor",
+      "cordis-host-runner",
+      "workspace-changes",
+      "cordis-inspect-providers",
+      "ui-deliverables",
+      "terminal-controller",
+      "ui-sidebar-terminal",
+      "directory-picker",
+      "office-to-pdf",
+      "cliworker-now",
+      "dsh-external-workflow"
+    ],
+    "secretReady": false
+  },
+  "thirdProductionAttempt": {
+    "evidence": [
+      "third-profile-cutover-rollback.json",
+      "third-desktop-ui-observation.json",
+      "desktop-protected-export-validation.json",
+      "desktop-state-after-third-rollback.json"
+    ],
+    "rendererAndExistingCanvasPassed": true,
+    "nativeJsonExportPassed": true,
+    "jsonReadOnlyChecks": 20,
+    "newSessionCreation": "agent-preset/invalid",
+    "profileRollback": "rolled-back",
+    "normalDesktopNewSessionPassed": true,
+    "unchangedOriginalWorkflowFiles": 30,
+    "overallAccepted": false
+  },
+  "disposition": {
+    "status": "abandoned-global-isolation-experiment",
+    "reason": "User requires workflow variable-level protection without changing DSH, other plugins, or user variable read/write/edit behavior.",
+    "globalBootstrapAndPresetExpansionStopped": true,
+    "ninthCompanionDeployed": false,
+    "futureScope": "OS credential store (macOS Keychain / Windows Credential Manager), independent native user-management window, Agent opaque refs and controlled backend consumption. Do not restrict DSH or other plugins.",
+    "historicalResultsAreReleasePrerequisites": false,
+    "ordinaryEnvironmentVariableStorage": false,
+    "windowsCredentialManagerIsHelloAuthentication": false,
+    "windowsMachineVerified": false,
+    "newInterfaceImplementedAndAccepted": false
+  }
+}

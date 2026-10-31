@@ -3,8 +3,8 @@
 DSH owns node implementations, scopes, permissions and durable run snapshots.
 Graphon owns edge activation, dependency readiness and skipped-path propagation.
 The protocol never evaluates Python supplied by a workflow or imports built-in
-model/document nodes. Each graph uses one worker; independent/nested graphs can
-run concurrently. A paused graph is released: the host replays *cached results*
+model/document nodes. Each graph uses 1..8 bounded workers; independent/nested
+graphs can run concurrently. A paused graph is released: the host replays *cached results*
 into a fresh graph when resuming, never the side effects themselves.
 """
 
@@ -70,6 +70,8 @@ class Execution:
     engine: GraphEngine | None = None
     graph: Graph | None = None
     control: str | None = None
+    failure: str | None = None
+    max_workers: int = 3
     original_ports: dict[str, str] = field(default_factory=dict)
     thread: threading.Thread | None = None
 
@@ -88,6 +90,7 @@ class BridgeNode(Node[BaseNodeData]):
         run: Execution = self.require_run_context_value("execution")
         response = service.call(run, self.id)
         if response.get("error") is not None:
+            run.failure = str(response["error"])
             yield StreamCompletedEvent(node_run_result=NodeRunResult(
                 status=WorkflowNodeExecutionStatus.FAILED,
                 error=str(response["error"]), error_type="DSHNodeError",
@@ -234,6 +237,10 @@ class BridgeService:
         with self.lock:
             if run.cancelled.is_set():
                 return {"error": "Workflow cancelled"}
+            if run.control in ("pause", "exit_loop"):
+                return {"control": run.control, "data": {}}
+            if run.failure is not None:
+                return {"error": run.failure}
             self.pending[call_id] = call
             self.emit({"type": "call", "id": run.id, "callId": call_id, "nodeId": node_id})
         try:
@@ -249,12 +256,15 @@ class BridgeService:
 
     def execute(self, message: dict[str, Any]) -> None:
         run_id = require_id(message)
+        workers = message.get("maxWorkers", 3)
+        if isinstance(workers, bool) or not isinstance(workers, int) or workers < 1 or workers > 8:
+            raise ValueError("maxWorkers must be an integer in 1..8")
         with self.lock:
             if run_id in self.executions:
                 raise ValueError("Duplicate active execute id")
             if len(self.executions) >= MAX_GRAPHS:
                 raise ValueError("Too many active graph executions")
-            run = Execution(run_id)
+            run = Execution(run_id, max_workers=workers)
             self.executions[run_id] = run
             run.thread = threading.Thread(target=self._execute, args=(run, message.get("graph")), daemon=True, name=f"DSHGraph-{run_id[:32]}")
             run.thread.start()
@@ -264,7 +274,7 @@ class BridgeService:
         skipped: set[str] = set()
         try:
             graph, state = build_graph(payload, run, self)
-            run.engine = GraphEngine(workflow_id=run.id, graph=graph, graph_runtime_state=state, command_channel=InMemoryChannel(), config=GraphEngineConfig(min_workers=1, max_workers=1))
+            run.engine = GraphEngine(workflow_id=run.id, graph=graph, graph_runtime_state=state, command_channel=InMemoryChannel(), config=GraphEngineConfig(min_workers=run.max_workers, max_workers=run.max_workers))
             if run.cancelled.is_set():
                 run.engine.request_abort("Workflow cancelled")
             for event in run.engine.run():
@@ -289,6 +299,12 @@ class BridgeService:
             with self.lock:
                 for call_id, call in list(self.pending.items()):
                     if call.run_id == run.id:
+                        # Failed engines may finish before a slow host callback.
+                        # Wake its private worker without admitting any new task.
+                        try:
+                            call.response.put_nowait({"error": error or "Graph execution ended"})
+                        except queue.Full:
+                            pass
                         self.pending.pop(call_id, None)
                 self.executions.pop(run.id, None)
             result: dict[str, Any] = {"type": "complete", "id": run.id, "status": status}

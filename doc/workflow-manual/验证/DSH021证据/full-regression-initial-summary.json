@@ -1,0 +1,20 @@
+{
+  "sourceFile": "full-regression.log",
+  "sourceSha256": "0ab19783589eb71818e8c22d875cb0d6722d8f765f761e6825187d77358e58ef",
+  "totalFiles": 96,
+  "passedFiles": 94,
+  "failedFiles": 2,
+  "totalTests": 992,
+  "passedTests": 990,
+  "failedTests": 2,
+  "failure": "listen EPERM: operation not permitted 127.0.0.1",
+  "affectedFiles": [
+    "tests/tool-adapters.test.ts",
+    "tests/graphon-capability-audit.test.ts"
+  ],
+  "rerunStatus": "completed-both-affected-files-all-11-tests-passed",
+  "rawLogIncluded": false,
+  "nativeCredentialOrModelNetworkNotProven": true,
+  "rerunEvidence": "localhost-regression-rerun-summary.json",
+  "initialFailureRecordPreserved": true
+}

@@ -1,0 +1,1 @@
+{"submission":{"draftRevision":1,"mode":"repair","patches":[{"op":"replace","path":"/formsByKey/notApproved/values/outputName","value":"not_approved"}],"summary":"修复 outputName 命名：not-approved → not_approved（符合 ^[A-Za-z][A-Za-z0-9_]*$），其余结构不变。"}}

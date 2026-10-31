@@ -1,0 +1,307 @@
+{
+ "journal": ".test-data/layered-par/shard-3/events.jsonl",
+ "journalSha256": "4c2ab1180aaa863ef238afb71c689bc026714d761f6363ae3b5feb918a3749df",
+ "line": 134,
+ "caseId": "branch",
+ "arm": "compact-repair",
+ "repeat": 2,
+ "status": "success",
+ "submissionsLog": [
+  {
+   "submission": {
+    "chains": [
+     {
+      "key": "main",
+      "nodes": [
+       "start",
+       "n1"
+      ]
+     }
+    ],
+    "coverage": {
+     "R1": [
+      "start",
+      "n1",
+      "n2",
+      "n3"
+     ]
+    },
+    "links": [
+     {
+      "key": "linkPass",
+      "port": "true",
+      "source": "n1",
+      "target": "n2"
+     },
+     {
+      "key": "linkFail",
+      "port": "false",
+      "source": "n1",
+      "target": "n3"
+     }
+    ],
+    "mode": "create",
+    "nodes": [
+     {
+      "config": {
+       "fields": [
+        {
+         "label": "分数",
+         "name": "score",
+         "required": true,
+         "type": "number"
+        }
+       ]
+      },
+      "key": "start",
+      "kind": "input",
+      "title": "输入分数"
+     },
+     {
+      "config": {
+       "operator": "gte",
+       "value": "60",
+       "variable": "input.score"
+      },
+      "key": "n1",
+      "kind": "if",
+      "title": "判断分数是否及格"
+     },
+     {
+      "config": {
+       "outputName": "result",
+       "text": "合格"
+      },
+      "key": "n2",
+      "kind": "output",
+      "title": "输出合格"
+     },
+     {
+      "config": {
+       "outputName": "result",
+       "text": "不合格"
+      },
+      "key": "n3",
+      "kind": "output",
+      "title": "输出不合格"
+     }
+    ],
+    "summary": "用户输入 number 类型 score；if 节点单条件判断 input.score >= 60，true 分支输出“合格”、false 分支输出“不合格”，两个 output 的 outputName 均为 result（分支互斥不会同时激活）。不使用模型、代码或工具。",
+    "title": "分数及格判断"
+   }
+  },
+  {
+   "submission": {
+    "draftRevision": 1,
+    "mode": "repair",
+    "patches": [
+     {
+      "op": "replace",
+      "path": "/chainsByKey",
+      "value": {
+       "main": {
+        "nodes": [
+         "start",
+         "n3"
+        ]
+       }
+      }
+     },
+     {
+      "op": "replace",
+      "path": "/linksByKey",
+      "value": {
+       "linkFail": {
+        "port": "false",
+        "source": "n3",
+        "target": "n4"
+       },
+       "linkPass": {
+        "port": "true",
+        "source": "n3",
+        "target": "n2"
+       }
+      }
+     },
+     {
+      "op": "replace",
+      "path": "/coverage",
+      "value": {
+       "R1": [
+        "start",
+        "n3",
+        "n2",
+        "n4"
+       ]
+      }
+     },
+     {
+      "op": "replace",
+      "path": "/summary",
+      "value": "用户输入 number 类型 score；if 节点 n3 单条件判断 input.score >= 60，true 分支输出“合格”（outputName=result）、false 分支输出“不合格”（outputName=result），分支互斥不会同时激活。入口沿用已有 start（n1），不使用模型、代码或工具。"
+     },
+     {
+      "op": "replace",
+      "path": "/nodesByKey",
+      "value": {
+       "n2": {
+        "config": {
+         "outputName": "result",
+         "text": "合格"
+        },
+        "kind": "output",
+        "title": "输出合格"
+       },
+       "n3": {
+        "config": {
+         "operator": "gte",
+         "value": "60",
+         "variable": "input.score"
+        },
+        "kind": "if",
+        "title": "判断分数是否及格"
+       },
+       "n4": {
+        "config": {
+         "outputName": "result",
+         "text": "不合格"
+        },
+        "kind": "output",
+        "title": "输出不合格"
+       },
+       "start": {
+        "config": {
+         "fields": [
+          {
+           "label": "分数",
+           "name": "score",
+           "required": true,
+           "type": "number"
+          }
+         ]
+        },
+        "kind": "input",
+        "title": "输入分数"
+       }
+      }
+     },
+     {
+      "op": "replace",
+      "path": "/title",
+      "value": "分数及格判断"
+     }
+    ]
+   }
+  }
+ ],
+ "feedback": [
+  {
+   "status": "repairable",
+   "draftRevision": 1,
+   "issues": [
+    {
+     "code": "DUPLICATE_KEY",
+     "message": "多个 key 绑定了同一个已有节点：start、n1。create 的 start/result 与已有 n1/n2 等是别名，不能用 n1/n2 声明新的业务节点；请给新节点换 key，并同步 chains/links、配置引用和 coverage。",
+     "allowedPaths": [
+      "/title",
+      "/description",
+      "/nodesByKey",
+      "/chainsByKey",
+      "/linksByKey",
+      "/rolesByKey",
+      "/environmentByKey",
+      "/summary",
+      "/assumptions",
+      "/coverage"
+     ]
+    }
+   ],
+   "fragments": {
+    "/title": "分数及格判断",
+    "/nodesByKey": {
+     "start": {
+      "config": {
+       "fields": [
+        {
+         "label": "分数",
+         "name": "score",
+         "required": true,
+         "type": "number"
+        }
+       ]
+      },
+      "kind": "input",
+      "title": "输入分数"
+     },
+     "n1": {
+      "config": {
+       "operator": "gte",
+       "value": "60",
+       "variable": "input.score"
+      },
+      "kind": "if",
+      "title": "判断分数是否及格"
+     },
+     "n2": {
+      "config": {
+       "outputName": "result",
+       "text": "合格"
+      },
+      "kind": "output",
+      "title": "输出合格"
+     },
+     "n3": {
+      "config": {
+       "outputName": "result",
+       "text": "不合格"
+      },
+      "kind": "output",
+      "title": "输出不合格"
+     }
+    },
+    "/chainsByKey": {
+     "main": {
+      "nodes": [
+       "start",
+       "n1"
+      ]
+     }
+    },
+    "/linksByKey": {
+     "linkPass": {
+      "port": "true",
+      "source": "n1",
+      "target": "n2"
+     },
+     "linkFail": {
+      "port": "false",
+      "source": "n1",
+      "target": "n3"
+     }
+    },
+    "/summary": "用户输入 number 类型 score；if 节点单条件判断 input.score >= 60，true 分支输出“合格”、false 分支输出“不合格”，两个 output 的 outputName 均为 result（分支互斥不会同时激活）。不使用模型、代码或工具。",
+    "/coverage": {
+     "R1": [
+      "start",
+      "n1",
+      "n2",
+      "n3"
+     ]
+    }
+   },
+   "allowedPaths": [
+    "/title",
+    "/description",
+    "/nodesByKey",
+    "/chainsByKey",
+    "/linksByKey",
+    "/rolesByKey",
+    "/environmentByKey",
+    "/summary",
+    "/assumptions",
+    "/coverage"
+   ],
+   "remainingSubmissions": 2
+  }
+ ]
+}

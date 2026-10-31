@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-17T08:19:35.211Z",
+  "desktopVersion": "0.2.1-rc.1",
+  "installedArtifact": "dsh-visible-dynamic-workflows-0.0.1-dsh021-os-authorization-macos-arm64.tgz",
+  "packageSha256": "b12b90a7d9022e5805ea758d7649cc784e63b12a12ed10a865fbfccf3cf59a9e",
+  "uiObserved": {
+    "sourceRevision": 6,
+    "canvasRestored": true,
+    "notesVisible": true,
+    "annotationPresent": true,
+    "viewportPercent": 75,
+    "environmentIconOnly": true,
+    "systemIconOnly": true,
+    "componentReady": true,
+    "copyMentionsPersistentAuthorization": true,
+    "missingSecretVisible": true,
+    "manageInvoked": true
+  },
+  "credentialValueRead": false,
+  "authenticationPending": true,
+  "automaticRunVerified": false,
+  "evidenceStage": "Earlier desktop observation before the user saved and authorized; superseded by persistent-authorization-acceptance.json for final authorization status."
+}

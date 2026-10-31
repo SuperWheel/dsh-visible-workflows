@@ -1,0 +1,218 @@
+[
+  {
+    "name": "layered-local-edit",
+    "source": ".test-data/layered-par/shard-4/events.jsonl",
+    "line": 42,
+    "manifest": ".test-data/layered-par/shard-4/manifest.json",
+    "case": "local-edit",
+    "repeat": 1,
+    "arm": "template-fill",
+    "status": "failed",
+    "files": {
+      "submission": {
+        "file": "layered-local-edit-submission.json",
+        "sha256": "2f2728df6c17ea551f95cfc593ef38e7e77caf148832cc890921bb7b4e12cee7"
+      },
+      "submissions": {
+        "file": "layered-local-edit-submissions.json",
+        "sha256": "33bb2883c44b001953ed00416bacf253d2c451473d11d3fc85c0fc01c420ad29"
+      },
+      "feedback": {
+        "file": "layered-local-edit-feedback.json",
+        "sha256": "d342206e6ee8b3d0d1b6a00e233653a9104ed2e1b7debc069b29f95789a54067"
+      },
+      "context": {
+        "file": "layered-local-edit-context.json",
+        "sha256": "6855f9d8579dfc61c8a65c0537abb5881fb196a4ed79a67a42697d3f68a5d713"
+      }
+    }
+  },
+  {
+    "name": "layered-large-edit",
+    "source": ".test-data/layered-par/shard-4/events.jsonl",
+    "line": 73,
+    "manifest": ".test-data/layered-par/shard-4/manifest.json",
+    "case": "large-edit",
+    "repeat": 1,
+    "arm": "template-fill",
+    "status": "failed",
+    "files": {
+      "submission": {
+        "file": "layered-large-edit-submission.json",
+        "sha256": "187915a816e5a45a9bbd3d370ea4479531d2e0838551c737ee7cadb27e074c76"
+      },
+      "submissions": {
+        "file": "layered-large-edit-submissions.json",
+        "sha256": "823d2173dac8c6623fbd06699872fc09f6ef017938329ed82d83a8f228d691d9"
+      },
+      "feedback": {
+        "file": "layered-large-edit-feedback.json",
+        "sha256": "a259ae813f3e12cebb269a8bba4792ee8935658ae592c55844ed8d670624e360"
+      },
+      "context": {
+        "file": "layered-large-edit-context.json",
+        "sha256": "bccab03912c1803517fcbbcd9e1bb4db2d0398293b3da4aad95b13d4600554a3"
+      }
+    }
+  },
+  {
+    "name": "replicate-container",
+    "source": ".test-data/replicate-r5/retry-429/shard-6/events.jsonl",
+    "line": 33,
+    "manifest": ".test-data/replicate-r5/retry-429/shard-6/manifest.json",
+    "case": "container",
+    "repeat": 6,
+    "arm": "template-fill",
+    "status": "success",
+    "files": {
+      "submission": {
+        "file": "replicate-container-submission.json",
+        "sha256": "4b052bbca14b45a11d9048b2b9bbcc56e2dc83c4372fa5f442285590f7c648f6"
+      },
+      "submissions": {
+        "file": "replicate-container-submissions.json",
+        "sha256": "2e8de243d87eb8f9f99c9e878b5cc36e826116eda48dbbc8f8cf8cd84cf98447"
+      },
+      "feedback": {
+        "file": "replicate-container-feedback.json",
+        "sha256": "de1dfe0f71af8631c7abcd068460b4ce9fb2c7ad5485e82bf14336c84e4898d9"
+      },
+      "context": {
+        "file": "replicate-container-context.json",
+        "sha256": "1fe3217daf51247bcfa67cd05d615328297d71da5ced9a7e3dcbdecabeec79c1"
+      },
+      "candidate": {
+        "file": "replicate-container-candidate.json",
+        "sha256": "9198c0aab6ee3fee306698e1ea4e5b5ece84ef7a641ed909d2edcd545aa1f2d6"
+      }
+    }
+  },
+  {
+    "name": "replicate-large-edit",
+    "source": ".test-data/replicate-r5/retry-429/shard-8/events.jsonl",
+    "line": 81,
+    "manifest": ".test-data/replicate-r5/retry-429/shard-8/manifest.json",
+    "case": "large-edit",
+    "repeat": 9,
+    "arm": "template-fill",
+    "status": "success",
+    "files": {
+      "submission": {
+        "file": "replicate-large-edit-submission.json",
+        "sha256": "4310352d17786e53256f7aa860cd81b7c42e22f4f8c6fba29882b1b3c27eb220"
+      },
+      "submissions": {
+        "file": "replicate-large-edit-submissions.json",
+        "sha256": "1defea1284da4added60829bbe2ce09c6125e436935d2298af05e98afc3f537c"
+      },
+      "feedback": {
+        "file": "replicate-large-edit-feedback.json",
+        "sha256": "862c2e8f160be6bfa2d0ea7e9d83ffbf4d4aad21a9b7a657bf9697f3a52d8d64"
+      },
+      "context": {
+        "file": "replicate-large-edit-context.json",
+        "sha256": "bccab03912c1803517fcbbcd9e1bb4db2d0398293b3da4aad95b13d4600554a3"
+      },
+      "candidate": {
+        "file": "replicate-large-edit-candidate.json",
+        "sha256": "a094615b9235d77d7e62ea5bf23c996d7ecff8a8315d67c137609033622a6716"
+      }
+    }
+  },
+  {
+    "name": "compact-web-process",
+    "source": ".test-data/t21-paired-r2/shard-1-part-2/events.jsonl",
+    "line": 33,
+    "manifest": ".test-data/t21-paired-r2/shard-1-part-2/manifest.json",
+    "case": "web-process",
+    "repeat": 1,
+    "arm": "compact-repair",
+    "status": "success",
+    "files": {
+      "submission": {
+        "file": "compact-web-process-submission.json",
+        "sha256": "0bb674edd27bf8242a6a3ccefaabbb572b0d0f89316270c11f090c143b3d406a"
+      },
+      "submissions": {
+        "file": "compact-web-process-submissions.json",
+        "sha256": "faf77a9e99fe69109a24496bc4f76e7b8768486c95c09a3b24e920e6cb3228d5"
+      },
+      "feedback": {
+        "file": "compact-web-process-feedback.json",
+        "sha256": "0015cbb746ccb40e9cbc0304618183d748ed812fc887ead4085e3214cf5e34d4"
+      },
+      "context": {
+        "file": "compact-web-process-context.json",
+        "sha256": "1fe3217daf51247bcfa67cd05d615328297d71da5ced9a7e3dcbdecabeec79c1"
+      },
+      "candidate": {
+        "file": "compact-web-process-candidate.json",
+        "sha256": "30ad0b589223ad3e666d34a37ef86a06b0996a9813933c2c02995d7622ffbcbd"
+      }
+    }
+  },
+  {
+    "name": "compact-branch",
+    "source": ".test-data/t21-paired-r2/shard-4-part-1/events.jsonl",
+    "line": 25,
+    "manifest": ".test-data/t21-paired-r2/shard-4-part-1/manifest.json",
+    "case": "branch",
+    "repeat": 1,
+    "arm": "compact-repair",
+    "status": "success",
+    "files": {
+      "submission": {
+        "file": "compact-branch-submission.json",
+        "sha256": "f8ba7cf1157a4003cc1479c60f46ae8663e89c4143418a10740060068c41edfa"
+      },
+      "submissions": {
+        "file": "compact-branch-submissions.json",
+        "sha256": "6fe3faf733cd1740c5d3547fe154e0aa89ff74fa624c685bd53feb13d76ae4d6"
+      },
+      "feedback": {
+        "file": "compact-branch-feedback.json",
+        "sha256": "a2b57e90d261065e530134aaa10461459f1f0908893041c5c42dcd3f4ed81c48"
+      },
+      "context": {
+        "file": "compact-branch-context.json",
+        "sha256": "1fe3217daf51247bcfa67cd05d615328297d71da5ced9a7e3dcbdecabeec79c1"
+      },
+      "candidate": {
+        "file": "compact-branch-candidate.json",
+        "sha256": "94ae7ec984034668d7594f04f348011e2ca40b60af2638bed8c409320157c794"
+      }
+    }
+  },
+  {
+    "name": "compact-container",
+    "source": ".test-data/t21-paired-r2/shard-4-part-2/events.jsonl",
+    "line": 37,
+    "manifest": ".test-data/t21-paired-r2/shard-4-part-2/manifest.json",
+    "case": "container",
+    "repeat": 1,
+    "arm": "compact-repair",
+    "status": "success",
+    "files": {
+      "submission": {
+        "file": "compact-container-submission.json",
+        "sha256": "68ff41aafd6bb53b14c6284f5583f6fbf54e790f0a91ad950b0b2653b924783f"
+      },
+      "submissions": {
+        "file": "compact-container-submissions.json",
+        "sha256": "1c86d533c0fe99564d49871101f1f2cf1538af2b445bd7709316cee4c78184d1"
+      },
+      "feedback": {
+        "file": "compact-container-feedback.json",
+        "sha256": "8ed237550823fadb90121cce280bda9ed5577922047ed56d92848101c1e445e3"
+      },
+      "context": {
+        "file": "compact-container-context.json",
+        "sha256": "1fe3217daf51247bcfa67cd05d615328297d71da5ced9a7e3dcbdecabeec79c1"
+      },
+      "candidate": {
+        "file": "compact-container-candidate.json",
+        "sha256": "c9c3307a1edf50d1ec6f3daa2cb43704cee3165569ecb7ad6d737c3d630c81ed"
+      }
+    }
+  }
+]

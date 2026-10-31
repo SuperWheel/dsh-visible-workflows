@@ -12,7 +12,7 @@ const contracts:Partial<Record<WorkflowNode['kind'],Record<string,Metadata>>>={
  template:{text:meta('string','模板转换后的文本')},
  output:{text:meta('string','最终输出文本')},
  llm:{text:meta('string','模型生成的内容'),json:meta('object','按输出字段解析后的结构化内容')},
- agent:{text:meta('string','Agent 返回的最终内容'),steps:meta('number','Agent 已执行的步数'),tool_results:meta('array','工具调用结果记录')},
+ agent:{text:meta('string','Agent 返回的最终内容'),json:meta('object','Agent 按输出字段返回的结构化内容'),steps:meta('number','Agent 已执行的步数')},
  knowledge:{text:meta('string','检索结果的文本摘要'),results:meta('array','匹配的检索结果'),result:meta('array','匹配的检索结果'),method:meta('string','检索方法'),count:meta('number','匹配结果数量')},
  classifier:{text:meta('string','命中的分类名称'),class_id:meta('string','命中的分类 ID'),class_label:meta('string','命中的分类名称'),class_name:meta('string','命中分类的说明；未填写时使用名称')},
  if:{text:meta('string','命中的分支 ID'),result:meta('boolean','是否命中 true 分支'),branch:meta('string','命中的分支 ID')},
@@ -22,7 +22,7 @@ const contracts:Partial<Record<WorkflowNode['kind'],Record<string,Metadata>>>={
  aggregator:{text:meta('string','聚合结果的文本表示'),json:meta('object','按聚合组名称组织的结果')},
  assigner:{text:meta('string','本次赋值结果的 JSON 文本'),variables:meta('object','本次修改的变量'),json:meta('object','本次修改的变量')},
  extractor:{text:meta('string','模型返回的原始内容'),json:meta('object','成功提取的参数'),__is_success:meta('number','1 表示提取成功，0 表示失败'),__reason:meta('string','提取失败原因；成功时为空')},
- http:{text:meta('string','响应正文'),body:meta('string','响应正文'),status_code:meta('number','HTTP 响应状态码'),headers:meta('object','过滤敏感字段后的响应头')},
+ http:{text:meta('string','响应正文'),body:meta('string','响应正文'),bytes:meta('number','响应正文字节数（解压后）'),status_code:meta('number','HTTP 响应状态码'),headers:meta('object','过滤敏感字段后的响应头')},
  list:{text:meta('string','处理结果的 JSON 文本'),result:meta('array','筛选、排序或截取后的列表'),json:meta('array','筛选、排序或截取后的列表'),first_record:meta('动态类型','列表第一项；空列表时为 null'),last_record:meta('动态类型','列表最后一项；空列表时为 null')},
  document:{text:meta('string','解析得到的文档文本'),characters:meta('number','提取文本的字符数')},
 }
@@ -40,13 +40,13 @@ export function inputVariable(field:InputField,prefix='input'):VariableMetadata 
 export function nodeOutputVariables(node:WorkflowNode,data?:Record<string,JsonValue>):VariableMetadata[] {
  const c=node.config
  return outputFields(node,data).map(name=>{
-  const declared=(node.kind==='extractor'?c.parameters:c.outputSchema)?.find(field=>field.name===name)
+  const declared=(node.kind==='extractor'?c.parameters:['code','llm','agent'].includes(node.kind)?c.outputSchema:undefined)?.find(field=>field.name===name)
   const input=['input','human'].includes(node.kind)?c.fields?.find(field=>field.name===name):undefined
-  const known=contracts[node.kind]?.[name]
+  const known=node.kind==='http'&&c.credentialOperation?(name==='ok'?meta('boolean','受控操作是否成功'):meta('number','HTTP 响应状态码；不包含响应正文或凭据')):contracts[node.kind]?.[name]
   const actual=valueAt(data,name)
-  const inferred=actual===undefined?undefined:valueType(actual)
+  const inferred=node.kind==='http'&&c.credentialOperation?undefined:actual===undefined?undefined:valueType(actual)
   const fallback=name==='text'?text:meta('动态类型','类型将在节点运行后确定')
-  const definition=input?inputVariable(input,node.id):declared?meta(declared.type,declared.description||'未设置字段说明'):known??fallback
+  const definition=input?inputVariable(input,node.id):known??(declared?meta(declared.type,declared.description||'未设置字段说明'):fallback)
   return {name,reference:`{{${node.id}.${name}}}`,type:inferred??definition.type,description:definition.description==='类型将在节点运行后确定'&&inferred?'来自上次成功运行的输出':definition.description}
  })
 }

@@ -11,23 +11,23 @@ import { SessionId } from '@deepseek-ai/dsh-session'
 import SystemPrompt, { renderPrompt } from '@deepseek-ai/dsh-system-prompt'
 import ToolRuntime from '@deepseek-ai/dsh-tools'
 
-async function mountedWorkflowService(agentPresent=false,toolMode?:'native'|'both') {
+async function mountedWorkflowService(agentPresent=false,toolMode?:'native'|'ptc') {
   const directory=mkdtempSync(join(tmpdir(),'workflow-cordis-')),ctx=new Context(),nativeCalls:unknown[]=[]
   const promptFiber=ctx.plugin(SystemPrompt,{personaPrefix:'普通聊天测试：{{assistant_name}}。'});await promptFiber
   assert.equal(promptFiber.state,2)
   const sessionId=SessionId('conversation'),workspaceId='workspace'
   const agents=new Map<string,any>()
   const workspaces=[{id:workspaceId,title:'Test',path:directory,sessionIds:[sessionId]}]
-  if(agentPresent)agents.set(sessionId,{id:sessionId,ctx,session:{header:{cwd:directory}},options:{}})
+  if(agentPresent)agents.set(sessionId,{id:sessionId,ctx,session:{id:sessionId,header:{id:sessionId,cwd:directory}},options:{}})
   const provisions=[
-    ctx.provide('llm',{}),ctx.provide('agents',{get:(id:string)=>agents.get(id)}),
+    ctx.provide('llm',{listProviders:()=>[],listModels:async()=>[],resolveModelInfo:async()=>{throw new Error('No model should be resolved in this deterministic fixture')}}),ctx.provide('agents',{get:(id:string)=>agents.get(id),list:()=>[...agents.values()],roots:()=>[...agents.values()],isOwnedBy:()=>false}),
     ctx.provide('workspaceRegistry',{list:()=>workspaces}),
     ctx.systemPrompt.variable('assistant_name',()=> '本地测试助手'),ctx.provide('typert',{}),
   ]
   if(!toolMode)provisions.push(ctx.provide('tools',{register:()=>()=>{},schemas:()=>[{name:'native_test',description:'permission fixture',parameters:{type:'object'}}],get:()=>({}),execute:async(value:unknown)=>{nativeCalls.push(value);return {isError:false,value:'authorized',content:[{type:'text',text:'authorized'}]}}}))
-  // The real tool registry generates its SDK section in `both` mode. Only its
+  // DSH 0.2.1 generates its SDK section in `ptc` mode. Only its
   // language is needed for assembly; a code/model execution must never happen.
-  if(toolMode==='both')provisions.push(ctx.provide('ptcRuntime',{language:'typescript',execute:()=>{throw new Error('Prompt contract fixture must not execute code')}}))
+  if(toolMode==='ptc')provisions.push(ctx.provide('ptcRuntime',{language:'typescript',execute:()=>{throw new Error('Prompt contract fixture must not execute code')}}))
   const toolsFiber=toolMode?ctx.plugin(ToolRuntime,{mode:toolMode}):undefined
   if(toolsFiber){await toolsFiber;assert.equal(toolsFiber.state,2)}
   const fiber=ctx.plugin(VisibleWorkflowService,{stateDirectory:directory});await fiber
@@ -41,7 +41,7 @@ async function mountedWorkflowService(agentPresent=false,toolMode?:'native'|'bot
 
 async function promptContract(){
  const cases:string[]=[]
- for(const mode of ['native','both'] as const){
+ for(const mode of ['native','ptc'] as const){
   const fixture=await mountedWorkflowService(false,mode)
   try {
    // This is the section registered by the production Host constructor into
@@ -52,18 +52,26 @@ async function promptContract(){
    assert.equal(guide.interpolate,false)
    assert.ok(guide.text.includes('{{input.字段名}}'))
    assert.ok(guide.text.includes('{{稳定节点ID.text}}'))
+   assert.ok(guide.text.includes('reviewed-file-write@1.0.0'))
+   assert.equal(guide.text.includes('config.body'),false)
    const rendered=renderPrompt(assembly)
    assert.ok(rendered.includes(guide.text),'rendering must preserve the complete workflow guidance verbatim')
    assert.ok(rendered.includes('普通聊天测试：本地测试助手。'),'ordinary prompt variables still interpolate normally')
    assert.deepEqual(Object.keys(assembly.variables),['assistant_name'])
-   const save=assembly.tools.find(tool=>tool.name==='visible_workflow_save')
+   const save=fixture.ctx.tools.schemas().find(tool=>tool.name==='visible_workflow_save')
    assert.ok(save,'the real ToolRuntime must expose the production save schema')
    assert.equal(save.description,fixture.ctx.tools.get('visible_workflow_save')!.description)
    assert.ok(save.description.includes('{{input.字段名}}'))
    assert.ok(save.description.includes('{{稳定节点ID.text}}'))
    assert.equal(Object.hasOwn(save,'execute'),false)
+   const plan=fixture.ctx.tools.schemas().find(tool=>tool.name==='visible_workflow_plan')
+   assert.ok(plan?.description.includes('reviewed-file-write@1.0.0'))
    assert.equal(Object.hasOwn(save,'output'),false)
-   if(mode==='both'){
+   if(mode==='native')assert.deepEqual(assembly.tools.find(tool=>tool.name==='visible_workflow_save'),save)
+   if(mode==='ptc'){
+    // PTC advertises only its transport on the wire; individual capabilities
+    // remain in the generated SDK documentation consumed by the model.
+    assert.deepEqual(assembly.tools.map(tool=>tool.name),['run_code'])
     const sdk=assembly.sections.find(section=>section.name==='tools:sdk')
     assert.ok(sdk,'real SDK tool documentation must participate in prompt assembly')
     assert.equal(sdk.interpolate,false)

@@ -1,0 +1,27 @@
+{
+  "nodes": 3,
+  "edges": 2,
+  "viewport": {
+    "x": 40,
+    "y": 30,
+    "scale": 0.75
+  },
+  "notes": 1,
+  "annotations": 1,
+  "secretDeclarationsOnly": true,
+  "referenceTargetsSecret": true,
+  "nodeCoordinates": [
+    [
+      90,
+      180
+    ],
+    [
+      340.25,
+      160.5
+    ],
+    [
+      710,
+      180
+    ]
+  ]
+}

@@ -49,6 +49,19 @@ describe('独立图运行器（确定性实际执行，无真实模型请求）'
     expect((await runtime.settle(waiting.id)).outputs.result).toContain('用户回答')
     expect(() => runtime.answer(waiting.id, { text: '重复回答' })).toThrow('不再等待')
   })
+  it('姓名问答按稳定节点引用映射到模板局部变量，再沿 Graphon 输出结果', async () => {
+    const { storage, runtime } = setup(), graph = makeWorkflow('workspace-test', '姓名问候')
+    const inputId = '65001be3-c022-4327-aa9f-8a97f78cdb82', templateId = 'd38d1203-23a4-4241-89b4-0e114f9eb174'
+    graph.nodes = [node(inputId, 'input', { fields: [{ name: 'name', label: '姓名', required: true, type: 'text' }] }), node(templateId, 'template', { inputs: { name: `{{${inputId}.name}}` }, text: '你好，{{name}}，欢迎使用工作流！祝你愉快！' }), node('result', 'output', { text: `{{${templateId}.text}}`, outputName: 'result' })]
+    graph.edges = [{ id: 'input-template', source: inputId, target: templateId }, { id: 'template-result', source: templateId, target: 'result' }]
+    const saved = storage.save(graph, 0), waiting = runtime.start(saved.id, {})
+    expect(waiting.status).toBe('waiting')
+    runtime.answer(waiting.id, { name: '小明' })
+    const result = await runtime.settle(waiting.id)
+    expect(result.status).toBe('success')
+    expect(result.executions[0]!.data?.name).toBe('小明')
+    expect(result.outputs).toEqual({ result: '你好，小明，欢迎使用工作流！祝你愉快！' })
+  })
   it.each(['yes please', 'no'])('条件路径 %s 仅执行被选中支路', async text => {
     const { storage, runtime } = setup(), flow = storage.save(branchFlow(), 0)
     const result = await runtime.settle(runtime.start(flow.id, { text }).id)
@@ -144,13 +157,14 @@ describe('版本、固定节点与持久恢复', () => {
     const moved = structuredClone(saved); moved.nodes[1]!.x += 50
     expect(storage.save(moved, 1, 'agent').revision).toBe(2)
   })
-  it('运行时保存被阻止，避免把本次运行修改误写原流程', async () => {
+  it('运行时保存为未来版本，活动运行的图快照保持不变', async () => {
     const { storage, runtime } = setup(), flow = storage.save(makeWorkflow('workspace-test'), 0)
     const run = runtime.start(flow.id, {})
-    expect(() => storage.save({ ...flow, title: '运行中修改' }, 1)).toThrow('运行中改图')
+    expect(storage.save({ ...flow, title: '运行中修改' }, 1).revision).toBe(2)
+    expect(storage.run(run.id).graph.title).toBe(flow.title)
     expect(() => runtime.start(flow.id, {})).toThrow('未结束的运行')
     await runtime.cancel(run.id)
-    expect(storage.save({ ...flow, title: '取消后修改' }, 1).revision).toBe(2)
+    expect(storage.save({ ...flow, title: '取消后修改' }, 2).revision).toBe(3)
   })
   it('库快照按最新运行排序，卡片不会显示旧的成功覆盖新的失败', async () => {
     const { storage, runtime } = setup(), flow = storage.save(makeWorkflow('workspace-test', '最新运行', true), 0)
@@ -168,7 +182,7 @@ describe('版本、固定节点与持久恢复', () => {
     const reopened = new WorkflowStorage(path)
     expect(reopened.run(interrupted.id).status).toBe('interrupted')
     expect(reopened.run(interrupted.id).error).toContain('未自动重放')
-    expect(JSON.parse(readFileSync(join(path, 'library.json'), 'utf8')).runs[0].status).toBe('interrupted')
+    expect(JSON.parse(readFileSync(join(path, 'runs', `${interrupted.id}.json`), 'utf8')).status).toBe('interrupted')
     reopened.close()
   })
 })

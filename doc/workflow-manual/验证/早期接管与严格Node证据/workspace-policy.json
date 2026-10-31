@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-17T05:16:15.402Z",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "scope": "Installed Harness component probe, actual FsLocal and strict supervisor/MXC; no Desktop/profile/Secret activation",
+  "results": [
+    {
+      "name": "immutable_alias_rejected_before_spawn",
+      "pass": true
+    },
+    {
+      "name": "future_immutable_file_alias_rejected",
+      "pass": true
+    },
+    {
+      "name": "real_supervised_fs_reads_workspace_with_runtime_aliases",
+      "pass": true
+    },
+    {
+      "name": "real_supervised_fs_still_denies_protected_file",
+      "pass": true
+    }
+  ],
+  "launches": 6,
+  "failures": [],
+  "observedProcessCount": 18,
+  "residualCount": 0,
+  "passed": true
+}

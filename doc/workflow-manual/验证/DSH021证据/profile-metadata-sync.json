@@ -1,0 +1,43 @@
+{
+  "state": "applied",
+  "at": "2026-10-17T07:53:48.888Z",
+  "finishedAt": "2026-10-17T07:53:48.970Z",
+  "profile": "$DSH_HOME/profiles/desktop",
+  "beforeHashes": {
+    "package.json": "890130f928392f19d28d087df1ba92b2e706f0f22e899ea77672fd12935a33e1",
+    "pnpm-lock.yaml": "dbf06534d95272fc1e2a20f27ecf12408038327341d94e31213abd01c44d6a82"
+  },
+  "afterHashes": {
+    "package.json": "ab9eb8c35aa678f87f26bdff7d23171947af11de0d0204537bf593db781d8548",
+    "pnpm-lock.yaml": "3f2b977cbccdba78c3107d677ed6876c76405fb48a9201764fecf2bf66b48a2d"
+  },
+  "permissions": {
+    "package.json": 384,
+    "pnpm-lock.yaml": 384
+  },
+  "plugin": "dsh-visible-dynamic-workflows",
+  "archiveFile": "dsh-visible-dynamic-workflows-0.0.1-dsh021-macos-arm64.tgz",
+  "archiveSha256": "238df8bd83aae9780d4f228312e50ca33927d16ccdf4a383593c3ed45cfb0e99",
+  "sourceFrom": "dsh-visible-dynamic-workflows-0.0.1-prd2-native-verified-macos-arm64.tgz",
+  "sourceTo": "dsh-visible-dynamic-workflows-0.0.1-dsh021-macos-arm64.tgz",
+  "peerSdk": "0.2.1-rc.1",
+  "peerCordis": "4.0.5",
+  "addedLockPackages": [
+    "@deepseek-ai/cosmokit@1.8.6",
+    "@deepseek-ai/schemastery@3.18.5"
+  ],
+  "retainedOtherPluginSchemastery": "3.18.4",
+  "otherManifestFieldsUnchanged": true,
+  "otherLockEntriesUnchanged": true,
+  "transactionFixtureChecks": {
+    "passed": 4,
+    "checks": [
+      "apply + repeat + explicit rollback",
+      "second-file failure restores exact originals",
+      "unrecognized concurrent content preserved",
+      "precondition mismatch writes nothing"
+    ],
+    "realProfileWritten": false
+  },
+  "fullProfileSnapshotsIncluded": false
+}

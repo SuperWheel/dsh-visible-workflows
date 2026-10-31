@@ -7,7 +7,7 @@ import { Field } from '../src/client/controls.tsx'
 vi.mock('@deepseek-ai/dsh-client-ui-primitives',()=>({
  Button:'button',
  Tooltip:({children,label,openOnClick}:{children:React.ReactNode;label:string;openOnClick:boolean})=><div data-help={label} data-open-on-click={openOnClick}>{children}</div>,
- Modal:({children,footer,onClose,closeLabel}:{children:React.ReactNode;footer:React.ReactNode;onClose:()=>void;closeLabel:string})=><div role="dialog">{children}{footer}<button aria-label={closeLabel} onClick={onClose}/></div>,
+ Modal:({children,footer,onClose,closeLabel,headless}:{children:React.ReactNode;footer:React.ReactNode;onClose:()=>void;closeLabel:string;headless?:boolean})=><div role="dialog">{children}{footer}{!headless&&<button aria-label={closeLabel} onClick={onClose}/>}</div>,
 }))
 const renderers:ReactTestRenderer[]=[]
 afterEach(()=>{for(const renderer of renderers.splice(0))act(()=>renderer.unmount());vi.unstubAllGlobals()})
@@ -54,5 +54,24 @@ describe('prompt cards',()=>{
   expect(renderer.root.findByProps({'data-help':'继承 DSH'}).props['data-open-on-click']).toBe(true)
   expect(renderer.root.findByProps({className:'vdw-field-help'}).children).toEqual(['当前模型不支持'])
   expect(renderer.root.findAllByProps({'aria-label':'思考强度说明'})).toHaveLength(0)
+ })
+})
+
+describe('节点备注复用长文本编辑器',()=>{
+ it('不显示提示词角色，展开同步、可清空，紧凑与展开均限制2000字',()=>{
+  let renderer!:ReactTestRenderer,current='原备注'
+  function Note(){const [value,setValue]=useState(current);current=value;return <PromptEditor label="备注" help="仅作说明" placeholder="添加节点备注（可选）" rows={3} maxLength={2000} value={value} onChange={setValue}/>}
+  act(()=>{renderer=create(<Note/>);renderers.push(renderer)})
+  expect(renderer.root.findByType('strong').children).toEqual(['备注'])
+  const compact=()=>renderer.root.findAllByType('textarea')[0]!
+  expect(compact().props).toMatchObject({className:'vdw-prompt-body',maxLength:2000,rows:3,placeholder:'添加节点备注（可选）',style:{resize:'none'}})
+  act(()=>renderer.root.findByProps({'aria-label':'展开备注'}).props.onClick())
+  const expanded=renderer.root.findAllByType('textarea').find(node=>node.props['aria-label']==='备注（展开）')!
+  expect(expanded.props.maxLength).toBe(2000)
+  act(()=>expanded.props.onChange({target:{value:'改后备注\n第二行'}}))
+  expect(compact().props.value).toBe('改后备注\n第二行')
+  act(()=>expanded.props.onChange({target:{value:'字'.repeat(2001)}}))
+  expect(current).toBe('改后备注\n第二行')
+  act(()=>expanded.props.onChange({target:{value:''}}));expect(current).toBe('')
  })
 })

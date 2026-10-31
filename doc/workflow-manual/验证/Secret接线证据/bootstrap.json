@@ -1,0 +1,23 @@
+{
+  "evidence": "installed-boot-component-only",
+  "bootModule": "/Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-app-boot/lib/index.js",
+  "nativeModule": "/Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-subprocess-local/lib/index.js",
+  "actualLoaderMountedConsumerAfterBoundary": true,
+  "actualPrivateNativeProvider": true,
+  "failedPreparationPreventedConsumer": true,
+  "realBootCleanedFailedRoot": true,
+  "desktopActivated": false,
+  "secretReady": false,
+  "pending": [
+    "live-composition-verification",
+    "preexisting-process-quiescence",
+    "control-fd7",
+    "pty",
+    "confined-mcp-transport",
+    "loader-import-control",
+    "host-ipc-and-ui",
+    "credential-broker-acceptance",
+    "host-crash-tree-supervision",
+    "confined-file-provider"
+  ]
+}

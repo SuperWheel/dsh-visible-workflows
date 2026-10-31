@@ -1,0 +1,408 @@
+[
+  {
+    "repeat": 0,
+    "submission": {
+      "chains": [
+        {
+          "key": "main",
+          "nodes": [
+            "start",
+            "iterate",
+            "result"
+          ]
+        },
+        {
+          "container": "iterate",
+          "key": "inner_iterate",
+          "nodes": [
+            "item_label"
+          ]
+        }
+      ],
+      "coverage": {
+        "R1": [
+          "start",
+          "iterate",
+          "item_label",
+          "result"
+        ]
+      },
+      "forms": [
+        {
+          "key": "start",
+          "template": "input",
+          "title": "用户输入",
+          "values": {
+            "fields": [
+              {
+                "defaultValue": "[]",
+                "label": "字符串数组",
+                "name": "items",
+                "required": true,
+                "type": "json"
+              }
+            ]
+          }
+        },
+        {
+          "key": "item_label",
+          "template": "template",
+          "title": "生成项标签",
+          "values": {
+            "text": "项：{{item}}"
+          }
+        },
+        {
+          "key": "iterate",
+          "template": "iteration",
+          "title": "遍历 items",
+          "values": {
+            "errorMode": "terminate",
+            "iterator": "input.items",
+            "outputVariable": "item_label.text",
+            "parallel": false
+          }
+        },
+        {
+          "key": "result",
+          "template": "output",
+          "title": "输出结果",
+          "values": {
+            "outputName": "result",
+            "text": "{{iterate.result | tojson}}"
+          }
+        }
+      ],
+      "title": "遍历字符串数组生成项标签"
+    }
+  },
+  {
+    "repeat": 1,
+    "submission": {
+      "chains": [
+        {
+          "key": "outer",
+          "nodes": [
+            "start",
+            "iterate_items",
+            "result"
+          ]
+        },
+        {
+          "key": "inner_items",
+          "container": "iterate_items",
+          "nodes": [
+            "item_text"
+          ]
+        }
+      ],
+      "coverage": {
+        "R1": [
+          "start",
+          "iterate_items",
+          "item_text",
+          "result"
+        ]
+      },
+      "forms": [
+        {
+          "key": "start",
+          "template": "input",
+          "title": "用户输入",
+          "values": {
+            "fields": [
+              {
+                "label": "items（字符串数组）",
+                "name": "items",
+                "required": true,
+                "type": "json"
+              }
+            ]
+          }
+        },
+        {
+          "key": "iterate_items",
+          "template": "iteration",
+          "title": "遍历 items",
+          "values": {
+            "errorMode": "terminate",
+            "iterator": "input.items",
+            "outputVariable": "item_text.text"
+          }
+        },
+        {
+          "key": "item_text",
+          "template": "template",
+          "title": "生成项文本",
+          "values": {
+            "text": "项：{{item}}"
+          }
+        },
+        {
+          "key": "result",
+          "template": "output",
+          "title": "结果数组",
+          "values": {
+            "text": "{{iterate_items.text}}"
+          }
+        }
+      ],
+      "mode": "create",
+      "title": "遍历 items 生成「项：{item}」结果数组"
+    }
+  },
+  {
+    "repeat": 2,
+    "submission": {
+      "chains": [
+        {
+          "key": "main",
+          "nodes": [
+            "start",
+            "iterate",
+            "result"
+          ]
+        },
+        {
+          "container": "iterate",
+          "key": "inner",
+          "nodes": [
+            "render",
+            "inner_out"
+          ]
+        }
+      ],
+      "coverage": {
+        "R1": [
+          "start",
+          "iterate",
+          "render",
+          "inner_out",
+          "result"
+        ]
+      },
+      "forms": [
+        {
+          "key": "start",
+          "template": "input",
+          "title": "用户输入",
+          "values": {
+            "fields": [
+              {
+                "defaultValue": "[]",
+                "label": "items（字符串数组）",
+                "name": "items",
+                "required": true,
+                "type": "json"
+              }
+            ]
+          }
+        },
+        {
+          "key": "iterate",
+          "template": "iteration",
+          "title": "遍历 items",
+          "values": {
+            "errorMode": "terminate",
+            "iterator": "input.items",
+            "outputVariable": "render.text",
+            "parallel": false
+          }
+        },
+        {
+          "key": "render",
+          "template": "template",
+          "title": "生成「项：{item}」",
+          "values": {
+            "text": "项：{{item}}"
+          }
+        },
+        {
+          "key": "inner_out",
+          "template": "output",
+          "title": "内部单项出口",
+          "values": {
+            "outputName": "item_result",
+            "text": "{{render.text}}"
+          }
+        },
+        {
+          "key": "result",
+          "template": "output",
+          "title": "最终结果",
+          "values": {
+            "outputName": "result",
+            "text": "{{iterate.text}}"
+          }
+        }
+      ],
+      "title": "items 逐项渲染工作流"
+    }
+  },
+  {
+    "repeat": 3,
+    "submission": {
+      "chains": [
+        {
+          "key": "main",
+          "nodes": [
+            "start",
+            "iterate",
+            "result"
+          ]
+        },
+        {
+          "container": "iterate",
+          "key": "inner",
+          "nodes": [
+            "item-template"
+          ]
+        }
+      ],
+      "coverage": {
+        "R1": [
+          "start",
+          "iterate",
+          "item-template",
+          "result"
+        ]
+      },
+      "forms": [
+        {
+          "key": "start",
+          "template": "input",
+          "title": "用户输入 items",
+          "values": {
+            "fields": [
+              {
+                "defaultValue": "[]",
+                "label": "items（字符串数组）",
+                "name": "items",
+                "required": true,
+                "type": "json"
+              }
+            ]
+          }
+        },
+        {
+          "key": "iterate",
+          "template": "iteration",
+          "title": "遍历 items",
+          "values": {
+            "errorMode": "terminate",
+            "iterator": "input.items",
+            "outputVariable": "item-template.text",
+            "parallel": false
+          }
+        },
+        {
+          "key": "item-template",
+          "template": "template",
+          "title": "生成项文本",
+          "values": {
+            "text": "项：{{item}}"
+          }
+        },
+        {
+          "key": "result",
+          "template": "output",
+          "title": "输出结果",
+          "values": {
+            "outputName": "result",
+            "text": "{{iterate.result | tojson}}"
+          }
+        }
+      ],
+      "title": "items 迭代生成“项：{item}”并输出紧凑 JSON"
+    }
+  },
+  {
+    "repeat": 4,
+    "submission": {
+      "chains": [
+        {
+          "key": "main",
+          "nodes": [
+            "start",
+            "iterate",
+            "render",
+            "result"
+          ]
+        },
+        {
+          "container": "iterate",
+          "key": "inner",
+          "nodes": [
+            "item-label"
+          ]
+        }
+      ],
+      "coverage": {
+        "R1": [
+          "start",
+          "iterate",
+          "item-label",
+          "render",
+          "result"
+        ]
+      },
+      "forms": [
+        {
+          "key": "start",
+          "template": "input",
+          "title": "用户输入",
+          "values": {
+            "fields": [
+              {
+                "label": "items（字符串数组）",
+                "name": "items",
+                "required": true,
+                "type": "json"
+              }
+            ]
+          }
+        },
+        {
+          "key": "iterate",
+          "template": "iteration",
+          "title": "迭代遍历 items",
+          "values": {
+            "concurrency": 3,
+            "errorMode": "terminate",
+            "iterator": "input.items",
+            "outputVariable": "item-label.text",
+            "parallel": false
+          }
+        },
+        {
+          "key": "item-label",
+          "template": "template",
+          "title": "生成项文本",
+          "values": {
+            "text": "项：{{item}}"
+          }
+        },
+        {
+          "key": "render",
+          "template": "template",
+          "title": "结果转紧凑 JSON",
+          "values": {
+            "text": "{{iterate.result | tojson}}"
+          }
+        },
+        {
+          "key": "result",
+          "template": "output",
+          "title": "输出",
+          "values": {
+            "outputName": "result",
+            "text": "{{render.text}}"
+          }
+        }
+      ],
+      "links": [],
+      "mode": "create",
+      "title": "遍历 items 生成「项：x」并输出紧凑 JSON 数组"
+    }
+  }
+]

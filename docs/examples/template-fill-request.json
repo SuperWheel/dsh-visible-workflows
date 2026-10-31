@@ -1,0 +1,52 @@
+{
+  "submission": {
+    "mode": "create",
+    "title": "问候",
+    "forms": [
+      {
+        "key": "start",
+        "template": "input",
+        "values": {
+          "fields": [
+            {
+              "name": "name",
+              "label": "姓名",
+              "required": true
+            }
+          ]
+        }
+      },
+      {
+        "key": "greet",
+        "template": "template",
+        "values": {
+          "text": "你好 {{input.name}}"
+        }
+      },
+      {
+        "key": "result",
+        "template": "output",
+        "values": {
+          "text": "{{greet.text}}",
+          "outputName": "result"
+        }
+      }
+    ],
+    "chains": [
+      {
+        "key": "main",
+        "nodes": [
+          "start",
+          "greet",
+          "result"
+        ]
+      }
+    ],
+    "coverage": {
+      "R1": [
+        "greet",
+        "result"
+      ]
+    }
+  }
+}

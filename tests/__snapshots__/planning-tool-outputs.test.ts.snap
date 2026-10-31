@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`builtin output versions (Desktop r50) > pins every builtin output contract: record the old fields in PREVIOUS_BUILTIN_OUTPUTS before changing one 1`] = `
+{
+  "builtin:file.stat": "25d163a7322e",
+  "builtin:html.extract_text": "30e2ac907f4d",
+  "builtin:html.select": "f3df6cf94149",
+  "builtin:json.merge": "566a57b2073f",
+  "builtin:json.parse": "884650d8ac5a",
+  "builtin:json.select": "1c611a24b76f",
+  "builtin:json.stringify": "82baa1addb22",
+  "builtin:time.convert_timezone": "b28cc128e735",
+  "builtin:time.from_timestamp": "b28cc128e735",
+  "builtin:time.now": "b28cc128e735",
+  "builtin:time.timestamp": "541330f16b3e",
+  "builtin:time.weekday": "7e83f2b8f0b9",
+}
+`;

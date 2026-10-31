@@ -1,0 +1,317 @@
+{
+  "schema": 1,
+  "date": "2026-10-16",
+  "generatedAt": "2026-10-16T11:59:08.615Z",
+  "pluginVersion": "0.0.1",
+  "platform": {
+    "os": "darwin",
+    "arch": "arm64",
+    "node": "v22.23.1"
+  },
+  "runtime": {
+    "python": "3.12.15",
+    "graphon": "0.7.0",
+    "protocol": 1
+  },
+  "vitest": {
+    "success": true,
+    "files": 43,
+    "total": 388,
+    "passed": 388,
+    "failed": 0,
+    "skipped": 0,
+    "filesSummary": [
+      {
+        "file": "tests/annotation-editor.test.ts",
+        "status": "passed",
+        "tests": 19,
+        "passed": 19
+      },
+      {
+        "file": "tests/annotation-fallback.test.ts",
+        "status": "passed",
+        "tests": 5,
+        "passed": 5
+      },
+      {
+        "file": "tests/annotation-nodes.test.ts",
+        "status": "passed",
+        "tests": 7,
+        "passed": 7
+      },
+      {
+        "file": "tests/annotation-placement.test.ts",
+        "status": "passed",
+        "tests": 6,
+        "passed": 6
+      },
+      {
+        "file": "tests/canvas-chrome.test.ts",
+        "status": "passed",
+        "tests": 7,
+        "passed": 7
+      },
+      {
+        "file": "tests/canvas-interaction.test.ts",
+        "status": "passed",
+        "tests": 19,
+        "passed": 19
+      },
+      {
+        "file": "tests/canvas-ports.test.ts",
+        "status": "passed",
+        "tests": 6,
+        "passed": 6
+      },
+      {
+        "file": "tests/canvas-top-actions.test.tsx",
+        "status": "passed",
+        "tests": 7,
+        "passed": 7
+      },
+      {
+        "file": "tests/chat-bridge.test.ts",
+        "status": "passed",
+        "tests": 42,
+        "passed": 42
+      },
+      {
+        "file": "tests/client-store.test.ts",
+        "status": "passed",
+        "tests": 16,
+        "passed": 16
+      },
+      {
+        "file": "tests/code-editor.test.tsx",
+        "status": "passed",
+        "tests": 12,
+        "passed": 12
+      },
+      {
+        "file": "tests/data-viewer.test.tsx",
+        "status": "passed",
+        "tests": 7,
+        "passed": 7
+      },
+      {
+        "file": "tests/document-adapters.test.ts",
+        "status": "passed",
+        "tests": 13,
+        "passed": 13
+      },
+      {
+        "file": "tests/document-config.test.tsx",
+        "status": "passed",
+        "tests": 2,
+        "passed": 2
+      },
+      {
+        "file": "tests/editor-heading.test.tsx",
+        "status": "passed",
+        "tests": 7,
+        "passed": 7
+      },
+      {
+        "file": "tests/expanded-flows.test.ts",
+        "status": "passed",
+        "tests": 2,
+        "passed": 2
+      },
+      {
+        "file": "tests/graphon-bridge.test.ts",
+        "status": "passed",
+        "tests": 3,
+        "passed": 3
+      },
+      {
+        "file": "tests/graphon-capability-audit.test.ts",
+        "status": "passed",
+        "tests": 1,
+        "passed": 1
+      },
+      {
+        "file": "tests/graphon-environment.test.ts",
+        "status": "passed",
+        "tests": 14,
+        "passed": 14
+      },
+      {
+        "file": "tests/harness-web-models.test.ts",
+        "status": "passed",
+        "tests": 9,
+        "passed": 9
+      },
+      {
+        "file": "tests/inspector-viewport.test.ts",
+        "status": "passed",
+        "tests": 3,
+        "passed": 3
+      },
+      {
+        "file": "tests/layout.test.ts",
+        "status": "passed",
+        "tests": 5,
+        "passed": 5
+      },
+      {
+        "file": "tests/mini-map.test.tsx",
+        "status": "passed",
+        "tests": 3,
+        "passed": 3
+      },
+      {
+        "file": "tests/model-settings.test.tsx",
+        "status": "passed",
+        "tests": 4,
+        "passed": 4
+      },
+      {
+        "file": "tests/navigation.test.ts",
+        "status": "passed",
+        "tests": 9,
+        "passed": 9
+      },
+      {
+        "file": "tests/node-branches.test.tsx",
+        "status": "passed",
+        "tests": 8,
+        "passed": 8
+      },
+      {
+        "file": "tests/node-picker.test.tsx",
+        "status": "passed",
+        "tests": 3,
+        "passed": 3
+      },
+      {
+        "file": "tests/note-content.test.ts",
+        "status": "passed",
+        "tests": 4,
+        "passed": 4
+      },
+      {
+        "file": "tests/notes.test.ts",
+        "status": "passed",
+        "tests": 16,
+        "passed": 16
+      },
+      {
+        "file": "tests/prompt-editor.test.tsx",
+        "status": "passed",
+        "tests": 5,
+        "passed": 5
+      },
+      {
+        "file": "tests/runtime-expanded.test.ts",
+        "status": "passed",
+        "tests": 23,
+        "passed": 23
+      },
+      {
+        "file": "tests/runtime-llm.test.ts",
+        "status": "passed",
+        "tests": 7,
+        "passed": 7
+      },
+      {
+        "file": "tests/runtime-model-defaults.test.ts",
+        "status": "passed",
+        "tests": 10,
+        "passed": 10
+      },
+      {
+        "file": "tests/runtime-numbering.test.ts",
+        "status": "passed",
+        "tests": 5,
+        "passed": 5
+      },
+      {
+        "file": "tests/runtime-sdk-contract.test.ts",
+        "status": "passed",
+        "tests": 3,
+        "passed": 3
+      },
+      {
+        "file": "tests/runtime.test.ts",
+        "status": "passed",
+        "tests": 16,
+        "passed": 16
+      },
+      {
+        "file": "tests/select-width.test.tsx",
+        "status": "passed",
+        "tests": 3,
+        "passed": 3
+      },
+      {
+        "file": "tests/sidebar-isolation.test.ts",
+        "status": "passed",
+        "tests": 9,
+        "passed": 9
+      },
+      {
+        "file": "tests/sticky-note.test.tsx",
+        "status": "passed",
+        "tests": 13,
+        "passed": 13
+      },
+      {
+        "file": "tests/tool-adapters.test.ts",
+        "status": "passed",
+        "tests": 10,
+        "passed": 10
+      },
+      {
+        "file": "tests/variable-browser.test.tsx",
+        "status": "passed",
+        "tests": 8,
+        "passed": 8
+      },
+      {
+        "file": "tests/viewport.test.ts",
+        "status": "passed",
+        "tests": 11,
+        "passed": 11
+      },
+      {
+        "file": "tests/workflow-navigation.test.ts",
+        "status": "passed",
+        "tests": 6,
+        "passed": 6
+      }
+    ]
+  },
+  "pythonProtocol": {
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 14
+  },
+  "allKinds": {
+    "covered": 20,
+    "total": 20,
+    "source": "tests/graphon-capability-audit.test.ts",
+    "engine": "real-Graphon",
+    "models": "controlled-responses-no-network",
+    "adapters": "production-JavaScript-local-files-keyword-retrieval-builtins-loopback-HTTP",
+    "pythonUserCode": "not-executed-normal-path-requires-full-host-sandbox"
+  },
+  "externalModelCalls": 0,
+  "externalMCPCalls": 0,
+  "productRuntimeModified": false,
+  "newManualWebOrDesktopAcceptance": false,
+  "sourceSha256": {
+    "src/shared/types.ts": "69b32377e06bac4701173f27ce999d3e988956896c556fd8561a70599977232b",
+    "src/host/runtime.ts": "f9006dc1e0201a0a2439bcb179f5e4b32af3e2af7842d5f6297948de333ad71e",
+    "src/host/graphon.ts": "082a0211b2fb5ce7f9a99bb2bc6b42097cc9791e6162915515091f5d4c6782df",
+    "src/host/graphon-environment.ts": "56c644d6c3a3b70f35532d8e4f1312f581d857f9871f7d48d23be3aec541e082",
+    "src/host/execution-adapters.ts": "66afd4cb9a6443902589cfeaf58e58b47b5e4343607c7e96629bff7405d4f466",
+    "src/host/validation.ts": "a17ccdeffef90c4a3a86a3ae16c98656d2fe24582146112b0512eb86ac51ea25",
+    "src/client/nodes.ts": "059758e11b882ed9fb17802e06fd28c56904af046832726a3b6f7c94fb637270",
+    "src/client/forms.tsx": "c25a596b1be28a9f4be3c5eb5fab8a46601d42fda01e8f790b5824f4ecdddaeb",
+    "runtime/graphon_bridge/main.py": "68db05157d7b6379f1935b7f2e20eb99d95c3f7c86c28a85215418a1ab72cf70",
+    "tests/graphon-capability-audit.test.ts": "30150eda61e52a5207f55bf04dd4369574d0255b433732c7805ab8836708150f",
+    "scripts/audit-graphon-boundaries.ts": "d440a3a55c4c858c50bca30696c7c5127b88a0c725e5cbd30d3f64ac31b3c22d"
+  }
+}

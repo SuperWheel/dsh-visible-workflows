@@ -1,0 +1,453 @@
+{
+  "format": "dsh-visible-workflow",
+  "formatVersion": 2,
+  "runtime": {
+    "engine": "graphon",
+    "protocol": 1
+  },
+  "workflow": {
+    "nodes": [
+      {
+        "id": "host-start",
+        "number": "1",
+        "kind": "input",
+        "title": "用户输入",
+        "x": 0,
+        "y": 0,
+        "fixed": false,
+        "config": {
+          "fields": [
+            {
+              "name": "records",
+              "label": "JSON numbers",
+              "required": true,
+              "type": "paragraph"
+            },
+            {
+              "name": "rounds",
+              "label": "Rounds",
+              "required": true,
+              "type": "number"
+            },
+            {
+              "name": "threshold",
+              "label": "Threshold",
+              "required": true,
+              "type": "number"
+            }
+          ]
+        }
+      },
+      {
+        "id": "host-end",
+        "number": "2",
+        "kind": "output",
+        "title": "输出",
+        "x": 200,
+        "y": 0,
+        "fixed": false,
+        "config": {
+          "text": "{{synthetic-parent-0.outputs.result}}",
+          "outputName": "result"
+        }
+      },
+      {
+        "id": "synthetic-parent-0",
+        "number": "a-2",
+        "kind": "tool",
+        "title": "工具",
+        "x": 720,
+        "y": 120,
+        "fixed": false,
+        "config": {
+          "toolId": "workflow:synthetic-t05-deep-child",
+          "inputs": {
+            "records": "{{input.records}}",
+            "rounds": "{{input.rounds}}",
+            "threshold": "{{input.threshold}}"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "planning-edge-1",
+        "source": "host-start",
+        "target": "synthetic-parent-0"
+      },
+      {
+        "id": "planning-edge-2",
+        "source": "synthetic-parent-0",
+        "target": "host-end"
+      }
+    ],
+    "id": "synthetic-t05-deep-parent",
+    "workspaceId": "import-required",
+    "title": "Synthetic T05 deep subworkflow caller",
+    "description": "",
+    "revision": 0,
+    "notes": [],
+    "createdAt": "2026-10-18T00:00:00.000Z",
+    "updatedAt": "2026-10-18T00:00:00.000Z",
+    "scope": "workspace"
+  },
+  "workflows": [
+    {
+      "nodes": [
+        {
+          "id": "host-start",
+          "number": "1",
+          "kind": "input",
+          "title": "用户输入",
+          "x": 0,
+          "y": 0,
+          "fixed": false,
+          "config": {
+            "fields": [
+              {
+                "name": "records",
+                "label": "JSON numbers",
+                "required": true,
+                "type": "paragraph"
+              },
+              {
+                "name": "rounds",
+                "label": "Rounds",
+                "required": true,
+                "type": "number"
+              },
+              {
+                "name": "threshold",
+                "label": "Threshold",
+                "required": true,
+                "type": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": "host-end",
+          "number": "2",
+          "kind": "output",
+          "title": "输出",
+          "x": 200,
+          "y": 0,
+          "fixed": false,
+          "config": {
+            "text": "{{synthetic-deep-1.result}}",
+            "outputName": "result"
+          }
+        },
+        {
+          "id": "synthetic-deep-0",
+          "number": "a-2",
+          "kind": "code",
+          "title": "代码执行",
+          "x": 720,
+          "y": 120,
+          "fixed": false,
+          "config": {
+            "language": "javascript",
+            "code": "function main(inputs) { var records = JSON.parse(inputs.records); if (!Array.isArray(records) || records.some(function (v) { return typeof v !== \"number\" || !Number.isFinite(v); })) throw new Error(\"records must be finite numbers\"); if (!Number.isInteger(inputs.rounds) || inputs.rounds < 1 || inputs.rounds > 5) throw new Error(\"rounds must be 1..5\"); return { records: records }; }",
+            "inputs": {
+              "records": "{{input.records}}",
+              "rounds": "{{input.rounds}}"
+            },
+            "outputSchema": [
+              {
+                "name": "records",
+                "type": "array",
+                "required": true
+              }
+            ],
+            "timeoutMs": 5000
+          }
+        },
+        {
+          "id": "synthetic-deep-1",
+          "number": "a-3",
+          "kind": "iteration",
+          "title": "迭代",
+          "x": 1040,
+          "y": 120,
+          "fixed": false,
+          "config": {
+            "iterator": "synthetic-deep-0.records",
+            "body": {
+              "nodes": [
+                {
+                  "id": "synthetic-deep-2",
+                  "number": "a-3:a-1",
+                  "kind": "input",
+                  "title": "用户输入",
+                  "x": 80,
+                  "y": 120,
+                  "fixed": false,
+                  "config": {
+                    "fields": []
+                  }
+                },
+                {
+                  "id": "synthetic-deep-3",
+                  "number": "a-3:a-2",
+                  "kind": "loop",
+                  "title": "循环",
+                  "x": 400,
+                  "y": 120,
+                  "fixed": false,
+                  "config": {
+                    "body": {
+                      "nodes": [
+                        {
+                          "id": "synthetic-deep-5",
+                          "number": "a-3:a-2:a-1",
+                          "kind": "input",
+                          "title": "用户输入",
+                          "x": 80,
+                          "y": 120,
+                          "fixed": false,
+                          "config": {
+                            "fields": []
+                          }
+                        },
+                        {
+                          "id": "synthetic-deep-6",
+                          "number": "a-3:a-2:a-2",
+                          "kind": "if",
+                          "title": "条件分支",
+                          "x": 400,
+                          "y": 120,
+                          "fixed": false,
+                          "config": {
+                            "variable": "item",
+                            "operator": "gt",
+                            "value": "{{input.threshold}}"
+                          }
+                        },
+                        {
+                          "id": "synthetic-deep-7",
+                          "number": "a-3:a-2:a-3",
+                          "kind": "code",
+                          "title": "代码执行",
+                          "x": 720,
+                          "y": 120,
+                          "fixed": false,
+                          "config": {
+                            "language": "javascript",
+                            "code": "function main(inputs) { return { delta: inputs.item }; }",
+                            "inputs": {
+                              "item": "{{item}}",
+                              "threshold": "{{input.threshold}}"
+                            },
+                            "outputSchema": [
+                              {
+                                "name": "delta",
+                                "type": "number",
+                                "required": true
+                              }
+                            ],
+                            "timeoutMs": 5000
+                          }
+                        },
+                        {
+                          "id": "synthetic-deep-8",
+                          "number": "a-3:a-2:a1-1",
+                          "kind": "code",
+                          "title": "代码执行",
+                          "x": 1040,
+                          "y": 120,
+                          "fixed": false,
+                          "config": {
+                            "language": "javascript",
+                            "code": "function main() { return { delta: 0 }; }",
+                            "inputs": {},
+                            "outputSchema": [
+                              {
+                                "name": "delta",
+                                "type": "number",
+                                "required": true
+                              }
+                            ],
+                            "timeoutMs": 5000
+                          }
+                        },
+                        {
+                          "id": "synthetic-deep-9",
+                          "number": "a-3:a-2:a-4",
+                          "kind": "aggregator",
+                          "title": "变量聚合器",
+                          "x": 1360,
+                          "y": 120,
+                          "fixed": false,
+                          "config": {
+                            "groups": [
+                              {
+                                "name": "delta",
+                                "variables": [
+                                  "synthetic-deep-7.delta",
+                                  "synthetic-deep-8.delta"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "id": "synthetic-deep-10",
+                          "number": "a-3:a-2:a-5",
+                          "kind": "assigner",
+                          "title": "变量赋值",
+                          "x": 80,
+                          "y": 340,
+                          "fixed": false,
+                          "config": {
+                            "assignments": [
+                              {
+                                "name": "sum",
+                                "operation": "add",
+                                "value": "{{synthetic-deep-9.delta}}"
+                              },
+                              {
+                                "name": "count",
+                                "operation": "add",
+                                "value": 1
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "id": "synthetic-deep-11",
+                          "number": "a-3:a-2:a-6",
+                          "kind": "output",
+                          "title": "输出",
+                          "x": 400,
+                          "y": 340,
+                          "fixed": false,
+                          "config": {
+                            "text": "{{vars.sum}}",
+                            "outputName": "round"
+                          }
+                        }
+                      ],
+                      "edges": [
+                        {
+                          "id": "planning-edge-1",
+                          "source": "synthetic-deep-6",
+                          "target": "synthetic-deep-7",
+                          "port": "true"
+                        },
+                        {
+                          "id": "planning-edge-2",
+                          "source": "synthetic-deep-6",
+                          "target": "synthetic-deep-8",
+                          "port": "false"
+                        },
+                        {
+                          "id": "planning-edge-3",
+                          "source": "synthetic-deep-7",
+                          "target": "synthetic-deep-9"
+                        },
+                        {
+                          "id": "planning-edge-4",
+                          "source": "synthetic-deep-8",
+                          "target": "synthetic-deep-9"
+                        },
+                        {
+                          "id": "planning-edge-5",
+                          "source": "synthetic-deep-5",
+                          "target": "synthetic-deep-6"
+                        },
+                        {
+                          "id": "planning-edge-6",
+                          "source": "synthetic-deep-9",
+                          "target": "synthetic-deep-10"
+                        },
+                        {
+                          "id": "planning-edge-7",
+                          "source": "synthetic-deep-10",
+                          "target": "synthetic-deep-11"
+                        }
+                      ]
+                    },
+                    "maxIterations": 5,
+                    "until": {
+                      "variable": "vars.count",
+                      "operator": "gte",
+                      "value": "{{input.rounds}}"
+                    },
+                    "initialVariables": {
+                      "sum": 0,
+                      "count": 0
+                    }
+                  }
+                },
+                {
+                  "id": "synthetic-deep-4",
+                  "number": "a-3:a-3",
+                  "kind": "output",
+                  "title": "输出",
+                  "x": 720,
+                  "y": 120,
+                  "fixed": false,
+                  "config": {
+                    "text": "{{synthetic-deep-3.variables.sum}}",
+                    "outputName": "batch"
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "id": "planning-edge-8",
+                  "source": "synthetic-deep-2",
+                  "target": "synthetic-deep-3"
+                },
+                {
+                  "id": "planning-edge-9",
+                  "source": "synthetic-deep-3",
+                  "target": "synthetic-deep-4"
+                }
+              ]
+            },
+            "outputVariable": "synthetic-deep-3.variables.sum",
+            "errorMode": "terminate",
+            "parallel": false,
+            "concurrency": 3
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "planning-edge-10",
+          "source": "host-start",
+          "target": "synthetic-deep-0"
+        },
+        {
+          "id": "planning-edge-11",
+          "source": "synthetic-deep-0",
+          "target": "synthetic-deep-1"
+        },
+        {
+          "id": "planning-edge-12",
+          "source": "synthetic-deep-1",
+          "target": "host-end"
+        }
+      ],
+      "id": "synthetic-t05-deep-child",
+      "workspaceId": "import-required",
+      "title": "Synthetic T05 deep container child",
+      "description": "",
+      "revision": 0,
+      "notes": [],
+      "createdAt": "2026-10-18T00:00:00.000Z",
+      "updatedAt": "2026-10-18T00:00:00.000Z",
+      "scope": "workspace"
+    }
+  ],
+  "presets": [],
+  "dependencies": [
+    {
+      "kind": "workflow",
+      "id": "workflow:synthetic-t05-deep-child",
+      "label": "workflow:synthetic-t05-deep-child"
+    }
+  ]
+}

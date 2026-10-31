@@ -44,6 +44,27 @@ describe('真实 SDK 适配边界（使用明示测试替身，无网络）', ()
     await expect(backend.generate({ ...request(), signal: controller.signal })).rejects.toThrow('已取消')
     expect(mock.listModels).not.toHaveBeenCalled(); expect(seen).toEqual([])
   })
+  it('reports exact usage including cache totals once, even when a model finishes with an error', async () => {
+    const onUsage = vi.fn()
+    const { backend } = adapter([{ type:'usage',usage:{inputTokens:5,outputTokens:2,cacheReadTokens:8,totalTokens:15} },{type:'finish',reason:{kind:'max-tokens'}}])
+    await expect(backend.generate({...request(),onUsage})).rejects.toThrow('结果不完整')
+    expect(onUsage).toHaveBeenCalledExactlyOnceWith({inputTokens:5,outputTokens:2,totalTokens:15})
+  })
+  it('keeps absent or incomplete provider usage unknown instead of settling zero', async () => {
+    const onUsage=vi.fn()
+    await adapter([{type:'finish',reason:{kind:'stop'}}]).backend.generate({...request(),onUsage})
+    expect(onUsage).toHaveBeenCalledExactlyOnceWith(undefined)
+    const incomplete=vi.fn()
+    await adapter([{type:'usage',usage:{inputTokens:5,outputTokens:2}},{type:'finish',reason:{kind:'stop'}}]).backend.generate({...request(),onUsage:incomplete})
+    expect(incomplete).toHaveBeenCalledExactlyOnceWith(undefined)
+  })
+  it('ignores obsolete plugin token caps and leaves output configuration to the provider', async()=>{
+    const {backend,seen}=adapter([{type:'finish',reason:{kind:'stop'}}])
+    await backend.generate({...request(),maxTokens:512} as any)
+    await backend.generate({...request(),maxTokens:0} as any)
+    expect(seen).toHaveLength(2)
+    expect(seen.every(value=>!Object.hasOwn(value,'maxTokens'))).toBe(true)
+  })
   it('单个提供方或模型失败不会隐藏其他可用模型，也不会替用户换模型', async () => {
     const catalog = await modelCatalog({
       listProviders: () => [{ id: 'offline', name: '离线服务' }, { id: 'online', name: '在线服务' }],

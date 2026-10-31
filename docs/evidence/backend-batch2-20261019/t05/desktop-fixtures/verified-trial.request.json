@@ -1,0 +1,37 @@
+{
+  "requestId": "synthetic-t05-desktop-reviewed-greeting",
+  "operation": "create",
+  "instruction": "完成本次姓名问候文件并请真人核对，再从已通过检查的试做提炼可复用工作流。生成流程以 name 为可变输入，每次把 JSON 问候写入 t05-greeting.json，保留每次运行的人工复核节点。先预览。",
+  "execution": {
+    "mode": "execute-first",
+    "task": "读取 t05-input.json 中 name 字段，写入 t05-greeting.json，JSON 对象仅需 text 字段，值严格为 Hello 加空格加本次 name；不读取其他文件。",
+    "tools": [
+      "read",
+      "write"
+    ],
+    "inputs": [
+      "t05-input.json"
+    ],
+    "artifacts": [
+      {
+        "path": "t05-greeting.json",
+        "format": "json",
+        "requireChanged": true,
+        "checks": [
+          {
+            "kind": "json-equals",
+            "pointer": "/text",
+            "value": "Hello Ada"
+          }
+        ]
+      }
+    ],
+    "reviewItems": [
+      "请真人核对问候语与姓名是否合适；生成的工作流必须保留当次真人复核。"
+    ]
+  },
+  "optimizationTarget": {
+    "maxModelCalls": 0,
+    "maxAgentCalls": 0
+  }
+}

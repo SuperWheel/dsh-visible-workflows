@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-17T04:50:57.725Z",
+  "node": "24.18.1",
+  "electron": "44.0.0",
+  "scope": "Installed official skill/files/reference/instructions and subprocess modules with actual one-shot MXC file workers. Synthetic fixtures only; no Desktop activation or live Agent readiness claim.",
+  "results": [
+    {
+      "name": "official_skill_catalog_and_body",
+      "pass": true
+    },
+    {
+      "name": "official_bundled_trusted_host_branch_is_confined",
+      "pass": true
+    },
+    {
+      "name": "official_reference_listing_and_ranking",
+      "pass": true
+    },
+    {
+      "name": "official_skill_cached_locator_cannot_read_new_protected_symlink",
+      "pass": true
+    },
+    {
+      "name": "official_reference_directory_symlink_cannot_traverse_protected_root",
+      "pass": true
+    },
+    {
+      "name": "official_agents_md_provider_read_and_symlink_denial",
+      "pass": true
+    },
+    {
+      "name": "boundary_revocation_blocks_automatic_read",
+      "pass": true
+    }
+  ],
+  "totals": {
+    "passed": 7,
+    "count": 7,
+    "workerLaunches": 52,
+    "protectedCanaryLeaked": false
+  },
+  "limitations": [
+    "native skill watchers explicitly disabled; official fs/observed invalidation retained",
+    "No live main/child Agent or real credential used",
+    "one-shot fixed file workers only, not hostile descendant lifetime acceptance"
+  ]
+}

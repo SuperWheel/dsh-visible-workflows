@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-17T07:46:15.369Z",
+  "rows": [
+    {
+      "id": "e6525265-51fb-4921-b062-45ce978c3d6a",
+      "revision": 1,
+      "unchanged": true
+    },
+    {
+      "id": "fe11cb39-b8c0-4318-af7e-158e19ad994f",
+      "revision": 41,
+      "unchanged": true
+    },
+    {
+      "id": "3b2ac60b-9f97-4ce7-a2a5-fdd2c8a7e391",
+      "revision": 1,
+      "unchanged": true
+    },
+    {
+      "id": "80a4a541-90c9-496b-b097-53fa3e266353",
+      "revision": 11,
+      "unchanged": true
+    },
+    {
+      "id": "d09b8fe9-ad6c-4777-8dd5-deeb7b95abbb",
+      "revision": 4,
+      "unchanged": true
+    },
+    {
+      "id": "d509d971-a850-4a8c-895b-c01069b87094",
+      "revision": 1,
+      "unchanged": true
+    },
+    {
+      "id": "ddb9340b-2880-478e-8abc-055f5446a725",
+      "revision": 1,
+      "unchanged": true
+    },
+    {
+      "id": "162878e8-e655-4572-a573-5649b6100d15",
+      "revision": 6,
+      "unchanged": false
+    }
+  ],
+  "source": {
+    "id": "162878e8-e655-4572-a573-5649b6100d15",
+    "revision": 6,
+    "nodeCount": 3,
+    "edgeCount": 2,
+    "notesCount": 1,
+    "annotationCount": 1,
+    "fixedOperationUnchanged": true,
+    "viewport": {
+      "x": 40,
+      "y": 30,
+      "scale": 0.75
+    }
+  },
+  "userConfirmed": {
+    "viewOldTestValue": true,
+    "editSave": true,
+    "reopenShowsNewValue": true,
+    "closedWithoutSaving": true
+  },
+  "rawValueRead": false,
+  "runAttempt": {
+    "started": false,
+    "reason": "client-preflight-only-accepted-legacy-schema2",
+    "networkSent": false
+  }
+}

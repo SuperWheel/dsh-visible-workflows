@@ -1,4 +1,8 @@
+import { BUILTIN_TOOLS } from '../shared/builtin-tools.ts'
+import { nodePorts, branchTop, nodeSize } from '../shared/canvas-layout.ts'
+export { isModelNode, isContainer, nodePorts, branchTop, nodeSize } from '../shared/canvas-layout.ts'
 import { newId, NODE_LABELS, type NodeKind, type NodeConfig, type NodeGraph, type WorkflowNode } from '../shared/types.ts'
+import { t } from './i18n.ts'
 export interface NodeDefinition { kind:NodeKind; group:string; icon:string; color:string; description:string }
 export const NODE_DEFINITIONS:NodeDefinition[]=[
  {kind:'agent',group:'基础',icon:'✦',color:'violet',description:'根据任务自主选择已授权工具，在限定步骤内完成任务。'},
@@ -16,15 +20,13 @@ export const NODE_DEFINITIONS:NodeDefinition[]=[
  {kind:'document',group:'转换',icon:'▤',color:'green',description:'从一个或多个文档提取文字，保留输入文件顺序。'},
  {kind:'assigner',group:'转换',icon:'≔',color:'cyan',description:'设置或更新运行变量，用于传递状态或控制循环。'},
  {kind:'extractor',group:'转换',icon:'⊡',color:'blue',description:'使用模型从文本中提取符合指定类型的参数。'},
- {kind:'http',group:'工具',icon:'⊕',color:'orange',description:'发送 HTTP 请求，将状态码、响应头和正文交给下游。'},
+ {kind:'http',group:'工具',icon:'⊕',color:'orange',description:'发送普通 HTTP 请求，或通过受保护凭据代理执行固定操作。'},
  {kind:'list',group:'工具',icon:'≡',color:'cyan',description:'过滤、排序和截取数组，输出列表及首尾记录。'},
  {kind:'input',group:'开始',icon:'▷',color:'blue',description:'定义执行时的输入字段，缺少必填信息时询问用户。'},
  {kind:'tool',group:'工具',icon:'⚒',color:'orange',description:'运行宿主中可用的具体工具操作，参数由工具定义。'},
  {kind:'exit_loop',group:'逻辑',icon:'⇥',color:'violet',description:'退出当前循环，将控制权交回容器外的下一步。'},
 ]
-export const definition=(kind:NodeKind)=>NODE_DEFINITIONS.find(d=>d.kind===kind)!
-export const isModelNode=(kind:NodeKind)=>['llm','agent','classifier','extractor'].includes(kind)
-export const isContainer=(kind:NodeKind)=>kind==='iteration'||kind==='loop'
+export const definition=(kind:NodeKind)=>{const value=NODE_DEFINITIONS.find(d=>d.kind===kind)!;return {...value,group:t(value.group),description:t(value.description)}}
 export function initialConfig(kind:NodeKind):NodeConfig {
  switch(kind){
  case 'input':return {fields:[{name:'text',label:'输入文本',required:true,type:'paragraph'}]}
@@ -51,42 +53,33 @@ export function initialConfig(kind:NodeKind):NodeConfig {
 }
 export function newNode(kind:NodeKind,x=90,y=160,config?:NodeConfig):WorkflowNode{return{id:newId(),number:'u-1',kind,title:NODE_LABELS[kind],x,y,fixed:false,config:config||initialConfig(kind)}}
 function initialBody(text:string):NodeGraph {const a=newNode('input',70,100,{fields:[]}),b=newNode('template',390,100,{text}),c=newNode('output',710,100,{text:`{{${b.id}.text}}`,outputName:'result'});return{nodes:[a,b,c],edges:[{id:newId(),source:a.id,target:b.id},{id:newId(),source:b.id,target:c.id}]}}
-export function nodePorts(node:WorkflowNode):{id:string;label:string}[]{
- if(node.kind==='output'||node.kind==='exit_loop')return []
- if(node.kind==='classifier')return(node.config.classes||[]).map(c=>({id:c.id,label:c.label}))
- if(node.kind==='human')return[...(node.config.actions||[]).map(a=>({id:a.id,label:a.label})),{id:'timeout',label:'超时'}]
- if(node.kind==='if')return[...(node.config.cases?.length?node.config.cases.map((c,i)=>({id:c.id,label:i?'ELIF':'IF'})):[{id:'true',label:'IF'}]),{id:'false',label:'ELSE'}]
- return[{id:'default',label:''}]
-}
 export function nodeSummary(n:WorkflowNode):string{
  const c=n.config
  switch(n.kind){
- case 'input':return c.fields?.map(f=>`${f.label}${f.required?' *':''}`).join(' · ')||'无额外输入'
- case 'llm':return c.prompt||'填写任务提示词'
- case 'agent':return `${c.tools?.length||0} 个工具 · 最多 ${c.maxSteps||6} 步`
- case 'knowledge':return `${c.sources?.length||0} 个来源 · Top ${Math.min(c.topK||3,20)}`
- case 'classifier':return `${c.classes?.length||0} 个分类 · ${c.prompt||'配置输入'}`
- case 'if':return c.cases?.map(c=>c.conditions.map(v=>v.variable).join(c.logic==='or'?' / ':' & ')).join(' · ')||c.variable||'配置判断条件'
- case 'human':return c.prompt||'等待用户确认'
- case 'iteration':return `${c.iterator||'选择数组'} · ${c.parallel?'并行':'顺序'}`
- case 'loop':return `最多 ${c.maxIterations||10} 次 · ${c.until?.variable||'配置退出条件'}`
- case 'exit_loop':return '退出当前循环'
- case 'code':return `${c.language==='python'?'Python':'JavaScript'} · ${Object.keys(c.inputs||{}).join(', ')||'定义输入变量'}`
- case 'aggregator':return `${c.groups?.length||0} 组 · 互斥分支汇合`
- case 'document':return `${c.documentMode==='agent'?'Agent':c.documentMode==='tool'?'指定工具':'轻量本地'} · ${c.source||'选择文件变量'}`
- case 'assigner':return c.assignments?.map(a=>`vars.${a.name} ${a.operation}`).join(' · ')||'定义赋值'
- case 'extractor':return c.parameters?.map(p=>p.name).join(', ')||'定义待提取参数'
- case 'http':return `${c.method||'GET'} ${c.url||'填写请求地址'}`
- case 'list':return `${c.listSource||'选择数组'} · ${c.limit?'前 '+c.limit+' 项':'全部'}`
- case 'tool':return c.toolId||'选择工具操作'
- default:return c.text||'配置内容'
+ case 'input':return c.fields?.map(f=>`${f.label}${f.required?' *':''}`).join(' · ')||t('无额外输入','No additional inputs')
+ case 'llm':return c.prompt||t('填写任务提示词','Enter a task prompt')
+ case 'agent':return t('{count} 个工具 · 最多 {steps} 步','{count} tools · up to {steps} steps',{count:c.tools?.length||0,steps:c.maxSteps||6})
+ case 'knowledge':return t('{count} 个来源 · Top {top}','{count} sources · Top {top}',{count:c.sources?.length||0,top:Math.min(c.topK||3,20)})
+ case 'classifier':return t('{count} 个分类 · {prompt}','{count} classes · {prompt}',{count:c.classes?.length||0,prompt:c.prompt||t('配置输入','Configure input')})
+ case 'if':return c.logicGate?t('{gate} · {count} 个输入','{gate} · {count} inputs',{gate:c.logicGate.operator,count:c.logicGate.inputs.length}):c.cases?.map(c=>c.conditions.map(v=>v.variable).join(c.logic==='or'?' / ':' & ')).join(' · ')||c.variable||t('配置判断条件','Configure conditions')
+ case 'human':return c.prompt||t('等待用户确认','Awaiting user confirmation')
+ case 'iteration':return `${c.iterator||t('选择数组','Select an array')} · ${c.parallel?t('并行','Parallel'):t('顺序','Sequential')}`
+ case 'loop':return t('最多 {count} 次 · {condition}','Up to {count} iterations · {condition}',{count:c.maxIterations||10,condition:c.until?.variable||t('配置退出条件','Configure exit condition')})
+ case 'exit_loop':return t('退出当前循环','Exit current loop')
+ case 'code':return `${c.language==='python'?'Python':'JavaScript'} · ${Object.keys(c.inputs||{}).join(', ')||t('定义输入变量','Define inputs')}`
+ case 'aggregator':return t('{count} 组 · 互斥分支汇合','{count} groups · exclusive branch merge',{count:c.groups?.length||0})
+ case 'document':return `${c.documentMode==='agent'?'Agent':c.documentMode==='tool'?t('指定工具'):t('轻量本地')} · ${c.source||t('选择文件变量','Select a file variable')}`
+ case 'assigner':return c.assignments?.map(a=>`vars.${a.name} ${a.operation}`).join(' · ')||t('定义赋值','Define assignments')
+ case 'extractor':return c.parameters?.map(p=>p.name).join(', ')||t('定义待提取参数','Define extraction fields')
+ case 'http':return c.credentialOperation?t('受控凭据 · DeepSeek 账户连接检查','Protected credential · DeepSeek connection check'):`${c.method||'GET'} ${c.url||t('填写请求地址','Enter request URL')}`
+ case 'list':return `${c.listSource||t('选择数组','Select an array')} · ${c.limit?t('前 {count} 项','First {count} items',{count:c.limit}):t('全部')}`
+ case 'tool':{const tool=BUILTIN_TOOLS.find(tool=>tool.id===c.toolId);return tool?`${tool.providerName} / ${tool.name}`:c.toolId||t('选择工具操作')}
+ default:return c.text||t('配置内容','Configure content')
  }
 }
 export function allNodes(graph:NodeGraph):WorkflowNode[]{return graph.nodes.flatMap(n=>[n,...(n.config.body?allNodes(n.config.body):[])])}
 export function graphAt(graph:NodeGraph,path:string[]):NodeGraph {for(const id of path){const body=graph.nodes.find(n=>n.id===id)?.config.body;if(!body)return graph;graph=body}return graph}
 export function replaceGraph(graph:NodeGraph,path:string[],next:NodeGraph):NodeGraph {if(!path.length)return next;return{...graph,nodes:graph.nodes.map(n=>n.id===path[0]&&n.config.body?{...n,config:{...n.config,body:replaceGraph(n.config.body,path.slice(1),next)}}:n)}}
-export const branchTop=(node:WorkflowNode)=>isModelNode(node.kind)?108:80
-export function nodeSize(node:WorkflowNode){const branches=['if','classifier','human'].includes(node.kind)?nodePorts(node).length:0;return{width:isContainer(node.kind)?480:256,height:isContainer(node.kind)?220:branches?branchTop(node)+branches*32+8:isModelNode(node.kind)?108:80}}
 export function portY(node:WorkflowNode,port:string){const ports=nodePorts(node),index=ports.findIndex(p=>p.id===port);return ['if','classifier','human'].includes(node.kind)?branchTop(node)+16+Math.max(0,index)*32:nodeSize(node).height/2}
 /** Only dependency ancestors are available; a container's children stay in its scope. */
 export function availableNodes(flow:NodeGraph,path:string[],targetId:string):WorkflowNode[]{
@@ -105,7 +98,7 @@ export function outputFields(node:WorkflowNode,data?:Record<string,import('../sh
  case 'code':fields=(c.outputSchema||[]).map(p=>p.name);break
  case 'tool':fields=[];break
  case 'llm':fields=['text',...(c.outputSchema||[]).map(p=>p.name)];break
- case 'agent':fields=['text','steps','tool_results'];break
+ case 'agent':fields=['text','json','steps',...(c.outputSchema||[]).map(p=>p.name)];break
  case 'knowledge':fields=['text','results','result','method','count'];break
  case 'classifier':fields=['text','class_id','class_label','class_name'];break
  case 'if':fields=['text','result','branch'];break
@@ -115,7 +108,7 @@ export function outputFields(node:WorkflowNode,data?:Record<string,import('../sh
  case 'aggregator':fields=['text',...(c.groups||[]).map(g=>g.name)];break
  case 'assigner':fields=['text','variables',...(c.assignments||[]).map(a=>a.name)];break
  case 'extractor':fields=['text','__is_success','__reason',...(c.parameters||[]).map(p=>p.name)];break
- case 'http':fields=['text','body','status_code','headers'];break
+ case 'http':if(c.credentialOperation)return ['ok','status_code'];fields=['text','body','bytes','status_code','headers'];break
  case 'list':fields=['text','result','first_record','last_record'];break
  case 'exit_loop':fields=[];break
  case 'input':fields=['text',...(c.fields||[]).map(f=>f.name)];break

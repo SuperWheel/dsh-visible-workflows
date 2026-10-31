@@ -1,0 +1,333 @@
+{
+ "submission": {
+  "assumptions": [
+   "reviewed-file-write@1.0.0 模块不在当前冻结工具目录（planner_tool_catalog 查询无结果），目标写入按可用工具使用 native:write；工具无错误分支，写入冲突/失败将直接使运行报错，不设置任何吞错或重读重试分支。",
+   "目标探测使用 native:glob 精确 pattern「t20-review.txt」，仅循环前观察一次；通过后的写入不读取目标或草稿文件。",
+   "未通过出口输出 outputs.result=\"not-approved\"；通过出口共用 outputName=result（互斥分支）。",
+   "全程仅 template/tool/human/loop/if/assigner/output/input 确定性节点，不含 llm/agent；本次为 design-only，不执行。"
+  ],
+  "chains": [
+   {
+    "key": "main",
+    "nodes": [
+     "start",
+     "draftInit",
+     "probeTarget",
+     "probeIf"
+    ]
+   },
+   {
+    "key": "readToLoop",
+    "nodes": [
+     "readFile",
+     "reviewLoop"
+    ]
+   },
+   {
+    "key": "afterLoop",
+    "nodes": [
+     "reviewLoop",
+     "approvedIf"
+    ]
+   },
+   {
+    "key": "approvedPath",
+    "nodes": [
+     "writeTarget",
+     "approvedOut"
+    ]
+   },
+   {
+    "key": "notApprovedPath",
+    "nodes": [
+     "notApprovedMsg",
+     "notApprovedOut"
+    ]
+   },
+   {
+    "container": "reviewLoop",
+    "key": "body",
+    "nodes": [
+     "renderDraft",
+     "writeDraftFile",
+     "review"
+    ]
+   },
+   {
+    "container": "reviewLoop",
+    "key": "onReject",
+    "nodes": [
+     "saveReview"
+    ]
+   },
+   {
+    "container": "reviewLoop",
+    "key": "onApprove",
+    "nodes": [
+     "setApproved"
+    ]
+   }
+  ],
+  "coverage": {
+   "R1": [
+    "start",
+    "draftInit",
+    "probeTarget",
+    "probeIf",
+    "readFile",
+    "reviewLoop",
+    "renderDraft",
+    "writeDraftFile",
+    "review",
+    "saveReview",
+    "setApproved",
+    "approvedIf",
+    "writeTarget",
+    "notApprovedMsg",
+    "approvedOut",
+    "notApprovedOut"
+   ]
+  },
+  "description": "新建可视化工作流《T20 表单审核文件写入（r12）》：template 生成固定初稿「T20 初稿：待审核内容。」→ 循环前 native:glob 精确探测目标 t20-review.txt，存在才 native:read 读取一次（不存在跳过）→ 进入最多 3 轮人工审核 loop：每轮先把当前草稿写入 .dsh-drafts/{{sys.workflow_run_id}}/t20-review.txt，再由 human 审核（paragraph 字段 content 默认值为当前生成正文，注明直接编辑草稿文件不用于提交、以表单 content 字段为准）；退回时 assigner 保存 reviewBase/reviewNote 并在下一轮拼接进入循环；通过时 assigner 置 vars.approved=yes 退出循环，经 if 判定后把审核表单 content（经 loop outputVariable=review.content 传出）直接写入目标 t20-review.txt，写入失败/冲突按工具默认行为报错不吞错；超过 3 轮未通过走 not-approved 出口。全程无 llm/agent。",
+  "forms": [
+   {
+    "key": "start",
+    "template": "input",
+    "title": "运行入口",
+    "values": {
+     "fields": []
+    }
+   },
+   {
+    "key": "draftInit",
+    "template": "template",
+    "title": "生成固定初稿",
+    "values": {
+     "text": "T20 初稿：待审核内容。"
+    }
+   },
+   {
+    "key": "probeTarget",
+    "template": "tool-4dcbcd9ad7c1998e6530",
+    "title": "精确探测目标文件",
+    "values": {
+     "inputs": {
+      "pattern": "t20-review.txt"
+     }
+    }
+   },
+   {
+    "key": "probeIf",
+    "template": "if",
+    "title": "目标是否存在",
+    "values": {
+     "operator": "not_empty",
+     "variable": "probeTarget.value.paths"
+    }
+   },
+   {
+    "key": "readFile",
+    "template": "tool-ac4c8a5b6b2521f8338a",
+    "title": "读取目标文件（仅观察一次）",
+    "values": {
+     "inputs": {
+      "file_path": "t20-review.txt"
+     }
+    }
+   },
+   {
+    "key": "reviewLoop",
+    "template": "loop",
+    "title": "人工审核循环（最多3轮）",
+    "values": {
+     "initialVariables": {
+      "approved": "no",
+      "draft": "{{draftInit.text}}",
+      "reviewBase": "",
+      "reviewNote": ""
+     },
+     "maxIterations": 3,
+     "outputVariable": "review.content",
+     "until": {
+      "operator": "equals",
+      "value": "yes",
+      "variable": "vars.approved"
+     }
+    }
+   },
+   {
+    "key": "renderDraft",
+    "template": "template",
+    "title": "合成当前草稿正文",
+    "values": {
+     "text": "{% if vars.reviewBase %}{{vars.reviewBase}}\n{{vars.reviewNote}}{% else %}{{vars.draft}}{% endif %}"
+    }
+   },
+   {
+    "key": "writeDraftFile",
+    "template": "tool-e54cee15d98bc6604069",
+    "title": "写入草稿文件",
+    "values": {
+     "inputs": {
+      "content": "{{renderDraft.text}}",
+      "file_path": ".dsh-drafts/{{sys.workflow_run_id}}/t20-review.txt"
+     }
+    }
+   },
+   {
+    "key": "review",
+    "template": "human",
+    "title": "人工审核",
+    "values": {
+     "actions": [
+      {
+       "id": "approve",
+       "label": "通过"
+      },
+      {
+       "id": "reject",
+       "label": "退回"
+      }
+     ],
+     "fields": [
+      {
+       "defaultValue": "{{renderDraft.text}}",
+       "label": "审核正文（直接编辑草稿文件不用于提交，以表单 content 字段为准）",
+       "name": "content",
+       "required": false,
+       "type": "paragraph"
+      },
+      {
+       "label": "审核意见（退回时填写）",
+       "name": "note",
+       "required": false,
+       "type": "paragraph"
+      }
+     ],
+     "prompt": "请审核本轮草稿正文（已写入 .dsh-drafts/{{sys.workflow_run_id}}/t20-review.txt，该文件只供查看）。直接编辑草稿文件不用于提交，以表单 content 字段为准；如需修改请直接在下方 content 字段中编辑。同意请点「通过」；需修改请填写审核意见并点「退回」。"
+    }
+   },
+   {
+    "key": "saveReview",
+    "template": "assigner",
+    "title": "保存退回意见",
+    "values": {
+     "assignments": [
+      {
+       "name": "reviewBase",
+       "operation": "set",
+       "value": "{{review.content}}"
+      },
+      {
+       "name": "reviewNote",
+       "operation": "set",
+       "value": "{{review.note}}"
+      }
+     ]
+    }
+   },
+   {
+    "key": "setApproved",
+    "template": "assigner",
+    "title": "标记审核通过",
+    "values": {
+     "assignments": [
+      {
+       "name": "approved",
+       "operation": "set",
+       "value": "yes"
+      }
+     ]
+    }
+   },
+   {
+    "key": "approvedIf",
+    "template": "if",
+    "title": "是否已通过",
+    "values": {
+     "operator": "equals",
+     "value": "yes",
+     "variable": "reviewLoop.variables.approved"
+    }
+   },
+   {
+    "key": "writeTarget",
+    "template": "tool-e54cee15d98bc6604069",
+    "title": "写入目标文件（仅由 approve 出口触发）",
+    "values": {
+     "inputs": {
+      "content": "{{reviewLoop.result}}",
+      "file_path": "t20-review.txt"
+     }
+    }
+   },
+   {
+    "key": "notApprovedMsg",
+    "template": "template",
+    "title": "未通过结果文本",
+    "values": {
+     "text": "not-approved"
+    }
+   },
+   {
+    "key": "approvedOut",
+    "template": "output",
+    "title": "通过出口",
+    "values": {
+     "outputName": "result",
+     "text": "已通过人工审核，最终审核稿已写入 t20-review.txt。"
+    }
+   },
+   {
+    "key": "notApprovedOut",
+    "template": "output",
+    "title": "not-approved 出口",
+    "values": {
+     "outputName": "result",
+     "text": "{{notApprovedMsg.text}}"
+    }
+   }
+  ],
+  "links": [
+   {
+    "key": "probeYes",
+    "port": "true",
+    "source": "probeIf",
+    "target": "readFile"
+   },
+   {
+    "key": "probeNo",
+    "port": "false",
+    "source": "probeIf",
+    "target": "reviewLoop"
+   },
+   {
+    "key": "approvedYes",
+    "port": "true",
+    "source": "approvedIf",
+    "target": "writeTarget"
+   },
+   {
+    "key": "approvedNo",
+    "port": "false",
+    "source": "approvedIf",
+    "target": "notApprovedMsg"
+   },
+   {
+    "key": "doApprove",
+    "port": "approve",
+    "source": "review",
+    "target": "setApproved"
+   },
+   {
+    "key": "doReject",
+    "port": "reject",
+    "source": "review",
+    "target": "saveReview"
+   }
+  ],
+  "mode": "create",
+  "summary": "T20 表单审核文件写入（r12）：确定性无模型流程；loop(最多3轮, until vars.approved=yes) 内每轮写草稿+human 审核，退回以 reviewBase+reviewNote 拼接续轮；通过后仅经 approve 路径将表单 content 经 loop.result 写入 t20-review.txt（失败不吞错），超限走 not-approved 出口。",
+  "title": "T20 表单审核文件写入（r12）"
+ }
+}
